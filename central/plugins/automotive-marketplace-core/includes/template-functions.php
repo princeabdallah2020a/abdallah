@@ -287,3 +287,13 @@ function amc_initials( $name ) {
 	}
 	return $out;
 }
+
+/**
+ * URL of a membership portal page.
+ *
+ * @param string $view    pricing|register|login|account|platform.
+ * @param string $section Section of the dealer space or platform admin.
+ */
+function amc_portal_url( $view, $section = '' ) {
+	return AMC\Portal::url( $view, $section );
+}

@@ -42,7 +42,13 @@ Not verified in Phase 1 (be aware):
 
 This website assistant is separate from the Phase 5 dealer assistant (WhatsApp/voice, connected to each dealer CRM).
 
-## Phase 2 — Dealer membership ○
+## Phase 2 — Dealer membership ◐ (built, not tested)
+
+Built as specified in the acceptance criteria below: editable plans and durations/discounts, public pricing page, 5-step registration with private document upload, dealer statuses Pending → Under review → Approved → Active (+ Suspended / Expired / Cancelled), manual payment providers with receipt verification, subscriptions with renewal queueing, reminders (7 days, 1 day), grace period and expiry by daily cron, provisioning provider interface with a manual checklist, support conversations, transactional emails, dealer space (/dealer-dashboard/) and platform administration (/platform-admin/) separate from wp-admin, roles "Dealer owner" and "Platform manager", audit of every staff action, admin AI assistant tool for memberships, French translation (0 missing strings).
+
+**Not tested:** at the owner's request, Phase 2 was delivered without running the test suites or opening the pages in a browser. Only PHP and JavaScript syntax checks were run. Test the full workflow on a staging site before taking real registrations: register a dealer, upload documents, approve, confirm a payment, complete the checklist, renew, and let a subscription expire.
+
+Previous acceptance criteria:
 Acceptance: a dealer can pick a plan, register, submit company + verification data, choose domain option, submit payment proof; an administrator can review, approve/reject, activate a subscription, suspend; statuses flow Pending → Under review → Approved → Active (+ Suspended/Expired/Cancelled); plans, prices, limits, durations and discounts are editable and never hardcoded; manual provisioning job with checklist; `/platform-admin/` with Overview, Dealers, Applications, Subscriptions, Payments, Websites, Listings, Featured, Support, Audit, Settings; expiry + reminders by cron; every admin action audited.
 
 ## Phase 3 — Dealer website + CRM ○

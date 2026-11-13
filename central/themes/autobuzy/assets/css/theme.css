@@ -128,6 +128,24 @@ main {
 	color: var(--amds-ink);
 }
 
+.am-nav__login {
+	font-size: var(--amds-text-sm);
+	font-weight: 600;
+	color: var(--amds-ink-2);
+	text-decoration: none;
+	white-space: nowrap;
+}
+
+.am-nav__login:hover {
+	color: var(--amds-accent);
+}
+
+.am-hero__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--amds-3);
+}
+
 .am-header__toggle {
 	display: none;
 	width: 44px;

@@ -89,7 +89,7 @@ final class Api {
 			)
 		);
 		$admin_only = static function () {
-			return current_user_can( 'manage_options' );
+			return Permissions::is_staff();
 		};
 		register_rest_route(
 			self::NS,

@@ -7,7 +7,8 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$join_url = autobuzy_page_url( 'join-dealer' );
+list( $cta_label, $cta_url ) = autobuzy_header_cta();
+$login_url                   = ! is_user_logged_in() && function_exists( 'amc_portal_url' ) ? amc_portal_url( 'login' ) : '';
 ?>
 <!doctype html>
 <html <?php language_attributes(); ?>>
@@ -32,8 +33,11 @@ $join_url = autobuzy_page_url( 'join-dealer' );
 
 		<nav class="am-nav" id="am-nav" aria-label="<?php esc_attr_e( 'Main menu', 'autobuzy' ); ?>">
 			<?php autobuzy_primary_nav(); ?>
-			<?php if ( $join_url ) : ?>
-				<a class="amds-btn amds-btn--primary am-nav__cta" href="<?php echo esc_url( $join_url ); ?>"><?php esc_html_e( 'Become a dealer', 'autobuzy' ); ?></a>
+			<?php if ( $login_url ) : ?>
+				<a class="am-nav__login" href="<?php echo esc_url( $login_url ); ?>"><?php esc_html_e( 'Dealer login', 'autobuzy' ); ?></a>
+			<?php endif; ?>
+			<?php if ( $cta_url ) : ?>
+				<a class="amds-btn amds-btn--primary am-nav__cta" href="<?php echo esc_url( $cta_url ); ?>"><?php echo esc_html( $cta_label ); ?></a>
 			<?php endif; ?>
 		</nav>
 	</div>

@@ -35,6 +35,15 @@ final class Settings {
 			'ai_model'            => 'claude-opus-5-5',
 			'ai_api_key'          => '',
 			'ai_daily_cap'        => 500,  // Max AI requests per day, all users (0 = no cap).
+			// Memberships.
+			'registration_open'     => 1,
+			'require_documents'     => 0,
+			'grace_days'            => 5,
+			'provisioning_provider' => 'manual',
+			'pay_wave_details'      => '',
+			'pay_om_details'        => '',
+			'pay_bank_details'      => '',
+			'pay_cash_details'      => '',
 		);
 	}
 
@@ -103,6 +112,23 @@ final class Settings {
 		}
 		if ( ! empty( $input['ai_api_key_delete'] ) ) {
 			$out['ai_api_key'] = '';
+		}
+		// Membership settings (only present in the platform admin form).
+		foreach ( array( 'registration_open', 'require_documents' ) as $key ) {
+			if ( isset( $input[ $key ] ) ) {
+				$out[ $key ] = empty( $input[ $key ] ) ? 0 : 1;
+			}
+		}
+		if ( isset( $input['grace_days'] ) ) {
+			$out['grace_days'] = min( 60, absint( $input['grace_days'] ) );
+		}
+		foreach ( array( 'pay_wave_details', 'pay_om_details', 'pay_bank_details', 'pay_cash_details' ) as $key ) {
+			if ( isset( $input[ $key ] ) ) {
+				$out[ $key ] = mb_substr( sanitize_text_field( (string) $input[ $key ] ), 0, 300 );
+			}
+		}
+		if ( isset( $input['provisioning_provider'] ) ) {
+			$out['provisioning_provider'] = sanitize_key( $input['provisioning_provider'] );
 		}
 
 		return $out;

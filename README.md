@@ -14,7 +14,7 @@ This is **not** a WordPress Multisite: every dealership has its own domain, host
 |---|---|---|
 | 1 | Architecture, schemas, design system, company site, marketplace home, catalog, vehicle pages | **Done and tested** |
 | + | AutoBuzy brand, website AI assistant (visitors + admin) | **Built**; AI replies need your API key and are untested without one |
-| 2 | Dealer registration, plans, onboarding, subscriptions, `/platform-admin/` | Not started |
+| 2 | Dealer registration, plans, onboarding, subscriptions, `/platform-admin/` | **Built, not tested** |
 | 3 | Dealer theme, dealer CRM plugin | Not started |
 | 4 | Sync API, Marketplace Connector plugin, webhooks | Designed (docs/03), not started |
 | 5 | WhatsApp + AI assistant (FR/EN/Wolof) | Designed (docs/01), not started |

@@ -215,12 +215,226 @@ final class Database {
 	}
 
 	/**
+	 * Migration 3 — Phase 2: plans, applications, subscriptions, payments,
+	 * private documents, website provisioning jobs, support tickets.
+	 */
+	private static function migration_3() {
+		global $wpdb;
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+		$c = $wpdb->get_charset_collate();
+		$t = array();
+		foreach ( array( 'dealers', 'plans', 'applications', 'subscriptions', 'payments', 'documents', 'provisioning_jobs', 'tickets', 'ticket_messages' ) as $name ) {
+			$t[ $name ] = self::table( $name );
+		}
+
+		// Dealers: two new columns (dbDelta needs the full definition).
+		dbDelta(
+			"CREATE TABLE {$t['dealers']} (
+			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			user_id bigint(20) unsigned DEFAULT NULL,
+			slug varchar(191) NOT NULL,
+			business_name varchar(191) NOT NULL,
+			logo_url varchar(500) NOT NULL DEFAULT '',
+			description text NOT NULL,
+			address varchar(255) NOT NULL DEFAULT '',
+			city varchar(100) NOT NULL DEFAULT '',
+			city_slug varchar(100) NOT NULL DEFAULT '',
+			country_code char(2) NOT NULL DEFAULT 'SN',
+			phone varchar(32) NOT NULL DEFAULT '',
+			whatsapp varchar(32) NOT NULL DEFAULT '',
+			contact_email varchar(191) NOT NULL DEFAULT '',
+			website_url varchar(500) NOT NULL DEFAULT '',
+			is_verified tinyint(1) NOT NULL DEFAULT 0,
+			status varchar(20) NOT NULL DEFAULT 'pending',
+			sync_mode varchar(10) NOT NULL DEFAULT 'api',
+			is_demo tinyint(1) NOT NULL DEFAULT 0,
+			visibility_boost tinyint(1) NOT NULL DEFAULT 0,
+			status_reason varchar(255) NOT NULL DEFAULT '',
+			created_at datetime NOT NULL,
+			updated_at datetime NOT NULL,
+			PRIMARY KEY  (id),
+			UNIQUE KEY slug (slug),
+			KEY status (status),
+			KEY city_slug (city_slug),
+			KEY user_id (user_id)
+			) $c;"
+		);
+
+		dbDelta(
+			"CREATE TABLE {$t['plans']} (
+			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			code varchar(40) NOT NULL,
+			name varchar(80) NOT NULL,
+			tagline varchar(191) NOT NULL DEFAULT '',
+			price_amount bigint(20) unsigned NOT NULL DEFAULT 0,
+			currency char(3) NOT NULL DEFAULT 'XOF',
+			vehicle_limit int(10) unsigned NOT NULL DEFAULT 0,
+			ai_quota int(10) unsigned NOT NULL DEFAULT 0,
+			team_members int(10) unsigned NOT NULL DEFAULT 1,
+			features longtext NOT NULL,
+			visibility_boost tinyint(1) NOT NULL DEFAULT 0,
+			is_highlighted tinyint(1) NOT NULL DEFAULT 0,
+			is_active tinyint(1) NOT NULL DEFAULT 1,
+			sort_order int(10) NOT NULL DEFAULT 0,
+			created_at datetime NOT NULL,
+			updated_at datetime NOT NULL,
+			PRIMARY KEY  (id),
+			UNIQUE KEY code (code)
+			) $c;"
+		);
+
+		dbDelta(
+			"CREATE TABLE {$t['applications']} (
+			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			dealer_id bigint(20) unsigned NOT NULL,
+			user_id bigint(20) unsigned NOT NULL DEFAULT 0,
+			plan_id bigint(20) unsigned NOT NULL DEFAULT 0,
+			duration_months smallint(5) unsigned NOT NULL DEFAULT 1,
+			legal_name varchar(191) NOT NULL DEFAULT '',
+			registration_number varchar(80) NOT NULL DEFAULT '',
+			tax_id varchar(80) NOT NULL DEFAULT '',
+			contact_name varchar(120) NOT NULL DEFAULT '',
+			contact_phone varchar(32) NOT NULL DEFAULT '',
+			activity varchar(10) NOT NULL DEFAULT 'sale',
+			fleet_size varchar(20) NOT NULL DEFAULT '',
+			website_option varchar(20) NOT NULL DEFAULT 'later',
+			domain varchar(191) NOT NULL DEFAULT '',
+			notes text NOT NULL,
+			status varchar(20) NOT NULL DEFAULT 'submitted',
+			reviewed_by bigint(20) unsigned NOT NULL DEFAULT 0,
+			reviewed_at datetime DEFAULT NULL,
+			decision_reason varchar(500) NOT NULL DEFAULT '',
+			created_at datetime NOT NULL,
+			updated_at datetime NOT NULL,
+			PRIMARY KEY  (id),
+			KEY dealer_id (dealer_id),
+			KEY status (status)
+			) $c;"
+		);
+
+		dbDelta(
+			"CREATE TABLE {$t['subscriptions']} (
+			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			dealer_id bigint(20) unsigned NOT NULL,
+			plan_id bigint(20) unsigned NOT NULL,
+			application_id bigint(20) unsigned NOT NULL DEFAULT 0,
+			duration_months smallint(5) unsigned NOT NULL DEFAULT 1,
+			amount bigint(20) unsigned NOT NULL DEFAULT 0,
+			currency char(3) NOT NULL DEFAULT 'XOF',
+			status varchar(20) NOT NULL DEFAULT 'pending_payment',
+			starts_at datetime DEFAULT NULL,
+			ends_at datetime DEFAULT NULL,
+			grace_ends_at datetime DEFAULT NULL,
+			reminder_stage tinyint(1) NOT NULL DEFAULT 0,
+			created_at datetime NOT NULL,
+			updated_at datetime NOT NULL,
+			PRIMARY KEY  (id),
+			KEY dealer_status (dealer_id,status),
+			KEY status_ends (status,ends_at)
+			) $c;"
+		);
+
+		dbDelta(
+			"CREATE TABLE {$t['payments']} (
+			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			dealer_id bigint(20) unsigned NOT NULL,
+			subscription_id bigint(20) unsigned NOT NULL DEFAULT 0,
+			method varchar(30) NOT NULL DEFAULT '',
+			amount bigint(20) unsigned NOT NULL DEFAULT 0,
+			currency char(3) NOT NULL DEFAULT 'XOF',
+			reference varchar(40) NOT NULL DEFAULT '',
+			payer_reference varchar(120) NOT NULL DEFAULT '',
+			proof_document_id bigint(20) unsigned NOT NULL DEFAULT 0,
+			status varchar(20) NOT NULL DEFAULT 'pending',
+			note varchar(500) NOT NULL DEFAULT '',
+			verified_by bigint(20) unsigned NOT NULL DEFAULT 0,
+			verified_at datetime DEFAULT NULL,
+			created_at datetime NOT NULL,
+			PRIMARY KEY  (id),
+			KEY dealer_id (dealer_id),
+			KEY status (status)
+			) $c;"
+		);
+
+		dbDelta(
+			"CREATE TABLE {$t['documents']} (
+			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			dealer_id bigint(20) unsigned NOT NULL,
+			application_id bigint(20) unsigned NOT NULL DEFAULT 0,
+			type varchar(30) NOT NULL DEFAULT 'other',
+			original_name varchar(191) NOT NULL DEFAULT '',
+			path varchar(255) NOT NULL,
+			mime varchar(60) NOT NULL DEFAULT '',
+			size int(10) unsigned NOT NULL DEFAULT 0,
+			uploaded_by bigint(20) unsigned NOT NULL DEFAULT 0,
+			created_at datetime NOT NULL,
+			PRIMARY KEY  (id),
+			KEY dealer_id (dealer_id)
+			) $c;"
+		);
+
+		dbDelta(
+			"CREATE TABLE {$t['provisioning_jobs']} (
+			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			dealer_id bigint(20) unsigned NOT NULL,
+			provider varchar(40) NOT NULL DEFAULT 'manual',
+			website_option varchar(20) NOT NULL DEFAULT 'later',
+			domain varchar(191) NOT NULL DEFAULT '',
+			steps longtext NOT NULL,
+			status varchar(20) NOT NULL DEFAULT 'queued',
+			site_url varchar(500) NOT NULL DEFAULT '',
+			admin_url varchar(500) NOT NULL DEFAULT '',
+			notes text NOT NULL,
+			created_at datetime NOT NULL,
+			updated_at datetime NOT NULL,
+			completed_at datetime DEFAULT NULL,
+			PRIMARY KEY  (id),
+			KEY dealer_id (dealer_id),
+			KEY status (status)
+			) $c;"
+		);
+
+		dbDelta(
+			"CREATE TABLE {$t['tickets']} (
+			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			dealer_id bigint(20) unsigned NOT NULL,
+			user_id bigint(20) unsigned NOT NULL DEFAULT 0,
+			subject varchar(191) NOT NULL,
+			category varchar(20) NOT NULL DEFAULT 'other',
+			status varchar(20) NOT NULL DEFAULT 'open',
+			created_at datetime NOT NULL,
+			updated_at datetime NOT NULL,
+			PRIMARY KEY  (id),
+			KEY dealer_id (dealer_id),
+			KEY status (status)
+			) $c;"
+		);
+
+		dbDelta(
+			"CREATE TABLE {$t['ticket_messages']} (
+			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			ticket_id bigint(20) unsigned NOT NULL,
+			user_id bigint(20) unsigned NOT NULL DEFAULT 0,
+			is_staff tinyint(1) NOT NULL DEFAULT 0,
+			body text NOT NULL,
+			created_at datetime NOT NULL,
+			PRIMARY KEY  (id),
+			KEY ticket_id (ticket_id)
+			) $c;"
+		);
+
+		Plans::seed();
+		Permissions::install_roles();
+		update_option( 'amc_flush_rewrites', 1, false );
+	}
+
+	/**
 	 * Drop every plugin table. Only called from uninstall.php when the
 	 * administrator explicitly opted in to data deletion.
 	 */
 	public static function drop_all() {
 		global $wpdb;
-		foreach ( array( 'vehicle_media', 'vehicles', 'dealers', 'inquiries', 'audit_log', 'ai_usage' ) as $name ) {
+		foreach ( array( 'vehicle_media', 'vehicles', 'dealers', 'inquiries', 'audit_log', 'ai_usage', 'plans', 'applications', 'subscriptions', 'payments', 'documents', 'provisioning_jobs', 'tickets', 'ticket_messages' ) as $name ) {
 			$table = self::table( $name );
 			$wpdb->query( "DROP TABLE IF EXISTS $table" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		}

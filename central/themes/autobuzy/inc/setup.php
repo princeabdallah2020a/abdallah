@@ -71,7 +71,7 @@ add_action(
 	'admin_notices',
 	static function () {
 		if ( ! defined( 'AMC_VERSION' ) && current_user_can( 'activate_plugins' ) ) {
-			echo '<div class="notice notice-error"><p>' . esc_html__( 'The AutoBuzy theme requires the "Automotive Marketplace Core" plugin. Please install and activate it.', 'autobuzy' ) . '</p></div>';
+			echo '<div class="notice notice-error"><p>' . esc_html__( 'The AutoBuzy theme requires the "AutoBuzy Marketplace Core" plugin. Please install and activate it.', 'autobuzy' ) . '</p></div>';
 		}
 	}
 );

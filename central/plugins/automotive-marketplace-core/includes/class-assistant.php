@@ -147,7 +147,7 @@ final class Assistant {
 
 		if ( 'admin' === $scope ) {
 			return $base
-				. "You are talking to a platform administrator inside the WordPress dashboard. Help them understand what is happening on the platform: figures, listings, dealers, contact requests, recent activity, and what needs attention. Lead with the answer and the numbers, then the detail. You can read data but cannot change anything: when an action is needed, say exactly where to do it in the dashboard (for example Marketplace → Contact requests). When asked to draft a reply, an announcement or a listing text, write it ready to send, in the language of the recipient.\n\n"
+				. "You are talking to a platform administrator inside the WordPress dashboard. Help them understand what is happening on the platform: figures, listings, dealers, contact requests, recent activity, and what needs attention. Lead with the answer and the numbers, then the detail. You can read data but cannot change anything: when an action is needed, say exactly where to do it: memberships, payments, websites, plans and support are managed in the platform admin at " . Portal::url( 'platform' ) . " ; contact requests are in the WordPress dashboard under Marketplace → Contact requests. When asked to draft a reply, an announcement or a listing text, write it ready to send, in the language of the recipient.\n\n"
 				. 'Format: short paragraphs and simple "- " bullet lists. No tables, no headings.';
 		}
 

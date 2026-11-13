@@ -32,6 +32,10 @@ final class Plugin {
 		Api::init();
 		Inquiries::init();
 		Assistant_Ui::init();
+		Permissions::init();
+		Portal::init();
+		Documents::init();
+		Subscriptions::init();
 
 		if ( is_admin() ) {
 			Admin::init();
@@ -47,11 +51,14 @@ final class Plugin {
 		Content::register_post_types();
 		Content::install_pages();
 		Marketplace::register_rewrites();
+		Portal::register_rewrites();
+		Permissions::install_roles();
 		flush_rewrite_rules();
 		Audit::log( 'plugin.activated', 'plugin', 0, array( 'version' => AMC_VERSION ) );
 	}
 
 	public static function deactivate() {
+		wp_clear_scheduled_hook( 'amc_daily' );
 		flush_rewrite_rules();
 	}
 }

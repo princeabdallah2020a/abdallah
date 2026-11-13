@@ -27,6 +27,9 @@ if ( $has ) {
 	);
 	$columns[ __( 'Dealers', 'autobuzy' ) ] = array(
 		array( __( 'Become a dealer', 'autobuzy' ), autobuzy_page_url( 'join-dealer' ) ),
+		array( __( 'Plans and prices', 'autobuzy' ), amc_portal_url( 'pricing' ) ),
+		array( __( 'Apply online', 'autobuzy' ), amc_portal_url( 'register' ) ),
+		array( __( 'Dealer login', 'autobuzy' ), amc_portal_url( 'login' ) ),
 	);
 }
 $legal = $has ? array(

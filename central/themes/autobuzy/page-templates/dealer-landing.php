@@ -26,7 +26,12 @@ get_header();
 				<?php if ( has_excerpt() ) : ?>
 					<p class="am-hero__lead"><?php echo esc_html( get_the_excerpt() ); ?></p>
 				<?php endif; ?>
-				<a class="amds-btn amds-btn--accent amds-btn--lg" href="#amc-inquiry"><?php esc_html_e( 'Request my dealer account', 'autobuzy' ); ?></a>
+				<div class="am-hero__actions">
+					<a class="amds-btn amds-btn--accent amds-btn--lg" href="<?php echo esc_url( $has ? amc_portal_url( 'register' ) : '#amc-inquiry' ); ?>"><?php esc_html_e( 'Apply online', 'autobuzy' ); ?></a>
+					<?php if ( $has ) : ?>
+						<a class="amds-btn amds-btn--outline-on-dark amds-btn--lg" href="<?php echo esc_url( amc_portal_url( 'pricing' ) ); ?>"><?php esc_html_e( 'See plans and prices', 'autobuzy' ); ?></a>
+					<?php endif; ?>
+				</div>
 			</div>
 		</section>
 
@@ -59,7 +64,7 @@ get_header();
 				<ol class="am-steps">
 					<?php
 					$steps = array(
-						array( __( 'Send your request', 'autobuzy' ), __( 'Fill in the form below with your dealership details.', 'autobuzy' ) ),
+						array( __( 'Apply online', 'autobuzy' ), __( 'Choose your plan and send your application with your business documents.', 'autobuzy' ) ),
 						array( __( 'Verification', 'autobuzy' ), __( 'Our team checks your business information and helps you choose a plan.', 'autobuzy' ) ),
 						array( __( 'Setup', 'autobuzy' ), __( 'We set up your website and your CRM and connect them to the marketplace.', 'autobuzy' ) ),
 						array( __( 'Publish', 'autobuzy' ), __( 'You add your vehicles: they go live on your website and on the marketplace.', 'autobuzy' ) ),
@@ -75,7 +80,7 @@ get_header();
 		<section class="am-section">
 			<div class="amds-container am-split">
 				<div>
-					<h2 class="am-section__title"><?php esc_html_e( 'Request your dealer account', 'autobuzy' ); ?></h2>
+					<h2 class="am-section__title"><?php esc_html_e( 'A question before you start?', 'autobuzy' ); ?></h2>
 					<div class="am-prose"><?php the_content(); ?></div>
 				</div>
 				<div class="amds-surface">

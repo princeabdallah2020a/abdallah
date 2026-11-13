@@ -11,7 +11,7 @@ get_header();
 
 if ( ! autobuzy_has_marketplace() ) :
 	?>
-	<main id="main" class="am-page"><div class="amds-container"><div class="amds-alert amds-alert--warning"><?php esc_html_e( 'The AutoBuzy theme requires the "Automotive Marketplace Core" plugin. Please install and activate it.', 'autobuzy' ); ?></div></div></main>
+	<main id="main" class="am-page"><div class="amds-container"><div class="amds-alert amds-alert--warning"><?php esc_html_e( 'The AutoBuzy theme requires the "AutoBuzy Marketplace Core" plugin. Please install and activate it.', 'autobuzy' ); ?></div></div></main>
 	<?php
 	get_footer();
 	return;
@@ -43,7 +43,7 @@ $recent       = array_slice(
 	8
 );
 $testimonials = AMC\Content::testimonials( 3 );
-$join_url     = autobuzy_page_url( 'join-dealer' );
+$join_url     = amc_portal_url( 'pricing' );
 $city         = AMC\Settings::get( 'default_city' );
 ?>
 <main id="main">

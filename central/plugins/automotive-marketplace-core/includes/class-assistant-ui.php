@@ -38,41 +38,53 @@ final class Assistant_Ui {
 	}
 
 	public static function enqueue_public() {
-		if ( ! self::enabled_for_visitors() ) {
+		if ( ! self::enabled_for_visitors() || Portal::is_app() ) {
 			return;
 		}
-		wp_enqueue_style( 'amc-assistant', AMC_URL . 'assets/css/assistant.css', array(), AMC_VERSION );
-		wp_enqueue_script( 'amc-assistant', AMC_URL . 'assets/js/assistant.js', array(), AMC_VERSION, true );
-		wp_localize_script(
-			'amc-assistant',
-			'amcAssistant',
-			array(
-				'scope'    => 'visitor',
-				'endpoint' => esc_url_raw( rest_url( Api::NS . '/assistant' ) ),
-				'home'     => home_url( '/' ),
-				'i18n'     => self::i18n(),
-			)
-		);
+		self::enqueue_for( 'visitor' );
 	}
 
 	public static function enqueue_admin( $hook ) {
-		if ( false === strpos( (string) $hook, 'amc-' ) ) {
-			return;
+		if ( false !== strpos( (string) $hook, 'amc-' ) ) {
+			self::enqueue_for( 'admin' );
 		}
+	}
+
+	/**
+	 * Load the chat assets.
+	 *
+	 * @param string $scope visitor|admin.
+	 */
+	public static function enqueue_for( $scope ) {
 		wp_enqueue_style( 'amc-assistant', AMC_URL . 'assets/css/assistant.css', array(), AMC_VERSION );
 		wp_enqueue_script( 'amc-assistant', AMC_URL . 'assets/js/assistant.js', array(), AMC_VERSION, true );
-		wp_localize_script(
-			'amc-assistant',
-			'amcAssistant',
+		$config = array(
+			'scope'    => $scope,
+			'endpoint' => esc_url_raw( rest_url( Api::NS . ( 'admin' === $scope ? '/admin/assistant' : '/assistant' ) ) ),
+			'home'     => home_url( '/' ),
+			'i18n'     => self::i18n(),
+		);
+		if ( 'admin' === $scope ) {
+			$config['nonce']         = wp_create_nonce( 'wp_rest' );
+			$config['draftEndpoint'] = esc_url_raw( rest_url( Api::NS . '/admin/inquiries/%d/draft-reply' ) );
+		}
+		wp_localize_script( 'amc-assistant', 'amcAssistant', $config );
+	}
+
+	/** Inline admin chat (WordPress admin page and /platform-admin/). */
+	public static function render_inline() {
+		echo '<div class="amc-ai amc-ai--inline" data-amc-ai-inline>';
+		self::panel(
+			'admin',
+			__( 'Hello. Ask me about the platform: figures, listings, dealers, contact requests, recent activity — or ask me to draft a message. I can read data but I never change anything.', 'automotive-marketplace-core' ),
 			array(
-				'scope'         => 'admin',
-				'endpoint'      => esc_url_raw( rest_url( Api::NS . '/admin/assistant' ) ),
-				'draftEndpoint' => esc_url_raw( rest_url( Api::NS . '/admin/inquiries/%d/draft-reply' ) ),
-				'nonce'         => wp_create_nonce( 'wp_rest' ),
-				'home'          => home_url( '/' ),
-				'i18n'          => self::i18n(),
+				__( 'Give me today\'s overview of the platform', 'automotive-marketplace-core' ),
+				__( 'What needs my attention in memberships?', 'automotive-marketplace-core' ),
+				__( 'Summarise the new contact requests', 'automotive-marketplace-core' ),
+				__( 'Draft a welcome message for a new dealer', 'automotive-marketplace-core' ),
 			)
 		);
+		echo '</div>';
 	}
 
 	/**
@@ -116,7 +128,7 @@ final class Assistant_Ui {
 	}
 
 	public static function render_widget() {
-		if ( ! self::enabled_for_visitors() ) {
+		if ( ! self::enabled_for_visitors() || Portal::is_app() ) {
 			return;
 		}
 		?>
@@ -143,7 +155,7 @@ final class Assistant_Ui {
 
 	/** Dashboard page: Marketplace → AI assistant. */
 	public static function render_admin_page() {
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! Permissions::is_staff() ) {
 			return;
 		}
 		$error = get_transient( 'amc_ai_last_error' );
@@ -157,20 +169,7 @@ final class Assistant_Ui {
 			<?php elseif ( $error ) : ?>
 				<div class="notice notice-error"><p><?php echo esc_html( __( 'Last AI error:', 'automotive-marketplace-core' ) . ' ' . $error ); ?></p></div>
 			<?php endif; ?>
-			<div class="amc-ai amc-ai--inline" data-amc-ai-inline style="margin-top:16px">
-				<?php
-				self::panel(
-					'admin',
-					__( 'Hello. Ask me about the platform: figures, listings, dealers, contact requests, recent activity — or ask me to draft a message. I can read data but I never change anything.', 'automotive-marketplace-core' ),
-					array(
-						__( 'Give me today\'s overview of the platform', 'automotive-marketplace-core' ),
-						__( 'Summarise the new contact requests', 'automotive-marketplace-core' ),
-						__( 'Which listings need attention?', 'automotive-marketplace-core' ),
-						__( 'Draft a welcome message for a new dealer', 'automotive-marketplace-core' ),
-					)
-				);
-				?>
-			</div>
+			<div style="margin-top:16px"><?php self::render_inline(); ?></div>
 		</div>
 		<?php
 	}

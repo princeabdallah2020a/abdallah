@@ -26,6 +26,8 @@ final class Admin {
 	public static function menu() {
 		add_menu_page( __( 'Marketplace', 'automotive-marketplace-core' ), __( 'Marketplace', 'automotive-marketplace-core' ), self::CAP, 'amc-marketplace', array( __CLASS__, 'page_overview' ), 'dashicons-car', 25 );
 		add_submenu_page( 'amc-marketplace', __( 'Overview', 'automotive-marketplace-core' ), __( 'Overview', 'automotive-marketplace-core' ), self::CAP, 'amc-marketplace', array( __CLASS__, 'page_overview' ) );
+		global $submenu;
+		$submenu['amc-marketplace'][] = array( __( 'Platform admin ↗', 'automotive-marketplace-core' ), Permissions::STAFF, Portal::url( 'platform' ) ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride
 		add_submenu_page( 'amc-marketplace', __( 'Contact requests', 'automotive-marketplace-core' ), __( 'Contact requests', 'automotive-marketplace-core' ), self::CAP, 'amc-inquiries', array( __CLASS__, 'page_inquiries' ) );
 		add_submenu_page( 'amc-marketplace', __( 'AI assistant', 'automotive-marketplace-core' ), __( 'AI assistant', 'automotive-marketplace-core' ), self::CAP, 'amc-assistant', array( 'AMC\\Assistant_Ui', 'render_admin_page' ) );
 		add_submenu_page( 'amc-marketplace', __( 'Settings', 'automotive-marketplace-core' ), __( 'Settings', 'automotive-marketplace-core' ), self::CAP, 'amc-settings', array( __CLASS__, 'page_settings' ) );

@@ -45,6 +45,7 @@ function autobuzy_default_nav() {
 			array( __( 'For sale', 'autobuzy' ), amc_catalog_url( 'sale' ) ),
 			array( __( 'For rent', 'autobuzy' ), amc_catalog_url( 'rent' ) ),
 			array( __( 'Dealers', 'autobuzy' ), amc_dealers_url() ),
+			array( __( 'Pricing', 'autobuzy' ), function_exists( 'amc_portal_url' ) ? amc_portal_url( 'pricing' ) : '' ),
 			array( __( 'Services', 'autobuzy' ), autobuzy_page_url( 'services' ) ),
 			array( __( 'How it works', 'autobuzy' ), autobuzy_page_url( 'how-it-works' ) ),
 		),
@@ -103,4 +104,22 @@ function autobuzy_section_head( $title, $url = '', $label = '', $lead = '' ) {
 		echo '<a class="amds-link" href="' . esc_url( $url ) . '">' . esc_html( $label ) . autobuzy_icon( 'arrow', 16 ) . '</a>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 	echo '</div>';
+}
+
+/**
+ * Header call to action: dealer space for members, membership for visitors.
+ *
+ * @return array [ label, url ]
+ */
+function autobuzy_header_cta() {
+	if ( ! function_exists( 'amc_portal_url' ) ) {
+		return array( '', '' );
+	}
+	if ( is_user_logged_in() && AMC\Permissions::is_staff() ) {
+		return array( __( 'Platform admin', 'autobuzy' ), amc_portal_url( 'platform' ) );
+	}
+	if ( is_user_logged_in() && AMC\Memberships::current_dealer() ) {
+		return array( __( 'My dealer space', 'autobuzy' ), amc_portal_url( 'account' ) );
+	}
+	return array( __( 'Become a dealer', 'autobuzy' ), amc_portal_url( 'pricing' ) );
 }

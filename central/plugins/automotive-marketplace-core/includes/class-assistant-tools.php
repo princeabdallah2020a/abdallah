@@ -6,7 +6,7 @@
  *
  *  - visitor scope: public catalog only.
  *  - admin scope  : adds platform figures, contact requests and activity log
- *                   (only reachable by users with manage_options).
+ *                   (only reachable by platform staff).
  *
  * @package AutomotiveMarketplaceCore
  */
@@ -85,6 +85,14 @@ final class Assistant_Tools {
 			$tools[] = array(
 				'name'        => 'get_platform_stats',
 				'description' => 'Current platform figures: dealers by status, listings by status and by type, featured listings, listings not confirmed recently by dealer websites, contact requests waiting, demo data present, AI usage over the last 30 days.',
+				'inputSchema' => array(
+					'type'       => 'object',
+					'properties' => new \stdClass(),
+				),
+			);
+			$tools[] = array(
+				'name'        => 'get_membership_overview',
+				'description' => 'Dealer memberships: applications waiting for review (with business name, city, plan, date), payments waiting for verification (amount, method), subscriptions expiring in the next 14 days, website setups in progress, open support conversations, active dealers and monthly recurring revenue. Use it for questions about dealers, sign-ups, billing, renewals or what needs attention.',
 				'inputSchema' => array(
 					'type'       => 'object',
 					'properties' => new \stdClass(),
@@ -193,7 +201,7 @@ final class Assistant_Tools {
 
 		// Everything below is restricted to administrators (checked again here,
 		// not only at the REST layer).
-		if ( 'admin' !== $scope || ! current_user_can( 'manage_options' ) ) {
+		if ( 'admin' !== $scope || ! Permissions::is_staff() ) {
 			return array( 'error' => 'Unknown tool.' );
 		}
 
@@ -201,6 +209,9 @@ final class Assistant_Tools {
 		switch ( $name ) {
 			case 'get_platform_stats':
 				return self::platform_stats();
+
+			case 'get_membership_overview':
+				return self::membership_overview();
 
 			case 'list_contact_requests':
 				$limit  = isset( $input['limit'] ) ? min( 30, max( 1, absint( $input['limit'] ) ) ) : 10;
@@ -275,5 +286,47 @@ final class Assistant_Tools {
 			'default_currency'         => Settings::get( 'default_currency' ),
 		);
 		// phpcs:enable
+	}
+
+	/** Read-only membership summary for the admin assistant. */
+	public static function membership_overview() {
+		global $wpdb;
+		$subs  = Database::table( 'subscriptions' );
+		$d     = Database::table( 'dealers' );
+		$p     = Database::table( 'plans' );
+		$limit = gmdate( 'Y-m-d H:i:s', time() + 14 * DAY_IN_SECONDS );
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$expiring = $wpdb->get_results( $wpdb->prepare( "SELECT d.business_name, p.name AS plan, s.ends_at FROM $subs s LEFT JOIN $d d ON d.id = s.dealer_id LEFT JOIN $p p ON p.id = s.plan_id WHERE s.status = 'active' AND s.ends_at <= %s ORDER BY s.ends_at ASC LIMIT 20", $limit ), ARRAY_A );
+		// phpcs:enable
+		$apps = array();
+		foreach ( array_merge( Memberships::applications( 'submitted', 20 ), Memberships::applications( 'under_review', 20 ) ) as $app ) {
+			$apps[] = array(
+				'id'       => (int) $app->id,
+				'business' => $app->business_name,
+				'city'     => $app->city,
+				'plan'     => $app->plan_name,
+				'status'   => $app->status,
+				'received' => $app->created_at,
+			);
+		}
+		$payments = array();
+		foreach ( Payments::list( 'pending', 20 ) as $payment ) {
+			$payments[] = array(
+				'business' => $payment->business_name,
+				'amount'   => amc_format_money( $payment->amount, $payment->currency ),
+				'method'   => Payments::method_label( $payment->method ),
+				'sent'     => $payment->created_at,
+			);
+		}
+		return array(
+			'dealers_by_status'          => Memberships::dealer_counts(),
+			'applications_waiting'       => $apps,
+			'payments_to_verify'         => $payments,
+			'subscriptions_expiring_14d' => $expiring ? $expiring : array(),
+			'website_setups_open'        => Provisioning::open_count(),
+			'support_conversations_open' => Support::open_count(),
+			'monthly_recurring_revenue'  => amc_format_money( Subscriptions::mrr(), Settings::get( 'default_currency' ) ),
+			'where_to_act'               => Portal::url( 'platform' ),
+		);
 	}
 }

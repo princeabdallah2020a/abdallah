@@ -50,7 +50,7 @@ final class Dealers {
 			(SELECT COUNT(*) FROM $v v WHERE v.dealer_id = d.id AND v.status IN ('active','reserved')
 				AND (d.sync_mode <> 'api' OR v.last_synced_at >= %s)) AS vehicle_count
 			FROM $d d WHERE $where_sql
-			ORDER BY d.is_verified DESC, vehicle_count DESC, d.business_name ASC
+			ORDER BY d.visibility_boost DESC, d.is_verified DESC, vehicle_count DESC, d.business_name ASC
 			LIMIT %d OFFSET %d";
 		$rows = $wpdb->get_results( $wpdb->prepare( $sql, array_merge( array( $cutoff ), $params, array( $limit, $offset ) ) ) );
 		// phpcs:enable

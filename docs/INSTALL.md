@@ -60,6 +60,37 @@ Without a key: the public assistant still works using the built-in natural-langu
 
 Privacy: conversations are sent to Anthropic for processing when a key is configured; the site stores no transcript (only token counts per request, for cost tracking). Mention this in your privacy policy.
 
+## 4c. Dealer memberships (Phase 2)
+
+Pages created automatically (no WordPress page needed):
+
+| URL | Who | Purpose |
+|---|---|---|
+| `/pricing/` | public | Plans, prices, commitment discounts, comparison, FAQ |
+| `/dealer-registration/` | public | 5-step application: plan → account → dealership + documents → website/domain → payment |
+| `/dealer-login/` | dealers | Login |
+| `/dealer-dashboard/` | dealers | Status timeline, getting started, subscription and payment, payments, website setup progress, public profile, documents, support |
+| `/platform-admin/` | staff | Overview, applications, dealers, subscriptions, payments, dealer websites, listings, plans and prices, support, AI assistant, AI usage, audit log, settings |
+
+Aliases: `/dealer-onboarding/`, `/subscription-checkout/`, `/application-status/` open the matching dealer-space section.
+
+**First configuration (5 minutes):**
+
+1. Open **/platform-admin/settings/** and fill in at least one payment method (Wave number, Orange Money number, bank details or cash office). Only filled methods are offered to dealers.
+2. Open **/platform-admin/plans/**: check the three plans (Start 15 000, Business 25 000, Premium 40 000 FCFA/month) and the discounts for 3 / 6 / 12 months (5 / 10 / 15 % by default). Everything is editable; prices are never written in templates.
+3. Make sure WordPress can send email (SMTP plugin recommended): dealers and staff are notified at every step.
+4. Optional: give a colleague the role **Platform manager** (Users → Edit → Role): they get /platform-admin/ without full WordPress admin rights.
+
+**The workflow:** application received (dealer status *Pending*) → *Start review* (*Under review*) → *Approve* (status *Approved*, a website setup checklist is created) or *Reject* with a reason → payment receipt *Confirmed* in Payments → subscription starts, dealer becomes *Active* and visible on the marketplace. A payment confirmed before approval is kept and the subscription starts at approval. Every day, the plugin sends renewal reminders 7 days and 1 day before the end, keeps the dealer online during the grace period (5 days by default), then sets the account to *Expired* (listings hidden). Staff can suspend, reactivate or cancel an account, extend or cancel a subscription, record a cash/offered subscription, and grant the "verified" badge.
+
+**Payments are manual by design:** dealers pay by Wave, Orange Money, transfer or cash and upload the receipt; staff confirm it. There is no automatic debit. A payment gateway can be added later through the `amc_payment_providers` filter (interface `AMC\Payment_Provider`).
+
+**Website provisioning is a checklist by design:** WordPress cannot buy domains or open hosting accounts on its own. The checklist (hosting, domain + SSL, WordPress, dealer packages, branding, admin account, API credentials, handover) is completed by staff; when every step is ticked the dealer is notified. A hosting provider with an API can be plugged in through `amc_provisioning_providers` (interface `AMC\Provisioning_Provider`).
+
+**Documents** (RCCM, NINEA, ID, receipts) are stored in `wp-content/uploads/amc-private/` with web access denied and are served only to staff and to the owning dealer. On Nginx, add `location ^~ /wp-content/uploads/amc-private/ { deny all; }` (Apache is covered by the bundled `.htaccess`).
+
+**Cron:** reminders and expiry run with WP-Cron once a day. On low-traffic sites, configure a real cron calling `wp-cron.php`.
+
 ## 5. Preview with demo data
 
 **Marketplace → Overview → Import demo data** creates 6 fictional dealers and 34 vehicles (all labelled "Démo", with illustrated placeholder images). **Remove demo data** deletes them. Remove before launch.
