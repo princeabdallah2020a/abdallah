@@ -250,7 +250,7 @@ final class Vehicles {
 
 	/**
 	 * Listings similar to the given one: same listing type, same body type or
-	 * brand, closest price first.
+	 * brand (body type weighs more), closest price first.
 	 *
 	 * @param object $vehicle Hydrated listing.
 	 * @param int    $limit   Max results.
@@ -267,13 +267,15 @@ final class Vehicles {
 				WHERE d.status = 'active' AND v.status = 'active' AND v.id <> %d AND v.listing_type = %s
 				AND (v.body_type = %s OR v.brand_slug = %s)
 				AND (d.sync_mode <> 'api' OR v.last_synced_at >= %s)
-				ORDER BY (CASE WHEN v.brand_slug = %s THEN 0 ELSE 1 END) ASC, ABS(CAST(v.price_amount AS SIGNED) - %d) ASC
+				ORDER BY ((CASE WHEN v.body_type = %s THEN 0 ELSE 2 END) + (CASE WHEN v.brand_slug = %s THEN 0 ELSE 1 END)) ASC,
+					ABS(CAST(v.price_amount AS SIGNED) - %d) ASC
 				LIMIT %d",
 				$vehicle->id,
 				$vehicle->listing_type,
 				$vehicle->body_type,
 				$vehicle->brand_slug,
 				gmdate( 'Y-m-d H:i:s', time() - HOUR_IN_SECONDS * (int) Settings::get( 'hide_after_hours' ) ),
+				$vehicle->body_type,
 				$vehicle->brand_slug,
 				$vehicle->price_amount,
 				absint( $limit )

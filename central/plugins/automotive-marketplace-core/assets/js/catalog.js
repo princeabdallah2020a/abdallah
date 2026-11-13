@@ -35,6 +35,12 @@
 		}
 	} );
 
+	// ----- Filters panel: collapsed by default on small screens -----
+	var panel = document.querySelector( '.amc-catalog__toggle' );
+	if ( panel && window.matchMedia && window.matchMedia( '(max-width: 959px)' ).matches ) {
+		panel.removeAttribute( 'open' );
+	}
+
 	// ----- AJAX results -----
 	var form = document.querySelector( '[data-amc-filters]' );
 	var results = document.querySelector( '[data-amc-results]' );

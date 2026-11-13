@@ -30,7 +30,18 @@ $featured     = amc_get_vehicles(
 );
 $for_sale     = amc_get_vehicles( array( 'type' => 'sale' ), 4 );
 $for_rent     = amc_get_vehicles( array( 'type' => 'rent' ), 4 );
-$recent       = amc_get_vehicles( array(), 8 );
+// "Recently added" skips vehicles already shown in the sections above.
+$shown        = wp_list_pluck( array_merge( $featured, $for_sale, $for_rent ), 'id' );
+$recent       = array_slice(
+	array_filter(
+		amc_get_vehicles( array(), 24 ),
+		static function ( $vehicle ) use ( $shown ) {
+			return ! in_array( $vehicle->id, $shown, true );
+		}
+	),
+	0,
+	8
+);
 $testimonials = AMC\Content::testimonials( 3 );
 $join_url     = automarket_page_url( 'join-dealer' );
 $city         = AMC\Settings::get( 'default_city' );
