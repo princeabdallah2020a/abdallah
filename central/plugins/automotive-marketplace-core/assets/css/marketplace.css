@@ -1,0 +1,709 @@
+/* Marketplace components (cards, catalog, vehicle page, dealer pages). */
+
+.amc-main {
+	padding-bottom: var(--amds-8);
+}
+
+.amc-page-header {
+	padding: var(--amds-6) 0 0;
+	background: var(--amds-bg-subtle);
+	border-bottom: 1px solid var(--amds-border);
+	margin-bottom: var(--amds-6);
+}
+
+.amc-page-header__title {
+	font-size: var(--amds-text-3xl);
+	margin-bottom: var(--amds-4);
+}
+
+.amc-page-header__lead {
+	max-width: 60ch;
+	color: var(--amds-text-muted);
+}
+
+.amc-page-header:not(:has(.amds-tabs)) {
+	padding-bottom: var(--amds-6);
+}
+
+.amc-section {
+	padding-block: var(--amds-2);
+}
+
+.amc-block {
+	margin-top: var(--amds-7);
+}
+
+.amc-block > h2 {
+	font-size: var(--amds-text-xl);
+	margin-bottom: var(--amds-4);
+}
+
+.amc-prose {
+	max-width: 72ch;
+}
+
+.amc-prose h2 {
+	font-size: var(--amds-text-xl);
+}
+
+/* ---------- Vehicle card ---------- */
+.amc-grid {
+	display: grid;
+	gap: var(--amds-5);
+	grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+
+.amc-card {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	background: #fff;
+	border: 1px solid var(--amds-border);
+	border-radius: var(--amds-radius-lg);
+	overflow: hidden;
+	transition: box-shadow var(--amds-transition), border-color var(--amds-transition), transform var(--amds-transition);
+}
+
+.amc-card:hover,
+.amc-card:focus-within {
+	border-color: var(--amds-border-strong);
+	box-shadow: var(--amds-shadow);
+	transform: translateY(-2px);
+}
+
+.amc-card__media {
+	position: relative;
+	display: block;
+	aspect-ratio: 3 / 2;
+	background: var(--amds-bg-muted);
+}
+
+.amc-card__media img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.amc-card__placeholder {
+	display: grid;
+	place-items: center;
+	height: 100%;
+	color: var(--amds-border-strong);
+}
+
+.amc-card__badges {
+	position: absolute;
+	top: var(--amds-3);
+	left: var(--amds-3);
+	right: var(--amds-3);
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--amds-1);
+}
+
+.amc-card__body {
+	display: flex;
+	flex-direction: column;
+	gap: var(--amds-2);
+	padding: var(--amds-4);
+	flex: 1;
+}
+
+.amc-card__title {
+	margin: 0;
+	font-size: var(--amds-text-md);
+	font-weight: 600;
+	letter-spacing: -0.01em;
+}
+
+.amc-card__title a {
+	text-decoration: none;
+}
+
+/* The whole card is clickable through the title link. */
+.amc-card__title a::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+}
+
+.amc-card__price {
+	margin: 0;
+	font-family: var(--amds-font-display);
+	font-size: var(--amds-text-lg);
+	font-weight: 700;
+	color: var(--amds-accent);
+}
+
+.amc-card__specs {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: var(--amds-1) var(--amds-3);
+	margin: var(--amds-1) 0 0;
+	padding: 0;
+	list-style: none;
+	font-size: var(--amds-text-sm);
+	color: var(--amds-text-muted);
+}
+
+.amc-card__specs li,
+.amc-card__meta span {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.375rem;
+	min-width: 0;
+}
+
+.amc-card__meta {
+	display: flex;
+	justify-content: space-between;
+	gap: var(--amds-3);
+	margin: auto 0 0;
+	padding-top: var(--amds-3);
+	border-top: 1px solid var(--amds-border);
+	font-size: var(--amds-text-xs);
+	color: var(--amds-text-muted);
+}
+
+.amc-card__dealer {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.amc-verified {
+	display: inline-flex;
+	color: var(--amds-success);
+}
+
+/* ---------- Search form ---------- */
+.amc-filters--hero {
+	display: grid;
+	gap: var(--amds-3);
+	grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+	align-items: end;
+	padding: var(--amds-4);
+	background: #fff;
+	border-radius: var(--amds-radius-lg);
+	box-shadow: var(--amds-shadow-lg);
+	color: var(--amds-text);
+}
+
+.amc-filters--sidebar {
+	display: grid;
+	gap: var(--amds-4);
+}
+
+.amc-filters__pair {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: var(--amds-2);
+}
+
+.amc-filters__actions {
+	display: grid;
+	gap: var(--amds-2);
+	position: sticky;
+	bottom: 0;
+	padding-block: var(--amds-3);
+	background: #fff;
+}
+
+/* ---------- Catalog ---------- */
+.amc-catalog {
+	display: grid;
+	gap: var(--amds-6);
+	grid-template-columns: minmax(0, 1fr);
+}
+
+.amc-catalog__toggle {
+	border: 1px solid var(--amds-border);
+	border-radius: var(--amds-radius-lg);
+	padding: var(--amds-4);
+	background: #fff;
+}
+
+.amc-catalog__toggle > summary {
+	display: flex;
+	align-items: center;
+	gap: var(--amds-2);
+	font-weight: 600;
+	cursor: pointer;
+	list-style: none;
+}
+
+.amc-catalog__toggle > summary::-webkit-details-marker {
+	display: none;
+}
+
+.amc-catalog__toggle[open] > summary {
+	margin-bottom: var(--amds-4);
+}
+
+@media (min-width: 960px) {
+	.amc-catalog {
+		grid-template-columns: 290px minmax(0, 1fr);
+		align-items: start;
+	}
+
+	.amc-catalog__sidebar {
+		position: sticky;
+		top: calc(var(--amds-header-h, 72px) + var(--amds-4));
+		max-height: calc(100vh - var(--amds-header-h, 72px) - var(--amds-6));
+		overflow-y: auto;
+		border-radius: var(--amds-radius-lg);
+	}
+
+	.amc-catalog__toggle > summary {
+		pointer-events: none;
+	}
+}
+
+.amc-results__bar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--amds-3);
+	margin-bottom: var(--amds-4);
+}
+
+.amc-results__count {
+	margin: 0;
+	font-weight: 600;
+}
+
+.amc-results__sort {
+	display: flex;
+	align-items: center;
+	gap: var(--amds-2);
+}
+
+.amc-results__sort .amds-label {
+	font-weight: 500;
+	color: var(--amds-text-muted);
+}
+
+.amc-inline-search {
+	display: flex;
+	gap: var(--amds-2);
+	max-width: 520px;
+}
+
+/* ---------- Vehicle page ---------- */
+.amc-vehicle {
+	padding-top: var(--amds-5);
+}
+
+.amc-vehicle__layout {
+	display: grid;
+	gap: var(--amds-6);
+	grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 960px) {
+	.amc-vehicle__layout {
+		grid-template-columns: minmax(0, 1fr) 380px;
+		align-items: start;
+	}
+
+	.amc-vehicle__aside {
+		position: sticky;
+		top: calc(var(--amds-header-h, 72px) + var(--amds-4));
+	}
+}
+
+@media (max-width: 959px) {
+	/* Price and contact buttons come right after the photos on mobile. */
+	.amc-vehicle__layout {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.amc-vehicle__main {
+		display: contents;
+	}
+
+	.amc-gallery {
+		order: 1;
+	}
+
+	.amc-vehicle__aside {
+		order: 2;
+	}
+
+	.amc-vehicle__main > .amc-block {
+		order: 3;
+		margin-top: 0;
+	}
+}
+
+.amc-gallery__stage {
+	position: relative;
+	aspect-ratio: 3 / 2;
+	border-radius: var(--amds-radius-lg);
+	overflow: hidden;
+	background: var(--amds-bg-muted);
+}
+
+.amc-gallery__stage img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.amc-gallery__stage--empty {
+	display: grid;
+	place-content: center;
+	justify-items: center;
+	gap: var(--amds-2);
+	color: var(--amds-text-muted);
+}
+
+.amc-gallery__nav {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	display: grid;
+	place-items: center;
+	width: 44px;
+	height: 44px;
+	border: 0;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.92);
+	color: var(--amds-ink);
+	box-shadow: var(--amds-shadow-sm);
+	cursor: pointer;
+}
+
+.amc-gallery__nav:hover {
+	background: #fff;
+}
+
+.amc-gallery__nav--prev {
+	left: var(--amds-3);
+}
+
+.amc-gallery__nav--prev svg {
+	transform: rotate(180deg);
+}
+
+.amc-gallery__nav--next {
+	right: var(--amds-3);
+}
+
+.amc-gallery__count {
+	position: absolute;
+	right: var(--amds-3);
+	bottom: var(--amds-3);
+	padding: 0.15rem 0.6rem;
+	border-radius: var(--amds-radius-pill);
+	background: rgba(14, 23, 38, 0.72);
+	color: #fff;
+	font-size: var(--amds-text-xs);
+	font-weight: 600;
+}
+
+.amc-gallery__thumbs {
+	display: flex;
+	gap: var(--amds-2);
+	margin: var(--amds-3) 0 0;
+	padding: 2px;
+	list-style: none;
+	overflow-x: auto;
+}
+
+.amc-gallery__thumbs a {
+	display: block;
+	width: 96px;
+	aspect-ratio: 3 / 2;
+	border: 2px solid transparent;
+	border-radius: var(--amds-radius-sm);
+	overflow: hidden;
+	opacity: 0.7;
+}
+
+.amc-gallery__thumbs a.is-active,
+.amc-gallery__thumbs a:hover {
+	border-color: var(--amds-accent);
+	opacity: 1;
+}
+
+.amc-gallery__thumbs img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.amc-specs {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+	gap: 0 var(--amds-5);
+	margin: 0;
+}
+
+.amc-specs > div {
+	display: flex;
+	justify-content: space-between;
+	gap: var(--amds-3);
+	padding: var(--amds-3) 0;
+	border-bottom: 1px solid var(--amds-border);
+	font-size: var(--amds-text-sm);
+}
+
+.amc-specs dt {
+	color: var(--amds-text-muted);
+}
+
+.amc-specs dd {
+	margin: 0;
+	font-weight: 600;
+	text-align: right;
+}
+
+.amc-features {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+	gap: var(--amds-2) var(--amds-4);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	font-size: var(--amds-text-sm);
+}
+
+.amc-features li {
+	display: flex;
+	align-items: center;
+	gap: var(--amds-2);
+}
+
+.amc-features svg {
+	color: var(--amds-success);
+}
+
+.amc-summary,
+.amc-seller {
+	padding: var(--amds-5);
+	border: 1px solid var(--amds-border);
+	border-radius: var(--amds-radius-lg);
+	background: #fff;
+}
+
+.amc-seller {
+	margin-top: var(--amds-4);
+}
+
+.amc-summary__badges {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--amds-1);
+	margin-bottom: var(--amds-3);
+}
+
+.amc-summary__title {
+	font-size: var(--amds-text-2xl);
+	margin-bottom: var(--amds-2);
+}
+
+.amc-summary__price {
+	margin-bottom: var(--amds-3);
+	font-family: var(--amds-font-display);
+	font-size: var(--amds-text-2xl);
+	font-weight: 700;
+	color: var(--amds-accent);
+}
+
+.amc-summary__facts {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--amds-2) var(--amds-4);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	font-size: var(--amds-text-sm);
+	color: var(--amds-text-muted);
+}
+
+.amc-summary__facts li {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.375rem;
+}
+
+.amc-summary__actions {
+	display: grid;
+	gap: var(--amds-2);
+	margin-top: var(--amds-5);
+}
+
+.amc-seller__heading {
+	font-family: var(--amds-font-body);
+	font-size: var(--amds-text-xs);
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	color: var(--amds-text-muted);
+}
+
+.amc-seller .amc-dealer-card {
+	padding: 0;
+	border: 0;
+}
+
+.amc-seller__links {
+	display: grid;
+	gap: var(--amds-2);
+	margin-top: var(--amds-4);
+	padding-top: var(--amds-4);
+	border-top: 1px solid var(--amds-border);
+}
+
+.amc-vehicle__notice {
+	margin: var(--amds-4) 0 0;
+	font-size: var(--amds-text-xs);
+	color: var(--amds-text-muted);
+}
+
+/* ---------- Dealers ---------- */
+.amc-dealer-grid {
+	display: grid;
+	gap: var(--amds-4);
+	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+.amc-dealer-card {
+	position: relative;
+	display: flex;
+	gap: var(--amds-4);
+	align-items: center;
+	padding: var(--amds-4);
+	border: 1px solid var(--amds-border);
+	border-radius: var(--amds-radius-lg);
+	background: #fff;
+	transition: border-color var(--amds-transition), box-shadow var(--amds-transition);
+}
+
+.amc-dealer-grid .amc-dealer-card:hover {
+	border-color: var(--amds-border-strong);
+	box-shadow: var(--amds-shadow);
+}
+
+.amc-dealer-card__logo,
+.amc-dealer-hero__logo {
+	flex: none;
+	display: grid;
+	place-items: center;
+	width: 64px;
+	height: 64px;
+	border-radius: var(--amds-radius);
+	overflow: hidden;
+	background: var(--amds-ink);
+	color: #fff;
+	font-family: var(--amds-font-display);
+	font-weight: 600;
+	text-decoration: none;
+}
+
+.amc-dealer-card__logo img,
+.amc-dealer-hero__logo img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.amc-dealer-card__body {
+	min-width: 0;
+}
+
+.amc-dealer-card__name {
+	margin: 0 0 var(--amds-1);
+	font-size: var(--amds-text-md);
+}
+
+.amc-dealer-card__name a {
+	text-decoration: none;
+}
+
+.amc-dealer-card__name a::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+}
+
+.amc-dealer-card__meta {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--amds-1) var(--amds-3);
+	margin: 0 0 var(--amds-2);
+	font-size: var(--amds-text-sm);
+	color: var(--amds-text-muted);
+}
+
+.amc-dealer-card__meta span {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.3rem;
+}
+
+.amc-dealer-card__badges {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--amds-1);
+	margin: 0;
+}
+
+.amc-dealer-card__badges:empty {
+	display: none;
+}
+
+.amc-dealer-hero {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--amds-5);
+}
+
+.amc-dealer-hero__logo {
+	width: 96px;
+	height: 96px;
+	font-size: var(--amds-text-2xl);
+	border-radius: var(--amds-radius-lg);
+}
+
+.amc-dealer-hero__body {
+	flex: 1 1 280px;
+}
+
+.amc-dealer-hero__body .amc-page-header__title {
+	margin-bottom: var(--amds-2);
+}
+
+.amc-dealer-hero__badges {
+	display: flex;
+	gap: var(--amds-1);
+	margin-bottom: var(--amds-2);
+}
+
+.amc-dealer-hero__address {
+	display: flex;
+	align-items: center;
+	gap: 0.375rem;
+	margin: 0;
+	font-size: var(--amds-text-sm);
+	color: var(--amds-text-muted);
+}
+
+.amc-dealer-hero__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--amds-2);
+}
+
+/* ---------- Contact form ---------- */
+.amc-hp {
+	position: absolute;
+	left: -9999px;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+}

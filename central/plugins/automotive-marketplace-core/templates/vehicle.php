@@ -76,12 +76,8 @@ get_header();
 								<?php foreach ( $vehicle->media as $index => $media ) : ?>
 									<li>
 										<a href="<?php echo esc_url( $media->url ); ?>" data-amc-gallery-thumb data-alt="<?php echo esc_attr( $media->alt ? $media->alt : $vehicle->title ); ?>"<?php echo 0 === $index ? ' class="is-active" aria-current="true"' : ''; ?>>
-											<img src="<?php echo esc_url( $media->url ); ?>" alt="
-											<?php
-											/* translators: %d: photo number */
-											echo esc_attr( sprintf( __( 'Photo %d', 'automotive-marketplace-core' ), $index + 1 ) );
-											?>
-											" width="150" height="100" loading="lazy" decoding="async">
+											<?php /* translators: %d: photo number */ ?>
+											<img src="<?php echo esc_url( $media->url ); ?>" alt="<?php echo esc_attr( sprintf( __( 'Photo %d', 'automotive-marketplace-core' ), $index + 1 ) ); ?>" width="150" height="100" loading="lazy" decoding="async">
 										</a>
 									</li>
 								<?php endforeach; ?>
