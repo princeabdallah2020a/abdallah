@@ -47,7 +47,7 @@ final class Vehicles {
 		}
 
 		foreach ( array( 'price_min', 'price_max', 'year_min', 'year_max', 'mileage_max' ) as $key ) {
-			if ( isset( $raw[ $key ] ) && is_scalar( $raw[ $key ] ) ) {
+			if ( isset( $raw[ $key ] ) && is_scalar( $raw[ $key ] ) && 0 !== strpos( trim( (string) $raw[ $key ] ), '-' ) ) {
 				$value = absint( preg_replace( '/\D+/', '', (string) $raw[ $key ] ) );
 				if ( $value > 0 ) {
 					$f[ $key ] = $value;
