@@ -59,6 +59,15 @@ $city         = AMC\Settings::get( 'default_city' );
 			<h1 class="am-hero__title"><?php echo esc_html( autobuzy_option( 'hero_title' ) ); ?></h1>
 			<p class="am-hero__lead"><?php echo esc_html( autobuzy_option( 'hero_subtitle' ) ); ?></p>
 
+			<?php if ( AMC\Assistant_Ui::enabled_for_visitors() ) : ?>
+				<form class="amc-ai-ask" data-amc-ai-ask>
+					<?php echo autobuzy_icon( 'sparkle', 20 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+					<label class="screen-reader-text" for="am-ai-ask"><?php esc_html_e( 'Describe the vehicle you are looking for', 'autobuzy' ); ?></label>
+					<input type="text" id="am-ai-ask" name="q" maxlength="300" autocomplete="off" placeholder="<?php esc_attr_e( 'Describe your need: "family SUV, automatic, under 20 million"…', 'autobuzy' ); ?>">
+					<button type="submit"><?php esc_html_e( 'Ask the assistant', 'autobuzy' ); ?></button>
+				</form>
+			<?php endif; ?>
+
 			<?php amc_search_form( array( 'layout' => 'hero' ) ); ?>
 
 			<?php if ( $total || $dealer_total ) : ?>

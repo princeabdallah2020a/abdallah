@@ -29,6 +29,19 @@ Not verified in Phase 1 (be aware):
 - WordPress admin screens (Settings, Contact requests, demo buttons) were exercised only through their underlying functions, not clicked through in a browser.
 - No load test, no formal accessibility audit, no real photos (demo uses illustrations).
 
+## Added after Phase 1 — brand and website AI assistant ◐
+
+| Item | State | Evidence |
+|---|---|---|
+| Rebrand to **AutoBuzy** (theme `autobuzy`) | ✔ | all tests re-run |
+| Public assistant: chat widget + homepage "ask" bar, vehicle cards, session history, rate limit (20 messages / 10 min per IP), daily cap | ✔ | browser check |
+| Built-in natural-language search (works without any AI provider) | ✔ | tested on French queries |
+| Conversational AI through the official Anthropic PHP SDK, read-only tools, usage log (`amc_ai_usage`) | ◐ | Code path executed up to the provider (an invalid key is rejected and the fallback takes over). **A real conversation has not been run: no API key was available.** Test it once your key is configured. |
+| Admin assistant page and "draft a reply" on contact requests | ◐ | Pages load and the "not configured" path works; AI answers untested for the same reason |
+| Wolof | ○ | The model is instructed to answer in Wolof when confident; quality has not been evaluated with native speakers |
+
+This website assistant is separate from the Phase 5 dealer assistant (WhatsApp/voice, connected to each dealer CRM).
+
 ## Phase 2 — Dealer membership ○
 Acceptance: a dealer can pick a plan, register, submit company + verification data, choose domain option, submit payment proof; an administrator can review, approve/reject, activate a subscription, suspend; statuses flow Pending → Under review → Approved → Active (+ Suspended/Expired/Cancelled); plans, prices, limits, durations and discounts are editable and never hardcoded; manual provisioning job with checklist; `/platform-admin/` with Overview, Dealers, Applications, Subscriptions, Payments, Websites, Listings, Featured, Support, Audit, Settings; expiry + reminders by cron; every admin action audited.
 
@@ -46,7 +59,7 @@ Acceptance: provider/regulatory verification documented; inbound call flow with 
 
 ## Decisions to confirm with the product owner
 
-1. **Brand name.** The theme shows the WordPress site title; "AutoBuzy" is only a working name.
+1. ~~Brand name~~ — decided: AutoBuzy.
 2. **Canonical policy** default (`self`) — see docs/01 §1.4.
 3. **Freshness windows** (72 h / 168 h) — editable in settings.
 4. **Dealer hosting provider** — determines how much of provisioning can be automated in Phase 2.

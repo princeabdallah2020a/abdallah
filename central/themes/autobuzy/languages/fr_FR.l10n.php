@@ -104,5 +104,8 @@ return array(
 		'Services'                => 'Services',
 		'Skip to content'         => 'Aller au contenu',
 		'Menu'                    => 'Menu',
+		'Describe the vehicle you are looking for' => 'Décrivez le véhicule que vous cherchez',
+		'Describe your need: "family SUV, automatic, under 20 million"…' => 'Décrivez votre besoin : « SUV familial, automatique, moins de 20 millions »…',
+		'Ask the assistant' => 'Demander à l’assistant',
 	),
 );

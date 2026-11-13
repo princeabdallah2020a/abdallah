@@ -6,6 +6,7 @@ Nothing external is needed for Phase 1 beyond hosting. Later phases depend on ac
 |---|---|---|---|---|
 | Hosting for the central site | 1 | Any PHP 8.1+/MySQL host with HTTPS, cron, daily backups; Redis recommended | — | Hosting account, domain, DNS access |
 | Transactional email | 1–2 | SMTP service (e.g. Brevo, Mailgun, Amazon SES) via an SMTP plugin or `wp-config` | Deliverability to local providers | SMTP credentials, SPF/DKIM on the domain |
+| Website AI assistant | now | Anthropic API (Claude) via the official PHP SDK | Your monthly budget; set the daily cap accordingly | API key from console.anthropic.com |
 | Hosting for dealer sites | 2–3 | A reseller/VPS panel **with an API** enables automation; otherwise manual provisioning | Whether the host exposes an API for account + WordPress creation; pricing per site | Reseller account, API token |
 | Domain registration | 2 | Registrar with API (for `.com`); `.sn` domains go through NIC Sénégal-accredited registrars, usually manual | API availability per extension | Registrar account |
 | Mobile money / card payments | 2 | Wave, Orange Money, or an aggregator (e.g. PayDunya, CinetPay, PayTech) | Merchant account approval; API for one-off payments; **whether recurring/tokenised payments exist** (often not for mobile money) | Merchant account, API keys, webhook secret |

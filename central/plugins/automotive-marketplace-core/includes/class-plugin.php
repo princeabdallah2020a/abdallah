@@ -31,6 +31,7 @@ final class Plugin {
 		Sitemaps::init();
 		Api::init();
 		Inquiries::init();
+		Assistant_Ui::init();
 
 		if ( is_admin() ) {
 			Admin::init();

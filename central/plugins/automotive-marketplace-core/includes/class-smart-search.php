@@ -100,6 +100,8 @@ final class Smart_Search {
 
 		// Amounts: "15 millions", "15m", "8 500 000", "30 000", "25k".
 		$amounts = array();
+		// "entre 12 et 18 millions": the unit applies to both numbers.
+		$t = preg_replace( '/(\d+(?:[.,]\d+)?)\s*(et|and|a|to|-)\s*(\d+(?:[.,]\d+)?)\s*(millions?|m\b)/', '$1 millions $2 $3 millions', $t );
 		if ( preg_match_all( '/(\d+(?:[.,]\d+)?)\s*(millions?|m\b)/', $t, $m, PREG_SET_ORDER | PREG_OFFSET_CAPTURE ) ) {
 			foreach ( $m as $match ) {
 				$amounts[ $match[0][1] ] = (int) round( (float) str_replace( ',', '.', $match[1][0] ) * 1000000 );
@@ -126,6 +128,11 @@ final class Smart_Search {
 			} else {
 				$filters['price_max'] = $amounts[0]; // A budget is a maximum by default.
 			}
+		}
+
+		// A budget in millions can only be a purchase.
+		if ( ! isset( $filters['type'] ) && $amounts && max( $amounts ) >= 1000000 ) {
+			$filters['type'] = 'sale';
 		}
 
 		// Mileage: "moins de 80 000 km".

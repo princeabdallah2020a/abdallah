@@ -27,6 +27,7 @@ final class Admin {
 		add_menu_page( __( 'Marketplace', 'automotive-marketplace-core' ), __( 'Marketplace', 'automotive-marketplace-core' ), self::CAP, 'amc-marketplace', array( __CLASS__, 'page_overview' ), 'dashicons-car', 25 );
 		add_submenu_page( 'amc-marketplace', __( 'Overview', 'automotive-marketplace-core' ), __( 'Overview', 'automotive-marketplace-core' ), self::CAP, 'amc-marketplace', array( __CLASS__, 'page_overview' ) );
 		add_submenu_page( 'amc-marketplace', __( 'Contact requests', 'automotive-marketplace-core' ), __( 'Contact requests', 'automotive-marketplace-core' ), self::CAP, 'amc-inquiries', array( __CLASS__, 'page_inquiries' ) );
+		add_submenu_page( 'amc-marketplace', __( 'AI assistant', 'automotive-marketplace-core' ), __( 'AI assistant', 'automotive-marketplace-core' ), self::CAP, 'amc-assistant', array( 'AMC\\Assistant_Ui', 'render_admin_page' ) );
 		add_submenu_page( 'amc-marketplace', __( 'Settings', 'automotive-marketplace-core' ), __( 'Settings', 'automotive-marketplace-core' ), self::CAP, 'amc-settings', array( __CLASS__, 'page_settings' ) );
 	}
 
@@ -156,7 +157,13 @@ final class Admin {
 							<?php if ( $row->email ) : ?><br><a href="<?php echo esc_url( 'mailto:' . $row->email ); ?>"><?php echo esc_html( $row->email ); ?></a><?php endif; ?>
 							<?php if ( $row->phone ) : ?><br><?php echo esc_html( $row->phone ); ?><?php endif; ?>
 						</td>
-						<td><?php if ( $row->subject ) : ?><strong><?php echo esc_html( $row->subject ); ?></strong><br><?php endif; ?><?php echo nl2br( esc_html( $row->message ) ); ?></td>
+						<td>
+							<?php if ( $row->subject ) : ?><strong><?php echo esc_html( $row->subject ); ?></strong><br><?php endif; ?><?php echo nl2br( esc_html( $row->message ) ); ?>
+							<?php if ( Assistant::ai_available() ) : ?>
+								<p><button type="button" class="button" data-amc-ai-draft="<?php echo esc_attr( $row->id ); ?>"><?php esc_html_e( 'Draft a reply with AI', 'automotive-marketplace-core' ); ?></button></p>
+								<textarea id="amc-draft-<?php echo esc_attr( $row->id ); ?>" class="large-text" rows="8" hidden aria-label="<?php esc_attr_e( 'Draft reply (review before sending)', 'automotive-marketplace-core' ); ?>"></textarea>
+							<?php endif; ?>
+						</td>
 						<td>
 							<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 								<input type="hidden" name="action" value="amc_inquiry_status">
@@ -236,6 +243,35 @@ final class Admin {
 						</select>
 						<p class="description"><?php esc_html_e( 'Tells search engines which page is the original when the same vehicle is on the dealer website and on the marketplace.', 'automotive-marketplace-core' ); ?></p>
 					</td></tr>
+				</table>
+
+				<h2><?php esc_html_e( 'AI assistant', 'automotive-marketplace-core' ); ?></h2>
+				<table class="form-table" role="presentation">
+					<tr><th scope="row"><?php esc_html_e( 'Public assistant', 'automotive-marketplace-core' ); ?></th><td>
+						<label><input type="checkbox" name="<?php echo esc_attr( $name ); ?>[ai_visitor_enabled]" value="1" <?php checked( $s['ai_visitor_enabled'], 1 ); ?>>
+						<?php esc_html_e( 'Show the assistant on the public website', 'automotive-marketplace-core' ); ?></label>
+						<p class="description"><?php esc_html_e( 'Without an API key it works with the built-in search engine; with a key it becomes a conversational AI.', 'automotive-marketplace-core' ); ?></p>
+					</td></tr>
+					<tr><th scope="row"><label for="amc_ai_api_key"><?php esc_html_e( 'Anthropic API key', 'automotive-marketplace-core' ); ?></label></th><td>
+						<?php if ( defined( 'AUTOBUZY_ANTHROPIC_API_KEY' ) && AUTOBUZY_ANTHROPIC_API_KEY ) : ?>
+							<p><?php esc_html_e( 'Defined in wp-config.php (recommended).', 'automotive-marketplace-core' ); ?></p>
+						<?php else : ?>
+							<input class="regular-text" type="password" id="amc_ai_api_key" name="<?php echo esc_attr( $name ); ?>[ai_api_key]" value="" autocomplete="new-password" placeholder="<?php echo esc_attr( $s['ai_api_key'] ? __( 'A key is saved — leave empty to keep it', 'automotive-marketplace-core' ) : 'sk-ant-…' ); ?>">
+							<?php if ( $s['ai_api_key'] ) : ?>
+								<label style="margin-left:8px"><input type="checkbox" name="<?php echo esc_attr( $name ); ?>[ai_api_key_delete]" value="1"> <?php esc_html_e( 'Delete the saved key', 'automotive-marketplace-core' ); ?></label>
+							<?php endif; ?>
+							<p class="description"><?php esc_html_e( 'Safer alternative: add define( \'AUTOBUZY_ANTHROPIC_API_KEY\', \'…\' ); to wp-config.php. The key is never displayed again once saved.', 'automotive-marketplace-core' ); ?></p>
+						<?php endif; ?>
+					</td></tr>
+					<tr><th scope="row"><label for="amc_ai_model"><?php esc_html_e( 'Model', 'automotive-marketplace-core' ); ?></label></th><td>
+						<select id="amc_ai_model" name="<?php echo esc_attr( $name ); ?>[ai_model]">
+							<?php foreach ( Assistant::models() as $id => $label ) : ?>
+								<option value="<?php echo esc_attr( $id ); ?>" <?php selected( $s['ai_model'], $id ); ?>><?php echo esc_html( $label ); ?></option>
+							<?php endforeach; ?>
+						</select>
+						<p class="description"><?php esc_html_e( 'Opus gives the best answers; Sonnet and Haiku are faster and cheaper.', 'automotive-marketplace-core' ); ?></p>
+					</td></tr>
+					<?php $text( 'ai_daily_cap', __( 'Maximum AI requests per day', 'automotive-marketplace-core' ), 'number', __( 'Cost safety limit for all users together. Beyond it, the public assistant falls back to the built-in search. 0 = no limit.', 'automotive-marketplace-core' ) ); ?>
 				</table>
 
 				<h2><?php esc_html_e( 'Data', 'automotive-marketplace-core' ); ?></h2>

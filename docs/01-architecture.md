@@ -46,6 +46,7 @@ Rules that follow from the "independent dealers" decision:
 | ├ `Seo`, `Sitemaps` | Titles, descriptions, canonical, robots, Open Graph, JSON-LD, sitemap providers | 1 ✔ |
 | ├ `Api` | REST `marketplace/v1` — public read now; dealer sync endpoints in Phase 4 | 1 ✔ / 4 |
 | ├ `Inquiries`, `Rate_Limiter`, `Audit`, `Settings`, `Content`, `Admin`, `Demo_Data` | Contact requests, throttling, audit log, options, pages/testimonials, WP-admin screens, demo importer | 1 ✔ |
+| ├ `Assistant`, `Assistant_Tools`, `Assistant_Ui`, `Smart_Search` | Website AI assistant (visitors + administrators): Claude through the Anthropic PHP SDK with read-only tools; built-in search fallback; usage log | added ✔ (AI replies need an API key) |
 | ├ `Memberships`, `Subscriptions`, `Payments` (provider interface), `Provisioning` (provider interface) | Plans, onboarding workflow, payment proof / gateways, site provisioning jobs | 2 |
 | ├ `Platform_Admin` | `/platform-admin/` dashboard (separate from wp-admin) | 2 |
 | └ `Sync`, `Credentials`, `Webhooks` | Event ingestion, idempotency, API keys, outbound signed webhooks, connection monitoring | 4 |

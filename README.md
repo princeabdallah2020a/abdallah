@@ -1,4 +1,4 @@
-# Automotive Marketplace Ecosystem
+# AutoBuzy — Automotive Marketplace Ecosystem
 
 Monorepo for an international automotive platform built on WordPress:
 
@@ -13,6 +13,7 @@ This is **not** a WordPress Multisite: every dealership has its own domain, host
 | Phase | Scope | Status |
 |---|---|---|
 | 1 | Architecture, schemas, design system, company site, marketplace home, catalog, vehicle pages | **Done and tested** |
+| + | AutoBuzy brand, website AI assistant (visitors + admin) | **Built**; AI replies need your API key and are untested without one |
 | 2 | Dealer registration, plans, onboarding, subscriptions, `/platform-admin/` | Not started |
 | 3 | Dealer theme, dealer CRM plugin | Not started |
 | 4 | Sync API, Marketplace Connector plugin, webhooks | Designed (docs/03), not started |

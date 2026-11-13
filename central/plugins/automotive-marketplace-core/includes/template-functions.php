@@ -202,6 +202,8 @@ function amc_icon( $name, $size = 18 ) {
 		'chart'    => '<path d="M4 20V4M4 20h16"/><path d="M8 16v-5M12 16V8M16 16v-3"/>',
 		'menu'     => '<path d="M4 7h16M4 12h16M4 17h16"/>',
 		'close'    => '<path d="M6 6l12 12M18 6 6 18"/>',
+		'sparkle'  => '<path d="M12 3l1.800 4.700a2 2 0 0 0 1.200 1.200L19.500 10.500 15 12.200a2 2 0 0 0-1.200 1.200L12 18l-1.800-4.600A2 2 0 0 0 9 12.200L4.500 10.500 9 8.900a2 2 0 0 0 1.200-1.200L12 3z"/><path d="M19 15v4M17 17h4M5 3v3M3.500 4.500h3"/>',
+		'send'     => '<path d="M4 12l16-8-6 16-3-6.500L4 12z"/><path d="M11 13.500 20 4"/>',
 		'mail'     => '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
 	);
 	if ( ! isset( $paths[ $name ] ) ) {
