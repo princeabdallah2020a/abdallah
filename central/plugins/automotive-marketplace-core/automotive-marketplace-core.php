@@ -4,8 +4,8 @@
  * Description:       Central automotive marketplace: vehicle catalog, dealer directory, public API, SEO and platform data structures.
  * Version:           0.1.0
  * Requires at least: 6.5
- * Requires PHP:      7.4
- * Author:            Platform Team
+ * Requires PHP:      8.1
+ * Author:            AutoBuzy
  * License:           GPL-2.0-or-later
  * Text Domain:       automotive-marketplace-core
  * Domain Path:       /languages
@@ -16,7 +16,7 @@
 defined( 'ABSPATH' ) || exit;
 
 define( 'AMC_VERSION', '0.1.0' );
-define( 'AMC_DB_VERSION', 1 );
+define( 'AMC_DB_VERSION', 2 );
 define( 'AMC_FILE', __FILE__ );
 define( 'AMC_DIR', plugin_dir_path( __FILE__ ) );
 define( 'AMC_URL', plugin_dir_url( __FILE__ ) );

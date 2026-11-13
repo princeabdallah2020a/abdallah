@@ -15,7 +15,7 @@ Copy two folders from this repository to the server:
 | From (repository) | To (WordPress) |
 |---|---|
 | `central/plugins/automotive-marketplace-core/` | `wp-content/plugins/automotive-marketplace-core/` |
-| `central/themes/automarket/` | `wp-content/themes/automarket/` |
+| `central/themes/autobuzy/` | `wp-content/themes/autobuzy/` |
 
 (Or zip each folder and upload through *Plugins → Add new → Upload* and *Appearance → Themes → Add new → Upload*.)
 
@@ -27,7 +27,7 @@ Copy two folders from this repository to the server:
    - creates 5 tables (`wp_amc_dealers`, `wp_amc_vehicles`, `wp_amc_vehicle_media`, `wp_amc_inquiries`, `wp_amc_audit_log`);
    - creates the company pages (About, Services, How it works, Contact, FAQ, Become a dealer) in French, and Privacy/Terms **as drafts**;
    - registers the marketplace URLs.
-4. **Appearance → Themes**: activate **AutoMarket**.
+4. **Appearance → Themes**: activate **AutoBuzy**.
 
 ## 4. Configure
 
@@ -78,7 +78,7 @@ node tools/tests/browser.js http://127.0.0.1:8088                      # 32 chec
 
 ## 8. Customising templates
 
-Copy any file from `automotive-marketplace-core/templates/` into `automarket/amc/` (same relative path) to override it. Design tokens live in `shared/design-system/design-system.css`; after editing run `tools/dev/sync-design-system.sh`.
+Copy any file from `automotive-marketplace-core/templates/` into `autobuzy/amc/` (same relative path) to override it. Design tokens live in `shared/design-system/design-system.css`; after editing run `tools/dev/sync-design-system.sh`.
 
 ## 9. Uninstall
 

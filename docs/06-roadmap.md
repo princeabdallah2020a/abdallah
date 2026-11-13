@@ -46,7 +46,7 @@ Acceptance: provider/regulatory verification documented; inbound call flow with 
 
 ## Decisions to confirm with the product owner
 
-1. **Brand name.** The theme shows the WordPress site title; "AutoMarket" is only a working name.
+1. **Brand name.** The theme shows the WordPress site title; "AutoBuzy" is only a working name.
 2. **Canonical policy** default (`self`) — see docs/01 §1.4.
 3. **Freshness windows** (72 h / 168 h) — editable in settings.
 4. **Dealer hosting provider** — determines how much of provisioning can be automated in Phase 2.

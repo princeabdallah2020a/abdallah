@@ -1,6 +1,6 @@
 <?php
 /**
- * French translation of the AutoMarket theme (WordPress 6.5+ PHP format).
+ * French translation of the AutoBuzy theme (WordPress 6.5+ PHP format).
  */
 return array(
 	'language'     => 'fr_FR',
@@ -9,7 +9,7 @@ return array(
 		'Search results for "%s"' => 'Résultats de recherche pour « %s »',
 		'News'                    => 'Actualités',
 		'Nothing to show yet'     => 'Rien à afficher pour le moment',
-		'The AutoMarket theme requires the "Automotive Marketplace Core" plugin. Please install and activate it.' => 'Le thème AutoMarket nécessite l’extension « Automotive Marketplace Core ». Veuillez l’installer et l’activer.',
+		'The AutoBuzy theme requires the "Automotive Marketplace Core" plugin. Please install and activate it.' => 'Le thème AutoBuzy nécessite l’extension « Automotive Marketplace Core ». Veuillez l’installer et l’activer.',
 		'Automotive marketplace · %s' => 'Marketplace automobile · %s',
 		'vehicles online'         => 'véhicules en ligne',
 		'dealerships'             => 'concessionnaires',

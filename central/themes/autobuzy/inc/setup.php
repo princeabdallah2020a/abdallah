@@ -2,7 +2,7 @@
 /**
  * Theme setup, assets and plugin dependency notice.
  *
- * @package AutoMarket
+ * @package AutoBuzy
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit;
 add_action(
 	'after_setup_theme',
 	static function () {
-		load_theme_textdomain( 'automarket', get_template_directory() . '/languages' );
+		load_theme_textdomain( 'autobuzy', get_template_directory() . '/languages' );
 		add_theme_support( 'title-tag' );
 		add_theme_support( 'post-thumbnails' );
 		add_theme_support( 'html5', array( 'search-form', 'gallery', 'caption', 'style', 'script', 'navigation-widgets' ) );
@@ -26,8 +26,8 @@ add_action(
 		);
 		register_nav_menus(
 			array(
-				'primary' => __( 'Main menu', 'automarket' ),
-				'footer'  => __( 'Footer menu', 'automarket' ),
+				'primary' => __( 'Main menu', 'autobuzy' ),
+				'footer'  => __( 'Footer menu', 'autobuzy' ),
 			)
 		);
 	}
@@ -37,7 +37,7 @@ add_action(
 	'wp_enqueue_scripts',
 	static function () {
 		if ( ! wp_style_is( 'amds', 'registered' ) ) {
-			wp_register_style( 'amds', get_template_directory_uri() . '/assets/css/design-system.css', array(), AUTOMARKET_VERSION );
+			wp_register_style( 'amds', get_template_directory_uri() . '/assets/css/design-system.css', array(), AUTOBUZY_VERSION );
 		}
 	},
 	5
@@ -46,8 +46,8 @@ add_action(
 add_action(
 	'wp_enqueue_scripts',
 	static function () {
-		wp_enqueue_style( 'automarket', get_template_directory_uri() . '/assets/css/theme.css', array( 'amds' ), AUTOMARKET_VERSION );
-		wp_enqueue_script( 'automarket', get_template_directory_uri() . '/assets/js/theme.js', array(), AUTOMARKET_VERSION, true );
+		wp_enqueue_style( 'autobuzy', get_template_directory_uri() . '/assets/css/theme.css', array( 'amds' ), AUTOBUZY_VERSION );
+		wp_enqueue_script( 'autobuzy', get_template_directory_uri() . '/assets/js/theme.js', array(), AUTOBUZY_VERSION, true );
 	},
 	20
 );
@@ -71,7 +71,7 @@ add_action(
 	'admin_notices',
 	static function () {
 		if ( ! defined( 'AMC_VERSION' ) && current_user_can( 'activate_plugins' ) ) {
-			echo '<div class="notice notice-error"><p>' . esc_html__( 'The AutoMarket theme requires the "Automotive Marketplace Core" plugin. Please install and activate it.', 'automarket' ) . '</p></div>';
+			echo '<div class="notice notice-error"><p>' . esc_html__( 'The AutoBuzy theme requires the "Automotive Marketplace Core" plugin. Please install and activate it.', 'autobuzy' ) . '</p></div>';
 		}
 	}
 );

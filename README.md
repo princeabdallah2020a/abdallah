@@ -38,7 +38,7 @@ Detailed checklist: [docs/06-roadmap.md](docs/06-roadmap.md).
 ```
 central/
   plugins/automotive-marketplace-core/   Central plugin (data, catalog, API, SEO, admin)
-  themes/automarket/                     Central theme (company site + marketplace UI)
+  themes/autobuzy/                     Central theme (company site + marketplace UI)
 dealer/                                  Dealer theme, CRM and connector plugins (Phase 3–4)
 ai-service/                              AI assistant service (Phase 5–6)
 shared/design-system/                    Design tokens + base components (single source of truth)

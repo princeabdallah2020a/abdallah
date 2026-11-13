@@ -88,4 +88,6 @@ lint/tmp/
 *.log
 .DS_Store
 node_modules/
-vendor/
+
+# Composer dependencies (run: composer install --no-dev)
+/central/plugins/*/vendor/

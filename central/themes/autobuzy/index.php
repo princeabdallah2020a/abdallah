@@ -2,7 +2,7 @@
 /**
  * Fallback template (blog index, archives, single posts).
  *
- * @package AutoMarket
+ * @package AutoBuzy
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -18,11 +18,11 @@ get_header();
 					single_post_title();
 				} elseif ( is_search() ) {
 					/* translators: %s: search query */
-					echo esc_html( sprintf( __( 'Search results for "%s"', 'automarket' ), get_search_query() ) );
+					echo esc_html( sprintf( __( 'Search results for "%s"', 'autobuzy' ), get_search_query() ) );
 				} elseif ( is_archive() ) {
 					the_archive_title();
 				} else {
-					esc_html_e( 'News', 'automarket' );
+					esc_html_e( 'News', 'autobuzy' );
 				}
 				?>
 			</h1>
@@ -45,7 +45,7 @@ get_header();
 			<?php endwhile; ?>
 			<?php the_posts_pagination(); ?>
 		<?php else : ?>
-			<div class="amds-empty"><h2 class="amds-empty__title"><?php esc_html_e( 'Nothing to show yet', 'automarket' ); ?></h2></div>
+			<div class="amds-empty"><h2 class="amds-empty__title"><?php esc_html_e( 'Nothing to show yet', 'autobuzy' ); ?></h2></div>
 		<?php endif; ?>
 	</div>
 </main>

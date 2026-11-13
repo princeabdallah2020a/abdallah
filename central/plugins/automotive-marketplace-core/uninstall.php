@@ -14,7 +14,7 @@ if ( empty( $amc_settings['delete_on_uninstall'] ) ) {
 }
 
 global $wpdb;
-foreach ( array( 'vehicle_media', 'vehicles', 'dealers', 'inquiries', 'audit_log' ) as $amc_table ) {
+foreach ( array( 'vehicle_media', 'vehicles', 'dealers', 'inquiries', 'audit_log', 'ai_usage' ) as $amc_table ) {
 	$wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'amc_' . $amc_table ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 }
 delete_option( 'amc_settings' );

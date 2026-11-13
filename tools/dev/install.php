@@ -22,7 +22,7 @@ require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
 if ( ! is_blog_installed() ) {
-	wp_install( 'AutoMarket', 'admin', 'admin@example.test', true, '', 'local-dev-password' );
+	wp_install( 'AutoBuzy', 'admin', 'admin@example.test', true, '', 'local-dev-password' );
 }
 update_option( 'blogdescription', '' );
 update_option( 'timezone_string', 'Africa/Dakar' );
@@ -35,7 +35,7 @@ if ( is_wp_error( $result ) ) {
 	fwrite( STDERR, 'Plugin activation failed: ' . $result->get_error_message() . "\n" );
 	exit( 1 );
 }
-switch_theme( 'automarket' );
+switch_theme( 'autobuzy' );
 flush_rewrite_rules();
 
 echo "Installed. Admin login: admin / local-dev-password\n";

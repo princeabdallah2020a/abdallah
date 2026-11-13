@@ -2,13 +2,13 @@
 /**
  * Template helpers.
  *
- * @package AutoMarket
+ * @package AutoBuzy
  */
 
 defined( 'ABSPATH' ) || exit;
 
 /** True when the marketplace plugin is active. */
-function automarket_has_marketplace() {
+function autobuzy_has_marketplace() {
 	return defined( 'AMC_VERSION' );
 }
 
@@ -17,8 +17,8 @@ function automarket_has_marketplace() {
  *
  * @param string $key Page key, e.g. "contact".
  */
-function automarket_page_url( $key ) {
-	return automarket_has_marketplace() ? AMC\Content::page_url( $key ) : '';
+function autobuzy_page_url( $key ) {
+	return autobuzy_has_marketplace() ? AMC\Content::page_url( $key ) : '';
 }
 
 /**
@@ -27,7 +27,7 @@ function automarket_page_url( $key ) {
  * @param string $name Icon name.
  * @param int    $size Size in pixels.
  */
-function automarket_icon( $name, $size = 18 ) {
+function autobuzy_icon( $name, $size = 18 ) {
 	return function_exists( 'amc_icon' ) ? amc_icon( $name, $size ) : '';
 }
 
@@ -36,17 +36,17 @@ function automarket_icon( $name, $size = 18 ) {
  *
  * @return array[] [ label, url ]
  */
-function automarket_default_nav() {
-	if ( ! automarket_has_marketplace() ) {
+function autobuzy_default_nav() {
+	if ( ! autobuzy_has_marketplace() ) {
 		return array();
 	}
 	return array_filter(
 		array(
-			array( __( 'For sale', 'automarket' ), amc_catalog_url( 'sale' ) ),
-			array( __( 'For rent', 'automarket' ), amc_catalog_url( 'rent' ) ),
-			array( __( 'Dealers', 'automarket' ), amc_dealers_url() ),
-			array( __( 'Services', 'automarket' ), automarket_page_url( 'services' ) ),
-			array( __( 'How it works', 'automarket' ), automarket_page_url( 'how-it-works' ) ),
+			array( __( 'For sale', 'autobuzy' ), amc_catalog_url( 'sale' ) ),
+			array( __( 'For rent', 'autobuzy' ), amc_catalog_url( 'rent' ) ),
+			array( __( 'Dealers', 'autobuzy' ), amc_dealers_url() ),
+			array( __( 'Services', 'autobuzy' ), autobuzy_page_url( 'services' ) ),
+			array( __( 'How it works', 'autobuzy' ), autobuzy_page_url( 'how-it-works' ) ),
 		),
 		static function ( $item ) {
 			return '' !== $item[1];
@@ -55,7 +55,7 @@ function automarket_default_nav() {
 }
 
 /** Print the primary navigation list. */
-function automarket_primary_nav() {
+function autobuzy_primary_nav() {
 	if ( has_nav_menu( 'primary' ) ) {
 		wp_nav_menu(
 			array(
@@ -69,7 +69,7 @@ function automarket_primary_nav() {
 	}
 	$current = home_url( add_query_arg( array() ) );
 	echo '<ul class="am-nav__list">';
-	foreach ( automarket_default_nav() as $item ) {
+	foreach ( autobuzy_default_nav() as $item ) {
 		$active = untrailingslashit( strtok( $current, '?' ) ) === untrailingslashit( $item[1] );
 		echo '<li><a href="' . esc_url( $item[1] ) . '"' . ( $active ? ' aria-current="page"' : '' ) . '>' . esc_html( $item[0] ) . '</a></li>';
 	}
@@ -77,7 +77,7 @@ function automarket_primary_nav() {
 }
 
 /** Site name or custom logo. */
-function automarket_brand() {
+function autobuzy_brand() {
 	if ( has_custom_logo() ) {
 		the_custom_logo();
 		return;
@@ -93,14 +93,14 @@ function automarket_brand() {
  * @param string $label Link label.
  * @param string $lead  Optional intro.
  */
-function automarket_section_head( $title, $url = '', $label = '', $lead = '' ) {
+function autobuzy_section_head( $title, $url = '', $label = '', $lead = '' ) {
 	echo '<div class="am-section__head"><div><h2 class="am-section__title">' . esc_html( $title ) . '</h2>';
 	if ( $lead ) {
 		echo '<p class="am-section__lead">' . esc_html( $lead ) . '</p>';
 	}
 	echo '</div>';
 	if ( $url ) {
-		echo '<a class="amds-link" href="' . esc_url( $url ) . '">' . esc_html( $label ) . automarket_icon( 'arrow', 16 ) . '</a>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo '<a class="amds-link" href="' . esc_url( $url ) . '">' . esc_html( $label ) . autobuzy_icon( 'arrow', 16 ) . '</a>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 	echo '</div>';
 }

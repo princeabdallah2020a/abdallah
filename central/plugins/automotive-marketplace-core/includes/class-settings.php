@@ -30,6 +30,11 @@ final class Settings {
 			'company_address'     => '',
 			'api_rate_limit'      => 120,  // Public API requests per minute and per IP.
 			'delete_on_uninstall' => 0,
+			// AI assistant.
+			'ai_visitor_enabled'  => 1,
+			'ai_model'            => 'claude-opus-5-5',
+			'ai_api_key'          => '',
+			'ai_daily_cap'        => 500,  // Max AI requests per day, all users (0 = no cap).
 		);
 	}
 
@@ -85,6 +90,20 @@ final class Settings {
 			$out['canonical_policy'] = 'dealer' === $input['canonical_policy'] ? 'dealer' : 'self';
 		}
 		$out['delete_on_uninstall'] = empty( $input['delete_on_uninstall'] ) ? 0 : 1;
+		$out['ai_visitor_enabled']  = empty( $input['ai_visitor_enabled'] ) ? 0 : 1;
+		if ( isset( $input['ai_model'] ) && isset( Assistant::models()[ $input['ai_model'] ] ) ) {
+			$out['ai_model'] = $input['ai_model'];
+		}
+		if ( isset( $input['ai_daily_cap'] ) ) {
+			$out['ai_daily_cap'] = min( 100000, absint( $input['ai_daily_cap'] ) );
+		}
+		// The key field is never pre-filled: empty means "keep the saved key".
+		if ( ! empty( $input['ai_api_key'] ) ) {
+			$out['ai_api_key'] = preg_replace( '/[^A-Za-z0-9_\-]/', '', (string) $input['ai_api_key'] );
+		}
+		if ( ! empty( $input['ai_api_key_delete'] ) ) {
+			$out['ai_api_key'] = '';
+		}
 
 		return $out;
 	}

@@ -2,7 +2,7 @@
 /**
  * Default page template (About, Services, How it works, FAQ, legal pages).
  *
- * @package AutoMarket
+ * @package AutoBuzy
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -16,8 +16,8 @@ get_header();
 		?>
 		<header class="amc-page-header">
 			<div class="amds-container">
-				<nav class="amds-breadcrumb" aria-label="<?php esc_attr_e( 'Breadcrumb', 'automarket' ); ?>">
-					<a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Home', 'automarket' ); ?></a>
+				<nav class="amds-breadcrumb" aria-label="<?php esc_attr_e( 'Breadcrumb', 'autobuzy' ); ?>">
+					<a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Home', 'autobuzy' ); ?></a>
 					<span aria-current="page"><?php the_title(); ?></span>
 				</nav>
 				<h1 class="amc-page-header__title"><?php the_title(); ?></h1>

@@ -24,7 +24,7 @@ cp "$PLUGIN_DIR/db.copy" "$SITE/wp-content/db.php"
 mkdir -p "$SITE/wp-content/database" "$SITE/wp-content/uploads"
 
 ln -sfn "$ROOT/central/plugins/automotive-marketplace-core" "$SITE/wp-content/plugins/automotive-marketplace-core"
-ln -sfn "$ROOT/central/themes/automarket" "$SITE/wp-content/themes/automarket"
+ln -sfn "$ROOT/central/themes/autobuzy" "$SITE/wp-content/themes/autobuzy"
 
 cat > "$SITE/wp-config.php" <<PHP
 <?php

@@ -5,7 +5,7 @@
 ```
                          ┌──────────────────────────────────────────┐
    Buyers  ───────────►  │ CENTRAL SITE (one WordPress)             │
-   Dealers (signup) ──►  │  theme  automarket                       │
+   Dealers (signup) ──►  │  theme  autobuzy                       │
    Platform staff ────►  │  plugin automotive-marketplace-core      │
                          │   catalog · dealers · plans · payments   │
                          │   REST marketplace/v1 · /platform-admin/ │
@@ -38,7 +38,7 @@ Rules that follow from the "independent dealers" decision:
 
 | Component | Role | Phase |
 |---|---|---|
-| Theme `automarket` | Presentation only: header, footer, homepage, company pages, design-system styling | 1 ✔ |
+| Theme `autobuzy` | Presentation only: header, footer, homepage, company pages, design-system styling | 1 ✔ |
 | Plugin `automotive-marketplace-core` | All business logic | 1 ✔ → 4 |
 | ├ `Database` | Versioned migrations (`AMC_DB_VERSION`) | 1 ✔ |
 | ├ `Vehicles`, `Dealers` | Repositories; the *only* place visibility rules are enforced | 1 ✔ |
@@ -73,7 +73,7 @@ The same vehicle exists on the dealer site and on the marketplace.
 
 ## 1.5 Multilingual architecture
 
-- All interface strings use WordPress i18n (text domains `automotive-marketplace-core`, `automarket`), written in English, shipped with **fr_FR** translations (`*.l10n.php`, WordPress ≥ 6.5 format). Adding English = switching site language; adding Wolof = adding a `wo` translation file.
+- All interface strings use WordPress i18n (text domains `automotive-marketplace-core`, `autobuzy`), written in English, shipped with **fr_FR** translations (`*.l10n.php`, WordPress ≥ 6.5 format). Adding English = switching site language; adding Wolof = adding a `wo` translation file.
 - Stored values are language-neutral keys (`petrol`, `automatic`, `suv`…) translated at display time.
 - Editorial pages are WordPress pages (French at launch). Per-language URLs (`/en/`, `/wo/`) and a language switcher are planned for the phase where English/Wolof content exists; listing descriptions stay in the language the dealer wrote them.
 

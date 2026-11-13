@@ -69,6 +69,67 @@ final class Api {
 				'permission_callback' => $public,
 			)
 		);
+
+		// AI assistant — visitors (public, throttled) and administrators.
+		register_rest_route(
+			self::NS,
+			'/assistant',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( __CLASS__, 'assistant' ),
+				'permission_callback' => static function () {
+					if ( ! Settings::get( 'ai_visitor_enabled' ) ) {
+						return new \WP_Error( 'amc_disabled', __( 'The assistant is disabled.', 'automotive-marketplace-core' ), array( 'status' => 403 ) );
+					}
+					if ( ! Rate_Limiter::allow( 'assistant', 20, 10 * MINUTE_IN_SECONDS ) ) {
+						return new \WP_Error( 'amc_rate_limited', __( 'You have sent many messages. Please wait a few minutes.', 'automotive-marketplace-core' ), array( 'status' => 429 ) );
+					}
+					return true;
+				},
+			)
+		);
+		$admin_only = static function () {
+			return current_user_can( 'manage_options' );
+		};
+		register_rest_route(
+			self::NS,
+			'/admin/assistant',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( __CLASS__, 'admin_assistant' ),
+				'permission_callback' => $admin_only,
+			)
+		);
+		register_rest_route(
+			self::NS,
+			'/admin/inquiries/(?P<id>\d+)/draft-reply',
+			array(
+				'methods'             => 'POST',
+				'callback'            => static function ( \WP_REST_Request $request ) {
+					$draft = Assistant::draft_inquiry_reply( $request['id'] );
+					return is_wp_error( $draft ) ? $draft : rest_ensure_response( array( 'draft' => $draft ) );
+				},
+				'permission_callback' => $admin_only,
+			)
+		);
+	}
+
+	public static function assistant( \WP_REST_Request $request ) {
+		return self::assistant_response( 'visitor', $request );
+	}
+
+	public static function admin_assistant( \WP_REST_Request $request ) {
+		return self::assistant_response( 'admin', $request );
+	}
+
+	private static function assistant_response( $scope, \WP_REST_Request $request ) {
+		$messages = Assistant::sanitize_messages( $request->get_param( 'messages' ) );
+		if ( ! $messages ) {
+			return new \WP_Error( 'amc_invalid', __( 'Please write a message.', 'automotive-marketplace-core' ), array( 'status' => 400 ) );
+		}
+		$response = rest_ensure_response( Assistant::reply( $scope, $messages ) );
+		$response->header( 'Cache-Control', 'no-store' );
+		return $response;
 	}
 
 	/**

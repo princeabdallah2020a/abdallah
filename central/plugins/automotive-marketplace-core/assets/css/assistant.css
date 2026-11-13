@@ -1,0 +1,484 @@
+/* AutoBuzy assistant: floating widget (public) and inline panel (admin). */
+
+.amc-ai {
+	--ai-ink: var(--amds-ink, #0e1726);
+	--ai-accent: var(--amds-accent, #cf3e1a);
+	--ai-border: var(--amds-border, #dfe3e9);
+	--ai-muted: var(--amds-text-muted, #566070);
+	--ai-subtle: var(--amds-bg-subtle, #f6f7f9);
+	font-family: var(--amds-font-body, system-ui, sans-serif);
+	font-size: 0.9375rem;
+	line-height: 1.5;
+	color: var(--ai-ink);
+}
+
+.amc-ai *,
+.amc-ai *::before,
+.amc-ai *::after {
+	box-sizing: border-box;
+}
+
+.amc-ai--widget {
+	position: fixed;
+	right: 20px;
+	bottom: 20px;
+	z-index: 90;
+}
+
+.amc-ai__launcher {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	min-height: 52px;
+	padding: 0 1.125rem 0 0.875rem;
+	border: 0;
+	border-radius: 999px;
+	background: var(--ai-ink);
+	color: #fff;
+	font: inherit;
+	font-weight: 600;
+	cursor: pointer;
+	box-shadow: 0 10px 30px rgba(14, 23, 38, 0.28);
+	transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.amc-ai__launcher:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 14px 36px rgba(14, 23, 38, 0.34);
+}
+
+.amc-ai__spark {
+	display: grid;
+	place-items: center;
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+	background: var(--ai-accent);
+	color: #fff;
+	flex: none;
+}
+
+.amc-ai.is-open .amc-ai__launcher {
+	display: none;
+}
+
+.amc-ai__panel {
+	display: flex;
+	flex-direction: column;
+	width: min(400px, calc(100vw - 24px));
+	height: min(640px, calc(100vh - 40px));
+	height: min(640px, calc(100dvh - 40px));
+	background: #fff;
+	border: 1px solid var(--ai-border);
+	border-radius: 20px;
+	box-shadow: 0 24px 64px rgba(14, 23, 38, 0.24);
+	overflow: hidden;
+	animation: amc-ai-in 180ms ease-out;
+}
+
+.amc-ai__panel[hidden] {
+	display: none;
+}
+
+@keyframes amc-ai-in {
+	from {
+		opacity: 0;
+		transform: translateY(12px) scale(0.98);
+	}
+}
+
+@media (max-width: 520px) {
+	.amc-ai--widget {
+		right: 12px;
+		bottom: 12px;
+	}
+
+	.amc-ai--widget.is-open {
+		inset: 0;
+	}
+
+	.amc-ai--widget .amc-ai__panel {
+		width: 100%;
+		height: 100%;
+		border: 0;
+		border-radius: 0;
+	}
+
+	.amc-ai__launcher-label {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+	}
+
+	.amc-ai__launcher {
+		padding: 0 0.6875rem;
+	}
+}
+
+.amc-ai--inline .amc-ai__panel {
+	width: 100%;
+	max-width: 860px;
+	height: min(680px, calc(100vh - 220px));
+	box-shadow: none;
+	animation: none;
+}
+
+.amc-ai__head {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	padding: 0.875rem 1rem;
+	background: var(--ai-ink);
+	color: #fff;
+}
+
+.amc-ai__head-text {
+	flex: 1;
+	min-width: 0;
+}
+
+.amc-ai__title {
+	display: block;
+	font-family: var(--amds-font-display, inherit);
+	font-weight: 600;
+	font-size: 1rem;
+}
+
+.amc-ai__subtitle {
+	display: block;
+	font-size: 0.75rem;
+	color: #b9c2d0;
+}
+
+.amc-ai__icon-btn {
+	display: grid;
+	place-items: center;
+	width: 36px;
+	height: 36px;
+	border: 0;
+	border-radius: 10px;
+	background: transparent;
+	color: #fff;
+	cursor: pointer;
+}
+
+.amc-ai__icon-btn:hover {
+	background: rgba(255, 255, 255, 0.12);
+}
+
+.amc-ai__log {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	padding: 1rem;
+	overflow-y: auto;
+	background: var(--ai-subtle);
+	overscroll-behavior: contain;
+}
+
+.amc-ai__msg {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	max-width: 92%;
+}
+
+.amc-ai__msg--user {
+	align-self: flex-end;
+	align-items: flex-end;
+}
+
+.amc-ai__bubble {
+	padding: 0.625rem 0.875rem;
+	border-radius: 16px;
+	background: #fff;
+	border: 1px solid var(--ai-border);
+	border-bottom-left-radius: 6px;
+	overflow-wrap: anywhere;
+}
+
+.amc-ai__msg--user .amc-ai__bubble {
+	background: var(--ai-ink);
+	border-color: var(--ai-ink);
+	color: #fff;
+	border-radius: 16px;
+	border-bottom-right-radius: 6px;
+}
+
+.amc-ai__msg--error .amc-ai__bubble {
+	background: #fbe9e7;
+	border-color: #f2c0bb;
+	color: #8c1d18;
+}
+
+.amc-ai__bubble p,
+.amc-ai__bubble ul {
+	margin: 0 0 0.5rem;
+}
+
+.amc-ai__bubble > :last-child {
+	margin-bottom: 0;
+}
+
+.amc-ai__bubble ul {
+	padding-left: 1.1rem;
+}
+
+.amc-ai__bubble a {
+	color: var(--ai-accent);
+	font-weight: 600;
+}
+
+.amc-ai__typing {
+	display: inline-flex;
+	gap: 4px;
+	padding: 0.875rem;
+}
+
+.amc-ai__typing span {
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background: var(--ai-muted);
+	animation: amc-ai-dot 1s infinite ease-in-out;
+}
+
+.amc-ai__typing span:nth-child(2) {
+	animation-delay: 0.15s;
+}
+
+.amc-ai__typing span:nth-child(3) {
+	animation-delay: 0.3s;
+}
+
+@keyframes amc-ai-dot {
+	0%,
+	80%,
+	100% {
+		opacity: 0.3;
+		transform: translateY(0);
+	}
+
+	40% {
+		opacity: 1;
+		transform: translateY(-3px);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.amc-ai__panel,
+	.amc-ai__typing span {
+		animation: none;
+	}
+}
+
+.amc-ai__cars {
+	display: grid;
+	gap: 0.5rem;
+	width: 100%;
+}
+
+.amc-ai__car {
+	display: flex;
+	gap: 0.75rem;
+	align-items: center;
+	padding: 0.5rem;
+	background: #fff;
+	border: 1px solid var(--ai-border);
+	border-radius: 14px;
+	color: inherit;
+	text-decoration: none;
+	transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.amc-ai__car:hover {
+	border-color: var(--ai-ink);
+	box-shadow: 0 4px 14px rgba(14, 23, 38, 0.08);
+}
+
+.amc-ai__car img {
+	width: 84px;
+	height: 60px;
+	border-radius: 9px;
+	object-fit: cover;
+	background: #eceef2;
+	flex: none;
+}
+
+.amc-ai__car-body {
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+	font-size: 0.875rem;
+}
+
+.amc-ai__car-body strong {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.amc-ai__car-price {
+	font-weight: 700;
+	color: var(--ai-accent);
+}
+
+.amc-ai__car-meta {
+	font-size: 0.75rem;
+	color: var(--ai-muted);
+}
+
+.amc-ai__more {
+	font-size: 0.8125rem;
+	font-weight: 600;
+	color: var(--ai-ink);
+}
+
+.amc-ai__chips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.375rem;
+	padding: 0 1rem 0.75rem;
+	background: var(--ai-subtle);
+}
+
+.amc-ai__chips[hidden] {
+	display: none;
+}
+
+.amc-ai__chips button {
+	padding: 0.375rem 0.75rem;
+	border: 1px solid var(--ai-border);
+	border-radius: 999px;
+	background: #fff;
+	color: var(--ai-ink);
+	font: inherit;
+	font-size: 0.8125rem;
+	cursor: pointer;
+}
+
+.amc-ai__chips button:hover {
+	border-color: var(--ai-ink);
+}
+
+.amc-ai__form {
+	display: flex;
+	align-items: flex-end;
+	gap: 0.5rem;
+	padding: 0.75rem;
+	border-top: 1px solid var(--ai-border);
+	background: #fff;
+}
+
+.amc-ai__input {
+	flex: 1;
+	min-height: 44px;
+	max-height: 120px;
+	padding: 0.625rem 0.75rem;
+	border: 1px solid var(--ai-border);
+	border-radius: 14px;
+	background: var(--ai-subtle);
+	color: inherit;
+	font: inherit;
+	font-size: 1rem;
+	resize: none;
+}
+
+.amc-ai__input:focus {
+	outline: none;
+	border-color: var(--ai-accent);
+	box-shadow: 0 0 0 3px rgba(207, 62, 26, 0.22);
+	background: #fff;
+}
+
+.amc-ai__send {
+	display: grid;
+	place-items: center;
+	width: 44px;
+	height: 44px;
+	border: 0;
+	border-radius: 14px;
+	background: var(--ai-accent);
+	color: #fff;
+	cursor: pointer;
+	flex: none;
+}
+
+.amc-ai__send:hover {
+	background: var(--amds-accent-hover, #b23314);
+}
+
+.amc-ai__note {
+	margin: 0;
+	padding: 0 0.875rem 0.625rem;
+	background: #fff;
+	font-size: 0.6875rem;
+	color: var(--ai-muted);
+	text-align: center;
+}
+
+/* "Ask the assistant" bar (homepage hero). */
+.amc-ai-ask {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	max-width: 720px;
+	margin-bottom: 1rem;
+	padding: 0.375rem 0.375rem 0.375rem 1rem;
+	border: 1px solid rgba(255, 255, 255, 0.22);
+	border-radius: 999px;
+	background: rgba(255, 255, 255, 0.08);
+	color: #fff;
+	backdrop-filter: blur(6px);
+}
+
+.amc-ai-ask:focus-within {
+	border-color: #ff9a7d;
+	background: rgba(255, 255, 255, 0.12);
+}
+
+.amc-ai-ask svg {
+	color: #ff9a7d;
+	flex: none;
+}
+
+.amc-ai-ask input {
+	flex: 1;
+	min-width: 0;
+	min-height: 44px;
+	border: 0;
+	background: transparent;
+	color: #fff;
+	font: inherit;
+	font-size: 1rem;
+}
+
+.amc-ai-ask input::placeholder {
+	color: #b9c2d0;
+}
+
+.amc-ai-ask input:focus {
+	outline: none;
+	box-shadow: none;
+}
+
+.amc-ai-ask button {
+	min-height: 44px;
+	padding: 0 1.125rem;
+	border: 0;
+	border-radius: 999px;
+	background: #fff;
+	color: var(--amds-ink, #0e1726);
+	font: inherit;
+	font-size: 0.875rem;
+	font-weight: 600;
+	cursor: pointer;
+	white-space: nowrap;
+}
+
+.amc-ai-ask button:hover {
+	background: #eceef2;
+}

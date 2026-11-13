@@ -77,7 +77,7 @@ section( 'Translations (fr_FR coverage)' );
 foreach (
 	array(
 		array( $root . '/central/plugins/automotive-marketplace-core', 'automotive-marketplace-core', 'languages/automotive-marketplace-core-fr_FR.l10n.php' ),
-		array( $root . '/central/themes/automarket', 'automarket', 'languages/fr_FR.l10n.php' ),
+		array( $root . '/central/themes/autobuzy', 'autobuzy', 'languages/fr_FR.l10n.php' ),
 	) as $pkg
 ) {
 	$strings = amc_i18n_extract( $pkg[0], $pkg[1] );

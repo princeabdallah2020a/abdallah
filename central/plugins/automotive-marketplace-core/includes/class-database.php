@@ -190,12 +190,37 @@ final class Database {
 	}
 
 	/**
+	 * Migration 2 — AI assistant usage log (cost control and reporting).
+	 */
+	private static function migration_2() {
+		global $wpdb;
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+		$charset = $wpdb->get_charset_collate();
+		$table   = self::table( 'ai_usage' );
+		dbDelta(
+			"CREATE TABLE $table (
+			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			scope varchar(20) NOT NULL DEFAULT 'visitor',
+			user_id bigint(20) unsigned NOT NULL DEFAULT 0,
+			ip_hash char(64) NOT NULL DEFAULT '',
+			model varchar(60) NOT NULL DEFAULT '',
+			input_tokens int(10) unsigned NOT NULL DEFAULT 0,
+			output_tokens int(10) unsigned NOT NULL DEFAULT 0,
+			created_at datetime NOT NULL,
+			PRIMARY KEY  (id),
+			KEY created_at (created_at),
+			KEY scope_created (scope,created_at)
+			) $charset;"
+		);
+	}
+
+	/**
 	 * Drop every plugin table. Only called from uninstall.php when the
 	 * administrator explicitly opted in to data deletion.
 	 */
 	public static function drop_all() {
 		global $wpdb;
-		foreach ( array( 'vehicle_media', 'vehicles', 'dealers', 'inquiries', 'audit_log' ) as $name ) {
+		foreach ( array( 'vehicle_media', 'vehicles', 'dealers', 'inquiries', 'audit_log', 'ai_usage' ) as $name ) {
 			$table = self::table( $name );
 			$wpdb->query( "DROP TABLE IF EXISTS $table" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		}
