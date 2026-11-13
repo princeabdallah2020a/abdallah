@@ -51,7 +51,13 @@ Built as specified in the acceptance criteria below: editable plans and duration
 Previous acceptance criteria:
 Acceptance: a dealer can pick a plan, register, submit company + verification data, choose domain option, submit payment proof; an administrator can review, approve/reject, activate a subscription, suspend; statuses flow Pending → Under review → Approved → Active (+ Suspended/Expired/Cancelled); plans, prices, limits, durations and discounts are editable and never hardcoded; manual provisioning job with checklist; `/platform-admin/` with Overview, Dealers, Applications, Subscriptions, Payments, Websites, Listings, Featured, Support, Audit, Settings; expiry + reminders by cron; every admin action audited.
 
-## Phase 3 — Dealer website + CRM ○
+## Phase 3 — Dealer website + CRM ◐ (built, not tested)
+
+Built: plugin **AutoBuzy Dealer CRM** (13 custom tables, `/manager/` application with dashboard, vehicles, leads pipeline, customers, sales, rentals with overlap protection and availability planner, appointments, team invitations, 5 roles + per-person permissions, settings, activity log; public inventory, vehicle pages, about/contact/financing pages, lead forms, SEO, sitemap, read-only `dealer/v1` API) and theme **AutoDealer** (homepage, header, footer, 4 design presets, branding from the CRM). French translation complete. See docs/INSTALL-DEALER.md.
+
+**Not tested:** delivered without running WordPress or a browser, at the owner's request; only syntax checks were run. Test on a staging dealer site: create vehicles with photos, publish as manager and as sales agent, receive a website lead, move it through the pipeline, record and cancel a sale, create two overlapping rentals and check the second is refused, invite a team member.
+
+Acceptance criteria:
 Acceptance: installable theme + CRM plugin on a blank WordPress; `/manager/` with dashboard, vehicles (7 statuses, photos), leads pipeline, customers, sales (confirm ⇒ vehicle sold), rentals (no overlapping confirmed rentals), team invites with 5 roles; all permissions enforced server-side; dealer branding without code.
 
 ## Phase 4 — API + connector ○

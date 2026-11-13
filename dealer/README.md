@@ -1,9 +1,12 @@
-# Dealer package (Phase 3–4)
+# Dealer package (Phase 3)
 
-Will contain, for installation on each **independent** dealer WordPress site:
+Installed on **each independent dealer WordPress site** (own domain, hosting, database).
 
-- `themes/autodealer/` — official dealer theme (customisable branding, inventory, vehicle pages)
-- `plugins/automotive-dealer-crm/` — CRM at `/manager/` (vehicles, leads, customers, sales, rentals, team)
-- `plugins/automotive-marketplace-connector/` — secure connection to the central marketplace
+| Folder | What it is |
+|---|---|
+| `plugins/automotive-dealer-crm/` | **AutoBuzy Dealer CRM** — the CRM at `/manager/` and the public inventory of the dealer website |
+| `themes/autodealer/` | **AutoDealer** — the dealer website theme, branded from the CRM settings |
 
-Nothing is implemented yet. The design is in `docs/01-architecture.md`, `docs/02-database.md` and `docs/03-api-and-sync.md`.
+The Marketplace Connector (sync with the central marketplace) is Phase 4. The CRM already emits the `adc_vehicle_changed( $id, $event, $uid )` and `adc_lead_created( $id )` actions it will use.
+
+Installation: see `docs/INSTALL-DEALER.md`.

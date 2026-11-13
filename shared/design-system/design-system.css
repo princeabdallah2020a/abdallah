@@ -211,7 +211,7 @@ a {
 
 .amds-btn--accent {
 	background: var(--amds-accent);
-	color: #fff;
+	color: var(--amds-on-accent, #fff);
 }
 
 .amds-btn--accent:hover {
@@ -395,7 +395,12 @@ a {
 
 .amds-badge--accent {
 	background: var(--amds-accent);
-	color: #fff;
+	color: var(--amds-on-accent, #fff);
+}
+
+.amds-badge--danger {
+	background: var(--amds-danger-soft);
+	color: var(--amds-danger);
 }
 
 .amds-badge--info {

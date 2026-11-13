@@ -1,0 +1,158 @@
+/* Dealer website: inventory, vehicle page, contact forms. */
+
+.adc-main { padding-bottom: var(--amds-8); }
+.adc-muted { color: var(--amds-text-muted); }
+.adc-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+.adc-eyebrow {
+	margin: 0 0 var(--amds-2);
+	font-size: var(--amds-text-xs);
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var(--amds-accent);
+}
+
+.adc-page-head {
+	margin-bottom: var(--amds-6);
+	padding: clamp(2rem, 5vw, 3.5rem) 0;
+	background: var(--amds-ink);
+	color: #fff;
+}
+
+.adc-page-head .adc-eyebrow { color: color-mix(in srgb, var(--amds-accent) 70%, #fff); }
+.adc-page-head__title { margin: 0; font-size: var(--amds-text-3xl); color: #fff; }
+.adc-page-head__lead { margin: var(--amds-2) 0 0; color: rgba(255, 255, 255, 0.75); }
+
+.adc-block { margin-top: var(--amds-7); }
+.adc-block > h2 { font-size: var(--amds-text-xl); margin-bottom: var(--amds-4); }
+.adc-prose { max-width: 70ch; }
+.adc-prose p { color: var(--amds-text); }
+
+/* ---------- Cards ---------- */
+.adc-grid { display: grid; gap: var(--amds-5); grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+
+@media (min-width: 1100px) { .adc-grid--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+.adc-card {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	border: 1px solid var(--amds-border);
+	border-radius: var(--adc-radius, var(--amds-radius-lg));
+	background: #fff;
+	overflow: hidden;
+	transition: transform var(--amds-transition), box-shadow var(--amds-transition), border-color var(--amds-transition);
+}
+
+.adc-card:hover,
+.adc-card:focus-within { transform: translateY(-3px); box-shadow: var(--amds-shadow); border-color: var(--amds-border-strong); }
+.adc-card__media { position: relative; display: block; aspect-ratio: 3 / 2; background: var(--amds-bg-muted); }
+.adc-card__media img { width: 100%; height: 100%; object-fit: cover; }
+.adc-card__placeholder { display: grid; place-items: center; height: 100%; color: var(--amds-border-strong); }
+.adc-card__badges { position: absolute; top: var(--amds-3); left: var(--amds-3); display: flex; flex-wrap: wrap; gap: 4px; }
+.adc-card__body { display: flex; flex-direction: column; gap: var(--amds-2); padding: var(--amds-4); }
+.adc-card__title { margin: 0; font-size: var(--amds-text-md); }
+.adc-card__title a { color: var(--amds-ink); text-decoration: none; }
+.adc-card__title a::after { content: ""; position: absolute; inset: 0; }
+.adc-card__price { margin: 0; font-family: var(--amds-font-display); font-size: var(--amds-text-lg); font-weight: 700; color: var(--amds-accent); }
+.adc-card__specs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px var(--amds-3); margin: 0; padding: 0; list-style: none; font-size: var(--amds-text-sm); color: var(--amds-text-muted); }
+.adc-card__specs li { display: inline-flex; align-items: center; gap: 6px; }
+
+/* ---------- Inventory ---------- */
+.adc-inventory { display: grid; gap: var(--amds-6); align-items: start; }
+
+@media (min-width: 1000px) {
+	.adc-inventory { grid-template-columns: 270px minmax(0, 1fr); }
+	.adc-inventory__filters { position: sticky; top: calc(var(--amds-header-h, 72px) + var(--amds-4)); }
+}
+
+.adc-inventory__filters {
+	display: grid;
+	gap: var(--amds-3);
+	padding: var(--amds-4);
+	border: 1px solid var(--amds-border);
+	border-radius: var(--amds-radius-lg);
+	background: #fff;
+}
+
+.adc-inventory__actions { display: flex; gap: var(--amds-2); }
+
+.adc-empty {
+	display: grid;
+	justify-items: center;
+	gap: var(--amds-3);
+	padding: var(--amds-8) var(--amds-5);
+	border: 1px dashed var(--amds-border-strong);
+	border-radius: var(--amds-radius-lg);
+	background: var(--amds-bg-subtle);
+	text-align: center;
+	color: var(--amds-text-muted);
+}
+
+.adc-empty h2 { margin: 0; font-size: var(--amds-text-lg); }
+
+/* ---------- Vehicle page ---------- */
+.adc-vehicle { padding-top: var(--amds-5); }
+.adc-vehicle__layout { display: grid; gap: var(--amds-6); }
+
+@media (min-width: 1000px) {
+	.adc-vehicle__layout { grid-template-columns: minmax(0, 1fr) 380px; align-items: start; }
+	.adc-vehicle__aside { position: sticky; top: calc(var(--amds-header-h, 72px) + var(--amds-4)); }
+}
+
+.adc-gallery__stage { position: relative; aspect-ratio: 3 / 2; border-radius: var(--adc-radius, var(--amds-radius-lg)); background: var(--amds-bg-muted); overflow: hidden; }
+.adc-gallery__stage img { width: 100%; height: 100%; object-fit: cover; }
+.adc-gallery__stage--empty { display: grid; place-items: center; color: var(--amds-border-strong); }
+.adc-gallery__nav { position: absolute; top: 50%; transform: translateY(-50%); display: grid; place-items: center; width: 44px; height: 44px; border: 0; border-radius: 50%; background: rgba(255, 255, 255, 0.92); color: var(--amds-ink); cursor: pointer; box-shadow: var(--amds-shadow-sm); }
+.adc-gallery__nav--prev { left: var(--amds-3); }
+.adc-gallery__nav--prev svg { transform: rotate(180deg); }
+.adc-gallery__nav--next { right: var(--amds-3); }
+.adc-gallery__count { position: absolute; right: var(--amds-3); bottom: var(--amds-3); padding: 2px 10px; border-radius: 999px; background: rgba(0, 0, 0, 0.6); color: #fff; font-size: var(--amds-text-xs); font-weight: 600; }
+.adc-gallery__thumbs { display: flex; gap: var(--amds-2); margin: var(--amds-3) 0 0; padding: 2px; list-style: none; overflow-x: auto; }
+.adc-gallery__thumbs a { display: block; width: 96px; aspect-ratio: 3 / 2; border: 2px solid transparent; border-radius: 8px; overflow: hidden; opacity: 0.7; }
+.adc-gallery__thumbs a.is-active,
+.adc-gallery__thumbs a:hover { border-color: var(--amds-accent); opacity: 1; }
+.adc-gallery__thumbs img { width: 100%; height: 100%; object-fit: cover; }
+
+.adc-specs { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0 var(--amds-5); margin: 0; }
+.adc-specs > div { display: flex; justify-content: space-between; gap: var(--amds-3); padding: var(--amds-3) 0; border-bottom: 1px solid var(--amds-border); font-size: var(--amds-text-sm); }
+.adc-specs dt { color: var(--amds-text-muted); }
+.adc-specs dd { margin: 0; font-weight: 600; text-align: right; }
+
+.adc-features { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--amds-2) var(--amds-4); margin: 0; padding: 0; list-style: none; font-size: var(--amds-text-sm); }
+.adc-features li { display: flex; align-items: center; gap: var(--amds-2); }
+.adc-features svg { color: var(--amds-accent); }
+
+.adc-summary { margin-bottom: var(--amds-4); padding: var(--amds-5); border: 1px solid var(--amds-border); border-radius: var(--adc-radius, var(--amds-radius-lg)); background: #fff; }
+.adc-summary__badges { display: flex; gap: 4px; margin: 0 0 var(--amds-3); }
+.adc-summary__title { font-size: var(--amds-text-2xl); margin-bottom: var(--amds-2); }
+.adc-summary__price { margin: 0 0 var(--amds-4); font-family: var(--amds-font-display); font-size: var(--amds-text-2xl); font-weight: 700; color: var(--amds-accent); }
+.adc-summary__actions { display: grid; gap: var(--amds-2); }
+.adc-summary__trust { display: grid; gap: var(--amds-2); margin: var(--amds-4) 0 0; padding: var(--amds-4) 0 0; border-top: 1px solid var(--amds-border); list-style: none; font-size: var(--amds-text-sm); color: var(--amds-text-muted); }
+.adc-summary__trust li { display: flex; align-items: center; gap: var(--amds-2); }
+
+.adc-lead-form__title { font-size: var(--amds-text-lg); }
+.adc-lead-form .amds-form { gap: var(--amds-3); }
+.adc-lead-form__note { margin: 0; font-size: var(--amds-text-xs); color: var(--amds-text-muted); }
+
+.adc-sticky-cta { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; display: none; gap: var(--amds-2); padding: var(--amds-3); background: #fff; border-top: 1px solid var(--amds-border); box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.06); }
+.adc-sticky-cta .amds-btn { flex: 1; }
+
+@media (max-width: 999px) {
+	.adc-sticky-cta { display: flex; }
+	.adc-view-vehicle .adc-main { padding-bottom: 6rem; }
+}
+
+/* ---------- About / contact ---------- */
+.adc-split { display: grid; gap: var(--amds-6); align-items: start; }
+@media (min-width: 960px) { .adc-split { grid-template-columns: 1fr 1fr; } }
+.adc-split__media { margin: 0; }
+.adc-split__media img { width: 100%; height: auto; border-radius: var(--adc-radius, var(--amds-radius-lg)); }
+
+.adc-contact { display: grid; gap: var(--amds-4); margin: 0; padding: 0; list-style: none; }
+.adc-contact li { display: flex; gap: var(--amds-4); align-items: flex-start; padding: var(--amds-4); border: 1px solid var(--amds-border); border-radius: var(--amds-radius-lg); background: #fff; }
+.adc-contact li > svg { flex: none; color: var(--amds-accent); }
+.adc-contact span { display: flex; flex-direction: column; gap: 2px; }
+.adc-contact small { color: var(--amds-text-muted); font-size: var(--amds-text-xs); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
+.adc-contact a { color: var(--amds-ink); font-weight: 600; }

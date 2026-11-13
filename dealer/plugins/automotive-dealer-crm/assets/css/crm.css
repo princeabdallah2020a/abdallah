@@ -1,0 +1,642 @@
+/* AutoBuzy Dealer CRM (/manager/). Brand colours come from the dealer settings. */
+
+.adc-app-body,
+.adc-auth-body {
+	margin: 0;
+	background: var(--amds-bg-subtle);
+}
+
+.adc-muted { color: var(--amds-text-muted); }
+.adc-danger { color: var(--amds-danger) !important; }
+.adc-inline { display: inline; }
+.adc-fieldset-reset { margin: 0; padding: 0; border: 0; min-width: 0; }
+
+.adc-check {
+	display: inline-flex;
+	align-items: flex-start;
+	gap: var(--amds-2);
+	font-size: var(--amds-text-sm);
+	cursor: pointer;
+}
+
+.adc-check input {
+	width: 18px;
+	height: 18px;
+	margin-top: 1px;
+	accent-color: var(--amds-accent);
+}
+
+.adc-check.is-included { color: var(--amds-text-muted); }
+.adc-check--strong { font-weight: 600; }
+
+/* ---------- Shell ---------- */
+.adc-app {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	min-height: 100vh;
+}
+
+@media (min-width: 1024px) {
+	.adc-app { grid-template-columns: 260px minmax(0, 1fr); }
+}
+
+.adc-side {
+	display: none;
+	flex-direction: column;
+	gap: var(--amds-4);
+	padding: var(--amds-5) var(--amds-4);
+	background: var(--amds-ink);
+	color: rgba(255, 255, 255, 0.72);
+}
+
+.adc-side.is-open { display: flex; }
+
+@media (min-width: 1024px) {
+	.adc-side {
+		position: sticky;
+		top: 0;
+		display: flex;
+		height: 100vh;
+		overflow-y: auto;
+	}
+}
+
+.adc-side__brand,
+.adc-auth__brand {
+	display: flex;
+	align-items: center;
+	gap: var(--amds-3);
+	font-family: var(--amds-font-display);
+	font-size: var(--amds-text-md);
+	font-weight: 700;
+	color: #fff;
+	text-decoration: none;
+}
+
+.adc-auth__brand { color: var(--amds-ink); margin-bottom: var(--amds-5); }
+
+.adc-side__brand img,
+.adc-auth__brand img {
+	width: 36px;
+	height: 36px;
+	object-fit: contain;
+	border-radius: 8px;
+	background: #fff;
+}
+
+.adc-side__mark {
+	display: grid;
+	place-items: center;
+	width: 36px;
+	height: 36px;
+	border-radius: 10px;
+	background: var(--amds-accent);
+	color: var(--amds-on-accent, #fff);
+	font-size: var(--amds-text-sm);
+	flex: none;
+}
+
+.adc-side__area {
+	margin: 0;
+	font-size: var(--amds-text-xs);
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+.adc-side__new { width: 100%; }
+
+.adc-nav {
+	display: grid;
+	gap: 2px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.adc-nav a {
+	display: flex;
+	align-items: center;
+	gap: var(--amds-3);
+	min-height: 42px;
+	padding: 0 var(--amds-3);
+	border-radius: var(--amds-radius);
+	font-size: var(--amds-text-sm);
+	color: rgba(255, 255, 255, 0.72);
+	text-decoration: none;
+}
+
+.adc-nav a:hover { background: rgba(255, 255, 255, 0.07); color: #fff; }
+
+.adc-nav a.is-active {
+	background: rgba(255, 255, 255, 0.12);
+	color: #fff;
+	box-shadow: inset 3px 0 0 var(--amds-accent);
+}
+
+.adc-nav a span:first-of-type { flex: 1; }
+
+.adc-nav__count {
+	min-width: 22px;
+	padding: 1px 7px;
+	border-radius: 999px;
+	background: var(--amds-accent);
+	color: var(--amds-on-accent, #fff);
+	font-size: var(--amds-text-xs);
+	font-weight: 700;
+	text-align: center;
+}
+
+.adc-side__foot {
+	display: grid;
+	gap: var(--amds-2);
+	margin-top: auto;
+	padding-top: var(--amds-4);
+	border-top: 1px solid rgba(255, 255, 255, 0.12);
+	font-size: var(--amds-text-sm);
+}
+
+.adc-side__foot a { color: rgba(255, 255, 255, 0.72); text-decoration: none; }
+.adc-side__foot a:hover { color: #fff; }
+
+.adc-side__user { display: grid; color: #fff; font-weight: 600; }
+.adc-side__user small { font-weight: 400; color: rgba(255, 255, 255, 0.6); }
+
+.adc-top {
+	position: sticky;
+	top: 0;
+	z-index: 20;
+	display: flex;
+	align-items: center;
+	gap: var(--amds-3);
+	min-height: 58px;
+	padding: 0 var(--amds-4);
+	background: var(--amds-ink);
+	color: #fff;
+	font-weight: 600;
+}
+
+@media (min-width: 1024px) { .adc-top { display: none; } }
+
+.adc-top__menu {
+	display: grid;
+	place-items: center;
+	width: 44px;
+	height: 44px;
+	border: 0;
+	background: transparent;
+	color: #fff;
+	cursor: pointer;
+}
+
+.adc-content {
+	width: 100%;
+	max-width: 1280px;
+	padding: clamp(1rem, 3vw, 2.25rem);
+	padding-bottom: var(--amds-8);
+}
+
+.adc-head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: var(--amds-3) var(--amds-5);
+	margin-bottom: var(--amds-5);
+}
+
+.adc-head__title { margin: 0; font-size: var(--amds-text-2xl); }
+.adc-head__lead { margin: var(--amds-1) 0 0; color: var(--amds-text-muted); }
+.adc-head__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--amds-2); }
+
+/* ---------- Panels ---------- */
+.adc-panel {
+	margin-bottom: var(--amds-5);
+	padding: var(--amds-5);
+	border: 1px solid var(--amds-border);
+	border-radius: var(--amds-radius-lg);
+	background: #fff;
+}
+
+.adc-panel--flush { padding: 0; overflow: hidden; }
+
+.adc-panel__head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--amds-3);
+	margin-bottom: var(--amds-4);
+}
+
+.adc-panel__head h2 { margin: 0; font-size: var(--amds-text-lg); }
+
+.adc-grid-2 { display: grid; gap: var(--amds-5); }
+.adc-grid-2 > .adc-panel { margin-bottom: 0; }
+.adc-grid-2 + * { margin-top: var(--amds-5); }
+
+@media (min-width: 900px) {
+	.adc-grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+}
+
+.adc-form-layout { display: grid; gap: var(--amds-5); align-items: start; }
+
+@media (min-width: 1100px) {
+	.adc-form-layout { grid-template-columns: minmax(0, 1fr) 340px; }
+	.adc-form-layout__side { position: sticky; top: var(--amds-4); }
+}
+
+.adc-table-wrap { overflow-x: auto; }
+.adc-panel--flush .amds-table th:first-child,
+.adc-panel--flush .amds-table td:first-child { padding-left: var(--amds-5); }
+.amds-table td a { color: var(--amds-ink); }
+
+.adc-toolbar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--amds-2);
+	margin-bottom: var(--amds-4);
+}
+
+.adc-toolbar .amds-input,
+.adc-toolbar .amds-select { width: auto; min-width: 180px; }
+
+.adc-tabs { margin-bottom: var(--amds-4); }
+
+.adc-segment {
+	display: inline-flex;
+	padding: 3px;
+	border: 1px solid var(--amds-border);
+	border-radius: var(--amds-radius);
+	background: #fff;
+}
+
+.adc-segment a {
+	padding: 0.45rem 0.9rem;
+	border-radius: 7px;
+	font-size: var(--amds-text-sm);
+	font-weight: 600;
+	color: var(--amds-text-muted);
+	text-decoration: none;
+}
+
+.adc-segment a.is-active { background: var(--amds-ink); color: #fff; }
+
+.adc-actions { display: flex; flex-wrap: wrap; gap: var(--amds-2); align-items: center; }
+.adc-stack { display: grid; gap: var(--amds-2); }
+.adc-btn-xs { min-height: 32px !important; padding: 0.25rem 0.6rem !important; font-size: var(--amds-text-xs) !important; }
+
+.adc-inline-fields { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--amds-2); margin-top: var(--amds-3); }
+.adc-inline-fields .amds-field { flex: 1; min-width: 200px; }
+.adc-inline-fields .amds-select { flex: 1; }
+
+/* ---------- KPIs and charts ---------- */
+.adc-kpis {
+	display: grid;
+	gap: var(--amds-4);
+	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+	margin-bottom: var(--amds-5);
+}
+
+.adc-kpi {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	padding: var(--amds-4) var(--amds-5);
+	border: 1px solid var(--amds-border);
+	border-radius: var(--amds-radius-lg);
+	background: #fff;
+	color: inherit;
+	text-decoration: none;
+	transition: border-color var(--amds-transition), box-shadow var(--amds-transition);
+}
+
+.adc-kpi:hover { border-color: var(--amds-border-strong); box-shadow: var(--amds-shadow-sm); }
+
+.adc-kpi__label {
+	font-size: var(--amds-text-xs);
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: var(--amds-text-muted);
+}
+
+.adc-kpi__value { font-family: var(--amds-font-display); font-size: var(--amds-text-2xl); font-weight: 700; }
+.adc-kpi__sub { font-size: var(--amds-text-sm); color: var(--amds-text-muted); }
+
+.adc-list { display: grid; margin: 0; padding: 0; list-style: none; }
+
+.adc-list li {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--amds-3);
+	padding: var(--amds-3) 0;
+	border-bottom: 1px solid var(--amds-border);
+	font-size: var(--amds-text-sm);
+}
+
+.adc-list li:last-child { border-bottom: 0; }
+.adc-list li > span:not(.amds-badge):not(.adc-date-chip) { display: flex; flex: 1; flex-direction: column; min-width: 0; }
+.adc-list small { color: var(--amds-text-muted); }
+.adc-list a { color: var(--amds-ink); text-decoration: none; }
+
+.adc-date-chip {
+	display: grid;
+	place-items: center;
+	min-width: 56px;
+	padding: 6px;
+	border-radius: var(--amds-radius);
+	background: var(--amds-accent-soft);
+	color: var(--amds-ink);
+	font-weight: 700;
+	font-size: var(--amds-text-xs);
+	text-transform: uppercase;
+}
+
+.adc-date-chip small { font-weight: 500; text-transform: none; }
+
+.adc-bars { display: grid; gap: var(--amds-2); margin: 0; padding: 0; list-style: none; }
+.adc-bars a { display: grid; grid-template-columns: 110px 1fr 36px; align-items: center; gap: var(--amds-3); color: inherit; text-decoration: none; font-size: var(--amds-text-sm); }
+.adc-bars__bar { height: 10px; border-radius: 999px; background: var(--amds-bg-muted); overflow: hidden; }
+.adc-bars__bar span { display: block; height: 100%; background: var(--amds-ink); border-radius: inherit; }
+.adc-bars__bar--won span { background: var(--amds-success); }
+.adc-bars__bar--lost span { background: var(--amds-danger); }
+.adc-bars__bar--new span { background: var(--amds-accent); }
+.adc-bars__value { text-align: right; font-weight: 700; }
+
+.adc-columns { display: flex; align-items: flex-end; gap: var(--amds-3); height: 180px; padding-top: var(--amds-4); }
+.adc-columns__col { display: flex; flex: 1; flex-direction: column; align-items: center; justify-content: flex-end; gap: 4px; height: 100%; }
+.adc-columns__bar { width: 100%; max-width: 44px; border-radius: 8px 8px 2px 2px; background: linear-gradient(180deg, var(--amds-accent), var(--amds-ink)); }
+.adc-columns__label,
+.adc-columns__value { font-size: var(--amds-text-xs); color: var(--amds-text-muted); }
+.adc-columns__value { font-weight: 700; color: var(--amds-ink); }
+
+.adc-empty {
+	display: grid;
+	justify-items: center;
+	gap: var(--amds-3);
+	padding: var(--amds-8) var(--amds-5);
+	border: 1px dashed var(--amds-border-strong);
+	border-radius: var(--amds-radius-lg);
+	background: #fff;
+	text-align: center;
+	color: var(--amds-text-muted);
+}
+
+.adc-empty h2 { margin: 0; font-size: var(--amds-text-lg); }
+
+/* ---------- Stock ---------- */
+.adc-stock { display: grid; gap: var(--amds-3); }
+
+.adc-stock__item {
+	display: grid;
+	grid-template-columns: 120px minmax(0, 1fr);
+	gap: var(--amds-4);
+	align-items: center;
+	padding: var(--amds-3);
+	border: 1px solid var(--amds-border);
+	border-radius: var(--amds-radius-lg);
+	background: #fff;
+}
+
+@media (min-width: 900px) {
+	.adc-stock__item { grid-template-columns: 140px minmax(0, 1fr) auto; }
+}
+
+.adc-stock__media {
+	display: grid;
+	place-items: center;
+	aspect-ratio: 3 / 2;
+	border-radius: var(--amds-radius);
+	background: var(--amds-bg-muted);
+	color: var(--amds-border-strong);
+	overflow: hidden;
+}
+
+.adc-stock__media img { width: 100%; height: 100%; object-fit: cover; }
+.adc-stock__top { display: flex; flex-wrap: wrap; align-items: center; gap: var(--amds-2); }
+.adc-stock__top a { color: var(--amds-ink); text-decoration: none; }
+.adc-stock__price { margin: var(--amds-1) 0 0; font-family: var(--amds-font-display); font-weight: 700; color: var(--amds-accent); }
+.adc-stock__meta { margin: 0; font-size: var(--amds-text-sm); color: var(--amds-text-muted); }
+.adc-stock__actions { display: flex; flex-wrap: wrap; gap: var(--amds-1); grid-column: 1 / -1; }
+
+@media (min-width: 900px) {
+	.adc-stock__actions { grid-column: auto; justify-content: flex-end; }
+}
+
+.adc-stock__actions .amds-btn { min-height: 36px; padding: 0.35rem 0.75rem; font-size: var(--amds-text-xs); }
+
+/* ---------- Vehicle form ---------- */
+.adc-photos {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+	gap: var(--amds-3);
+	margin: 0 0 var(--amds-4);
+	padding: 0;
+	list-style: none;
+}
+
+.adc-photos li { display: grid; gap: var(--amds-2); }
+.adc-photos img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: var(--amds-radius); }
+.adc-photos__tools { display: flex; align-items: center; justify-content: space-between; gap: var(--amds-2); }
+.adc-photos__tools .amds-input { width: 64px; min-height: 34px; padding: 0.2rem 0.4rem; }
+.adc-photos--preview:empty { display: none; }
+
+.adc-drop {
+	position: relative;
+	display: grid;
+	justify-items: center;
+	gap: var(--amds-2);
+	padding: var(--amds-6) var(--amds-4);
+	border: 2px dashed var(--amds-border-strong);
+	border-radius: var(--amds-radius-lg);
+	color: var(--amds-text-muted);
+	text-align: center;
+	cursor: pointer;
+}
+
+.adc-drop:hover,
+.adc-drop.is-over { border-color: var(--amds-accent); color: var(--amds-ink); }
+.adc-drop input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+
+.adc-danger-zone { border-color: #f2c0bb; }
+
+/* ---------- Leads ---------- */
+.adc-board {
+	display: grid;
+	grid-auto-flow: column;
+	grid-auto-columns: minmax(250px, 1fr);
+	gap: var(--amds-3);
+	overflow-x: auto;
+	padding-bottom: var(--amds-3);
+}
+
+.adc-board__col {
+	display: flex;
+	flex-direction: column;
+	gap: var(--amds-2);
+	min-height: 200px;
+	padding: var(--amds-3);
+	border-radius: var(--amds-radius-lg);
+	background: var(--amds-bg-muted);
+}
+
+.adc-board__col header {
+	display: flex;
+	justify-content: space-between;
+	padding: 2px 4px var(--amds-2);
+	font-size: var(--amds-text-sm);
+	font-weight: 700;
+}
+
+.adc-board__col--new header { color: var(--amds-accent); }
+.adc-board__col--won header { color: var(--amds-success); }
+.adc-board__col--lost header { color: var(--amds-danger); }
+.adc-board__count { color: var(--amds-text-muted); }
+
+.adc-lead-card {
+	display: grid;
+	gap: 4px;
+	padding: var(--amds-3);
+	border: 1px solid var(--amds-border);
+	border-radius: var(--amds-radius);
+	background: #fff;
+	box-shadow: var(--amds-shadow-sm);
+}
+
+.adc-lead-card__name { font-weight: 700; color: var(--amds-ink); text-decoration: none; }
+.adc-lead-card__meta,
+.adc-lead-card__follow { display: flex; align-items: center; gap: 4px; font-size: var(--amds-text-xs); color: var(--amds-text-muted); }
+.adc-lead-card__follow.is-late { color: var(--amds-danger); font-weight: 600; }
+.adc-lead-card footer { display: flex; align-items: center; gap: 4px; margin-top: var(--amds-2); }
+.adc-lead-card footer .adc-inline { margin-right: auto; }
+
+.adc-avatar {
+	display: grid;
+	place-items: center;
+	flex: none;
+	width: 26px;
+	height: 26px;
+	border-radius: 50%;
+	background: var(--amds-ink);
+	color: #fff;
+	font-size: 11px;
+	font-weight: 700;
+}
+
+.adc-avatar--lg { width: 40px; height: 40px; font-size: var(--amds-text-sm); }
+
+.adc-icon-btn {
+	display: grid;
+	place-items: center;
+	width: 30px;
+	height: 30px;
+	border-radius: 8px;
+	color: var(--amds-text-muted);
+}
+
+.adc-icon-btn:hover { background: var(--amds-bg-muted); color: var(--amds-ink); }
+
+.adc-stages { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: var(--amds-5); }
+
+.adc-stage { display: contents; }
+
+.adc-stage button,
+.adc-stage > span {
+	flex: 1;
+	min-width: 110px;
+	min-height: 40px;
+	padding: 0.4rem 0.8rem;
+	border: 1px solid var(--amds-border);
+	border-radius: var(--amds-radius);
+	background: #fff;
+	font: inherit;
+	font-size: var(--amds-text-sm);
+	font-weight: 600;
+	color: var(--amds-text-muted);
+	text-align: center;
+	cursor: pointer;
+}
+
+.adc-stage > span { display: grid; place-items: center; cursor: default; }
+.adc-stage button:hover { border-color: var(--amds-ink); color: var(--amds-ink); }
+.adc-stage.is-current { display: contents; }
+.adc-stage.is-current > span { background: var(--amds-ink); border-color: var(--amds-ink); color: #fff; }
+
+.adc-note-kinds { display: flex; gap: var(--amds-4); }
+.adc-quote { margin: 0 0 var(--amds-4); padding: var(--amds-3) var(--amds-4); border-left: 3px solid var(--amds-accent); background: var(--amds-bg-subtle); border-radius: 0 var(--amds-radius) var(--amds-radius) 0; }
+
+.adc-timeline { position: relative; display: grid; gap: var(--amds-4); margin: 0; padding: 0 0 0 var(--amds-5); list-style: none; }
+.adc-timeline::before { content: ""; position: absolute; left: 6px; top: 6px; bottom: 6px; width: 2px; background: var(--amds-border); }
+.adc-timeline__item { position: relative; font-size: var(--amds-text-sm); }
+.adc-timeline__item p { margin: 0; }
+.adc-timeline__item small { color: var(--amds-text-muted); }
+.adc-timeline__dot { position: absolute; left: calc(-1 * var(--amds-5)); top: 4px; width: 14px; height: 14px; border: 3px solid #fff; border-radius: 50%; background: var(--amds-border-strong); }
+.adc-timeline__item--call .adc-timeline__dot { background: var(--amds-accent); }
+.adc-timeline__item--status .adc-timeline__dot { background: var(--amds-ink); }
+.adc-timeline__item--note .adc-timeline__dot { background: var(--amds-info); }
+
+.adc-lost { display: flex; flex-wrap: wrap; gap: var(--amds-2); margin-top: var(--amds-4); padding-top: var(--amds-4); border-top: 1px solid var(--amds-border); }
+.adc-lost .amds-input { flex: 1; min-width: 160px; }
+
+.adc-dl { margin: 0 0 var(--amds-3); }
+.adc-dl > div { display: flex; justify-content: space-between; gap: var(--amds-3); padding: var(--amds-2) 0; border-bottom: 1px solid var(--amds-border); font-size: var(--amds-text-sm); }
+.adc-dl dt { color: var(--amds-text-muted); }
+.adc-dl dd { margin: 0; font-weight: 600; text-align: right; overflow-wrap: anywhere; }
+
+/* ---------- Rentals ---------- */
+.adc-planner { width: 100%; border-collapse: separate; border-spacing: 2px; font-size: var(--amds-text-xs); }
+.adc-planner th { padding: 4px; font-weight: 600; color: var(--amds-text-muted); text-align: center; }
+.adc-planner th span { display: block; font-weight: 400; }
+.adc-planner th.is-weekend { color: var(--amds-ink); }
+.adc-planner tbody th { min-width: 160px; text-align: left; font-size: var(--amds-text-sm); }
+.adc-planner tbody th a { color: var(--amds-ink); text-decoration: none; }
+.adc-planner td { height: 30px; min-width: 30px; border-radius: 6px; background: var(--amds-bg-subtle); padding: 0; }
+.adc-planner td a { display: block; width: 100%; height: 30px; }
+.adc-planner td.is-confirmed { background: var(--amds-accent); }
+.adc-planner td.is-active { background: var(--amds-ink); }
+.adc-planner td.is-quote { background: repeating-linear-gradient(45deg, var(--amds-bg-muted), var(--amds-bg-muted) 4px, var(--amds-border-strong) 4px, var(--amds-border-strong) 6px); }
+
+.adc-legend { display: flex; flex-wrap: wrap; gap: var(--amds-3); font-size: var(--amds-text-xs); color: var(--amds-text-muted); }
+.adc-legend__item::before { content: ""; display: inline-block; width: 12px; height: 12px; margin-right: 4px; border-radius: 3px; vertical-align: -2px; }
+.adc-legend__item--confirmed::before { background: var(--amds-accent); }
+.adc-legend__item--active::before { background: var(--amds-ink); }
+.adc-legend__item--quote::before { background: var(--amds-border-strong); }
+
+.adc-total { margin: 0; font-family: var(--amds-font-display); font-size: var(--amds-text-xl); font-weight: 700; color: var(--amds-accent); }
+.adc-total:empty { display: none; }
+
+.adc-customer-picker { display: grid; gap: var(--amds-3); padding: var(--amds-4); border: 1px solid var(--amds-border); border-radius: var(--amds-radius); background: var(--amds-bg-subtle); }
+.adc-customer-picker [hidden] { display: none; }
+
+/* ---------- Team and settings ---------- */
+.adc-member { padding: 0; }
+.adc-member > summary { display: flex; align-items: center; gap: var(--amds-3); padding: var(--amds-4) var(--amds-5); cursor: pointer; list-style: none; }
+.adc-member > summary::-webkit-details-marker { display: none; }
+.adc-member__who { display: flex; flex: 1; flex-direction: column; min-width: 0; }
+.adc-member__who small { color: var(--amds-text-muted); }
+.adc-member[open] > summary { border-bottom: 1px solid var(--amds-border); }
+.adc-member > form,
+.adc-member > .adc-inline { display: block; padding: var(--amds-4) var(--amds-5) 0; }
+.adc-member > .adc-inline { padding-bottom: var(--amds-4); }
+.adc-caps { display: grid; gap: var(--amds-2); grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+.adc-more > summary { cursor: pointer; font-size: var(--amds-text-sm); font-weight: 600; margin-bottom: var(--amds-2); }
+.adc-roles dt { font-weight: 700; font-size: var(--amds-text-sm); }
+.adc-roles dd { margin: 0 0 var(--amds-3); font-size: var(--amds-text-sm); color: var(--amds-text-muted); }
+
+.adc-presets { display: grid; gap: var(--amds-2); margin-bottom: var(--amds-4); }
+.adc-preset { position: relative; display: flex; align-items: center; gap: var(--amds-3); padding: var(--amds-3); border: 1px solid var(--amds-border); border-radius: var(--amds-radius); cursor: pointer; font-size: var(--amds-text-sm); }
+.adc-preset input { position: absolute; opacity: 0; }
+.adc-preset:has(input:checked) { border-color: var(--amds-accent); box-shadow: 0 0 0 1px var(--amds-accent); }
+.adc-preset__swatch { display: flex; overflow: hidden; border-radius: 6px; flex: none; }
+.adc-preset__swatch span { width: 22px; height: 28px; }
+input[type="color"].amds-input { padding: 4px; height: 44px; }
+.adc-image-preview img { max-width: 100%; height: auto; border-radius: var(--amds-radius); background: var(--amds-bg-muted); }
+
+/* ---------- Auth ---------- */
+.adc-auth { display: grid; place-items: center; min-height: 100vh; padding: var(--amds-5); }
+.adc-auth__card { width: 100%; max-width: 420px; padding: clamp(1.5rem, 4vw, 2.5rem); border: 1px solid var(--amds-border); border-radius: 20px; background: #fff; box-shadow: var(--amds-shadow); }
+.adc-auth__title { font-size: var(--amds-text-2xl); }
+.adc-auth__links { margin: var(--amds-4) 0 0; font-size: var(--amds-text-sm); }
