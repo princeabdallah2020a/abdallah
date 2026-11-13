@@ -77,9 +77,9 @@ final class Catalog {
 	public static function price_periods() {
 		return array(
 			'total' => '',
-			'hour'  => __( 'per hour', 'automotive-marketplace-core' ),
-			'day'   => __( 'per day', 'automotive-marketplace-core' ),
-			'month' => __( 'per month', 'automotive-marketplace-core' ),
+			'hour'  => __( 'hour', 'automotive-marketplace-core' ),
+			'day'   => __( 'day', 'automotive-marketplace-core' ),
+			'month' => __( 'month', 'automotive-marketplace-core' ),
 		);
 	}
 
