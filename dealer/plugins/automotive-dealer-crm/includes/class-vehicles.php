@@ -461,6 +461,38 @@ final class Vehicles {
 	}
 
 	/** Internal status change by sales/rentals (permission checked by the caller). */
+	/**
+	 * Change only the price (used by the AI assistant, after confirmation).
+	 *
+	 * @return true|\WP_Error
+	 */
+	public static function set_price( $id, $amount ) {
+		global $wpdb;
+		$vehicle = self::get( $id );
+		if ( ! $vehicle ) {
+			return new \WP_Error( 'adc_vehicle', __( 'Vehicle not found.', 'automotive-dealer-crm' ) );
+		}
+		if ( ! current_user_can( 'adc_edit_prices' ) ) {
+			return new \WP_Error( 'adc_forbidden', __( 'You do not have permission to do this.', 'automotive-dealer-crm' ) );
+		}
+		$amount = absint( $amount );
+		if ( $amount < 1 ) {
+			return new \WP_Error( 'adc_vehicle', __( 'Please enter a valid price.', 'automotive-dealer-crm' ) );
+		}
+		$wpdb->update(
+			Database::table( 'vehicles' ),
+			array(
+				'price_amount' => $amount,
+				'updated_by'   => get_current_user_id(),
+				'updated_at'   => current_time( 'mysql', true ),
+			),
+			array( 'id' => $vehicle->id )
+		);
+		Activity::log( 'vehicle_price', 'vehicle', $vehicle->id, $vehicle->title . ' → ' . adc_money( $amount, $vehicle->currency ) );
+		do_action( 'adc_vehicle_changed', $vehicle->id, 'updated' );
+		return true;
+	}
+
 	public static function system_status( $id, $status ) {
 		global $wpdb;
 		$data = array(

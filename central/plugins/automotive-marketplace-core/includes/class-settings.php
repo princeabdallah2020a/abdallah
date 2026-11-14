@@ -44,6 +44,23 @@ final class Settings {
 			'pay_om_details'        => '',
 			'pay_bank_details'      => '',
 			'pay_cash_details'      => '',
+			// WhatsApp AI assistant (Phase 5) — disabled until configured and verified.
+			'wa_enabled'            => 0,
+			'wa_phone_number_id'    => '',
+			'wa_business_number'    => '',
+			'wa_graph_version'      => 'v21.0',
+			'wa_verify_token'       => '',
+			'wa_access_token'       => '', // Encrypted (Crypto); prefer the AMC_WA_ACCESS_TOKEN constant.
+			'wa_app_secret'         => '', // Encrypted; prefer AMC_WA_APP_SECRET.
+			'wa_public_assistant'   => 1,  // Unknown numbers get the buyer assistant.
+			// Speech-to-text for voice notes (provider-independent).
+			'stt_provider'          => 'none',
+			'stt_base_url'          => 'https://api.openai.com/v1',
+			'stt_model'             => 'whisper-1',
+			'stt_api_key'           => '', // Encrypted; prefer AMC_STT_API_KEY.
+			// Telephony (Phase 6) — disabled until a provider is verified.
+			'voice_provider'        => 'none',
+			'voice_secret'          => '', // Encrypted shared secret of the voice gateway.
 		);
 	}
 
@@ -131,7 +148,66 @@ final class Settings {
 			$out['provisioning_provider'] = sanitize_key( $input['provisioning_provider'] );
 		}
 
+		// Channels (only present in the platform admin "WhatsApp & voice" form).
+		if ( isset( $input['channels_form'] ) ) {
+			foreach ( array( 'wa_enabled', 'wa_public_assistant' ) as $key ) {
+				$out[ $key ] = empty( $input[ $key ] ) ? 0 : 1;
+			}
+			foreach ( array( 'wa_phone_number_id' => '/[^0-9]/', 'wa_business_number' => '/[^0-9+ ]/', 'wa_verify_token' => '/[^A-Za-z0-9_\-]/', 'wa_graph_version' => '/[^a-z0-9.]/' ) as $key => $strip ) {
+				if ( isset( $input[ $key ] ) ) {
+					$out[ $key ] = substr( preg_replace( $strip, '', (string) $input[ $key ] ), 0, 80 );
+				}
+			}
+			if ( isset( $input['stt_provider'] ) ) {
+				$out['stt_provider'] = isset( Speech::providers()[ $input['stt_provider'] ] ) ? $input['stt_provider'] : 'none';
+			}
+			if ( isset( $input['stt_base_url'] ) ) {
+				$out['stt_base_url'] = untrailingslashit( esc_url_raw( (string) $input['stt_base_url'], array( 'https' ) ) );
+			}
+			if ( isset( $input['stt_model'] ) ) {
+				$out['stt_model'] = substr( preg_replace( '/[^A-Za-z0-9_.:\-\/]/', '', (string) $input['stt_model'] ), 0, 80 );
+			}
+			if ( isset( $input['voice_provider'] ) ) {
+				$out['voice_provider'] = isset( Telephony::providers()[ $input['voice_provider'] ] ) ? $input['voice_provider'] : 'none';
+			}
+			// Secrets: never pre-filled; empty keeps the saved value; stored encrypted.
+			foreach ( array( 'wa_access_token', 'wa_app_secret', 'stt_api_key', 'voice_secret' ) as $key ) {
+				// The form merges saved values: an unchanged (already encrypted) value is kept as is.
+				if ( ! empty( $input[ $key ] ) && (string) $input[ $key ] !== (string) self::get( $key ) ) {
+					$out[ $key ] = Crypto::encrypt( preg_replace( '/[^\x21-\x7E]/', '', (string) $input[ $key ] ) );
+				}
+				if ( ! empty( $input[ $key . '_delete' ] ) ) {
+					$out[ $key ] = '';
+				}
+			}
+			if ( '' === $out['wa_verify_token'] ) {
+				$out['wa_verify_token'] = wp_generate_password( 32, false );
+			}
+		}
+
 		return $out;
+	}
+
+	/**
+	 * A secret: wp-config.php constant first (recommended), then the encrypted setting.
+	 *
+	 * @param string $key      Setting key.
+	 * @param string $constant Constant name.
+	 */
+	public static function secret( $key, $constant ) {
+		if ( defined( $constant ) && constant( $constant ) ) {
+			return (string) constant( $constant );
+		}
+		$stored = (string) self::get( $key );
+		return '' === $stored ? '' : Crypto::decrypt( $stored );
+	}
+
+	/** Where a secret comes from: constant|settings|none (never the value). */
+	public static function secret_source( $key, $constant ) {
+		if ( defined( $constant ) && constant( $constant ) ) {
+			return 'constant';
+		}
+		return '' === (string) self::get( $key ) ? 'none' : 'settings';
 	}
 
 	/** Email that receives contact requests (falls back to the site admin email). */

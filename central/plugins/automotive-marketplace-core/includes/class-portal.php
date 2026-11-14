@@ -102,6 +102,7 @@ final class Portal {
 		};
 		return array(
 			'overview'      => array( __( 'Overview', 'automotive-marketplace-core' ), 'chart', 0 ),
+			'reports'       => array( __( 'Reports', 'automotive-marketplace-core' ), 'gauge', 0 ),
 			'applications'  => array( __( 'Applications', 'automotive-marketplace-core' ), 'mail', $count( 'applications' ) ),
 			'dealers'       => array( __( 'Dealers', 'automotive-marketplace-core' ), 'store', 0 ),
 			'subscriptions' => array( __( 'Subscriptions', 'automotive-marketplace-core' ), 'star', 0 ),
@@ -112,6 +113,7 @@ final class Portal {
 			'plans'         => array( __( 'Plans and prices', 'automotive-marketplace-core' ), 'filter', 0 ),
 			'support'       => array( __( 'Support', 'automotive-marketplace-core' ), 'chat', $count( 'support' ) ),
 			'assistant'     => array( __( 'AI assistant', 'automotive-marketplace-core' ), 'sparkle', 0 ),
+			'channels'      => array( __( 'WhatsApp & voice', 'automotive-marketplace-core' ), 'phone', 0 ),
 			'ai'            => array( __( 'AI usage', 'automotive-marketplace-core' ), 'gauge', 0 ),
 			'audit'         => array( __( 'Audit log', 'automotive-marketplace-core' ), 'clock', 0 ),
 			'settings'      => array( __( 'Settings', 'automotive-marketplace-core' ), 'gearbox', 0 ),

@@ -23,7 +23,11 @@ final class Router {
 	public static $data = array();
 
 	public static function sections() {
-		return array(
+		/**
+		 * CRM sections: key => [ label, icon, capability ]. Extensions such as
+		 * the Marketplace Connector add their own.
+		 */
+		return apply_filters( 'adc_manager_sections', array(
 			'dashboard' => array( __( 'Dashboard', 'automotive-dealer-crm' ), 'chart', 'adc_access' ),
 			'vehicles'  => array( __( 'Vehicles', 'automotive-dealer-crm' ), 'car', 'adc_access' ),
 			'leads'     => array( __( 'Leads', 'automotive-dealer-crm' ), 'flag', 'adc_access' ),
@@ -32,8 +36,9 @@ final class Router {
 			'rentals'   => array( __( 'Rentals', 'automotive-dealer-crm' ), 'key', 'adc_access' ),
 			'team'      => array( __( 'Team', 'automotive-dealer-crm' ), 'user', 'adc_manage_team' ),
 			'settings'  => array( __( 'Settings', 'automotive-dealer-crm' ), 'gear', 'adc_manage_settings' ),
+			'reports'   => array( __( 'Reports', 'automotive-dealer-crm' ), 'chart', 'adc_view_reports' ),
 			'activity'  => array( __( 'Activity', 'automotive-dealer-crm' ), 'clock', 'adc_view_reports' ),
-		);
+		) );
 	}
 
 	public static function init() {
@@ -240,6 +245,6 @@ final class Router {
 			return $theme;
 		}
 		$file = ADC_DIR . 'templates/' . $name . '.php';
-		return is_readable( $file ) ? $file : '';
+		return apply_filters( 'adc_locate_template', is_readable( $file ) ? $file : '', $name );
 	}
 }

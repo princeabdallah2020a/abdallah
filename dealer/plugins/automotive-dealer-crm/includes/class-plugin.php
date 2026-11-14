@@ -25,6 +25,7 @@ final class Plugin {
 		Public_Site::init();
 		Rest_Api::init();
 		Files::init();
+		Privacy::init();
 	}
 
 	public static function activate() {

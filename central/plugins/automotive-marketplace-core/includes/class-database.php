@@ -516,12 +516,89 @@ final class Database {
 	}
 
 	/**
+	 * Migration 5 — Phases 5 and 6: WhatsApp assistant (contacts, conversations,
+	 * messages) and telephony call log.
+	 */
+	private static function migration_5() {
+		global $wpdb;
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+		$c = $wpdb->get_charset_collate();
+		$t = static function ( $name ) {
+			return self::table( $name );
+		};
+		dbDelta(
+			"CREATE TABLE {$t('ai_contacts')} (
+			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			dealer_id bigint(20) unsigned NOT NULL,
+			phone varchar(20) NOT NULL,
+			user_ref bigint(20) unsigned NOT NULL DEFAULT 0,
+			name varchar(150) NOT NULL DEFAULT '',
+			role varchar(60) NOT NULL DEFAULT '',
+			updated_at datetime NOT NULL,
+			PRIMARY KEY  (id),
+			UNIQUE KEY phone (phone),
+			KEY dealer_id (dealer_id)
+			) $c;"
+		);
+		dbDelta(
+			"CREATE TABLE {$t('wa_conversations')} (
+			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			phone varchar(20) NOT NULL,
+			dealer_id bigint(20) unsigned NOT NULL DEFAULT 0,
+			history longtext NOT NULL,
+			pending_action longtext NOT NULL,
+			updated_at datetime NOT NULL,
+			PRIMARY KEY  (id),
+			UNIQUE KEY phone (phone)
+			) $c;"
+		);
+		dbDelta(
+			"CREATE TABLE {$t('wa_messages')} (
+			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			wamid varchar(191) NOT NULL DEFAULT '',
+			phone varchar(20) NOT NULL,
+			dealer_id bigint(20) unsigned NOT NULL DEFAULT 0,
+			direction varchar(3) NOT NULL DEFAULT 'in',
+			kind varchar(20) NOT NULL DEFAULT 'text',
+			body text NOT NULL,
+			media_id varchar(191) NOT NULL DEFAULT '',
+			status varchar(20) NOT NULL DEFAULT 'received',
+			error varchar(255) NOT NULL DEFAULT '',
+			created_at datetime NOT NULL,
+			PRIMARY KEY  (id),
+			KEY wamid (wamid),
+			KEY phone_created (phone,created_at),
+			KEY dealer_created (dealer_id,created_at)
+			) $c;"
+		);
+		dbDelta(
+			"CREATE TABLE {$t('call_logs')} (
+			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			provider varchar(30) NOT NULL DEFAULT '',
+			call_ref varchar(191) NOT NULL DEFAULT '',
+			direction varchar(10) NOT NULL DEFAULT 'inbound',
+			from_number varchar(32) NOT NULL DEFAULT '',
+			to_number varchar(32) NOT NULL DEFAULT '',
+			dealer_id bigint(20) unsigned NOT NULL DEFAULT 0,
+			status varchar(20) NOT NULL DEFAULT '',
+			duration_seconds int(10) unsigned NOT NULL DEFAULT 0,
+			transcript longtext NOT NULL,
+			created_at datetime NOT NULL,
+			updated_at datetime NOT NULL,
+			PRIMARY KEY  (id),
+			KEY provider_ref (provider,call_ref),
+			KEY created_at (created_at)
+			) $c;"
+		);
+	}
+
+	/**
 	 * Drop every plugin table. Only called from uninstall.php when the
 	 * administrator explicitly opted in to data deletion.
 	 */
 	public static function drop_all() {
 		global $wpdb;
-		foreach ( array( 'vehicle_media', 'vehicles', 'dealers', 'inquiries', 'audit_log', 'ai_usage', 'plans', 'applications', 'subscriptions', 'payments', 'documents', 'provisioning_jobs', 'tickets', 'ticket_messages', 'api_credentials', 'sync_events', 'webhook_deliveries', 'marketplace_leads' ) as $name ) {
+		foreach ( array( 'vehicle_media', 'vehicles', 'dealers', 'inquiries', 'audit_log', 'ai_usage', 'plans', 'applications', 'subscriptions', 'payments', 'documents', 'provisioning_jobs', 'tickets', 'ticket_messages', 'api_credentials', 'sync_events', 'webhook_deliveries', 'marketplace_leads', 'ai_contacts', 'wa_conversations', 'wa_messages', 'call_logs' ) as $name ) {
 			$table = self::table( $name );
 			$wpdb->query( "DROP TABLE IF EXISTS $table" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		}

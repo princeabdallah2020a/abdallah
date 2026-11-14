@@ -1504,3 +1504,73 @@ a.amc-kpi:hover {
 	font-size: var(--amds-text-sm);
 	word-break: break-all;
 }
+
+/* WhatsApp & voice (Phase 5–6) ---------------------------------------- */
+.amc-steps-list {
+	margin: 0 0 16px;
+	padding-left: 20px;
+	color: var(--amds-text-muted);
+	font-size: var(--amds-text-sm);
+}
+.amc-steps-list li + li {
+	margin-top: 4px;
+}
+.amc-inline-form {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	align-items: center;
+}
+.amc-inline-form .amds-input {
+	max-width: 260px;
+}
+.amc-wa-log {
+	display: grid;
+	gap: 8px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	max-height: 520px;
+	overflow: auto;
+}
+.amc-wa-log__item {
+	display: grid;
+	gap: 2px;
+	max-width: 88%;
+	padding: 8px 12px;
+	border-radius: var(--amds-radius);
+	background: var(--amds-bg-subtle);
+	font-size: var(--amds-text-sm);
+}
+.amc-wa-log__item--out {
+	justify-self: end;
+	background: var(--amds-accent-soft);
+}
+
+/* Reports ------------------------------------------------------------- */
+.amc-chart {
+	display: grid;
+	grid-template-columns: repeat(12, 1fr);
+	gap: 6px;
+	align-items: end;
+	height: 180px;
+}
+.amc-chart__col {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	align-items: center;
+	height: 100%;
+	gap: 6px;
+}
+.amc-chart__bar {
+	display: block;
+	width: 100%;
+	max-width: 36px;
+	border-radius: 6px 6px 0 0;
+	background: var(--amds-accent);
+}
+.amc-chart__label {
+	font-size: var(--amds-text-xs);
+	color: var(--amds-text-muted);
+}

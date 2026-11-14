@@ -18,6 +18,35 @@ final class Api {
 
 	public static function init() {
 		add_action( 'rest_api_init', array( __CLASS__, 'register_routes' ) );
+		add_filter( 'rest_post_dispatch', array( __CLASS__, 'headers' ), 10, 3 );
+		add_action( 'send_headers', array( __CLASS__, 'page_headers' ) );
+	}
+
+	/** Public catalog reads may be cached briefly; everything else never. */
+	public static function headers( $response, $server, $request ) {
+		$route = (string) $request->get_route();
+		if ( 0 !== strpos( $route, '/' . self::NS ) || ! $response instanceof \WP_HTTP_Response ) {
+			return $response;
+		}
+		$public = 'GET' === $request->get_method() && preg_match( '#^/' . preg_quote( self::NS, '#' ) . '/(vehicles|facets|dealers)#', $route ) && $response->get_status() < 400;
+		$response->header( 'Cache-Control', $public ? 'public, max-age=60, stale-while-revalidate=300' : 'no-store, private' );
+		$response->header( 'X-Content-Type-Options', 'nosniff' );
+		return $response;
+	}
+
+	/** Hardening headers on every front-end page. */
+	public static function page_headers() {
+		if ( headers_sent() ) {
+			return;
+		}
+		header( 'X-Content-Type-Options: nosniff' );
+		header( 'Referrer-Policy: strict-origin-when-cross-origin' );
+		header( 'Permissions-Policy: camera=(), microphone=(), geolocation=()' );
+		global $wp;
+		$view = $wp && isset( $wp->query_vars['amc_view'] ) ? $wp->query_vars['amc_view'] : '';
+		if ( in_array( $view, array( 'account', 'platform', 'login', 'register' ), true ) ) {
+			header( 'X-Frame-Options: SAMEORIGIN' ); // No clickjacking of forms.
+		}
 	}
 
 	public static function register_routes() {

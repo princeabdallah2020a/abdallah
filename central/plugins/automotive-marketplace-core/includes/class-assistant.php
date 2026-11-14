@@ -309,7 +309,7 @@ final class Assistant {
 		return $result['text'];
 	}
 
-	private static function log_usage( $scope, $model, array $usage ) {
+	public static function log_usage( $scope, $model, array $usage ) {
 		global $wpdb;
 		$wpdb->insert(
 			Database::table( 'ai_usage' ),
@@ -325,7 +325,7 @@ final class Assistant {
 		);
 	}
 
-	private static function log_error( $message ) {
+	public static function log_error( $message ) {
 		// Never log the key or the conversation: only the failure reason.
 		error_log( '[AutoBuzy assistant] ' . $message ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions
 		set_transient( 'amc_ai_last_error', mb_substr( $message, 0, 300 ), DAY_IN_SECONDS );

@@ -36,7 +36,14 @@ AMC\Portal::page_head( __( 'AI usage', 'automotive-marketplace-core' ), __( 'Las
 			<tbody>
 				<?php if ( ! $by_scope ) : ?><tr><td colspan="4" class="amc-muted"><?php esc_html_e( 'Nothing here.', 'automotive-marketplace-core' ); ?></td></tr><?php endif; ?>
 				<?php foreach ( (array) $by_scope as $row ) : ?>
-					<tr><td><?php echo esc_html( 'admin' === $row->scope ? __( 'Administration', 'automotive-marketplace-core' ) : __( 'Website visitors', 'automotive-marketplace-core' ) ); ?></td><td><?php echo esc_html( $row->model ); ?></td><td><?php echo esc_html( number_format_i18n( $row->requests ) ); ?></td><td><?php echo esc_html( number_format_i18n( $row->input_tokens ) . ' / ' . number_format_i18n( $row->output_tokens ) ); ?></td></tr>
+					<tr><td><?php
+					$amc_scopes = array(
+						'admin'           => __( 'Administration', 'automotive-marketplace-core' ),
+						'visitor'         => __( 'Website visitors', 'automotive-marketplace-core' ),
+						'whatsapp_dealer' => __( 'WhatsApp — dealers', 'automotive-marketplace-core' ),
+					);
+					echo esc_html( $amc_scopes[ $row->scope ] ?? $row->scope );
+					?></td><td><?php echo esc_html( $row->model ); ?></td><td><?php echo esc_html( number_format_i18n( $row->requests ) ); ?></td><td><?php echo esc_html( number_format_i18n( $row->input_tokens ) . ' / ' . number_format_i18n( $row->output_tokens ) ); ?></td></tr>
 				<?php endforeach; ?>
 			</tbody>
 		</table></div>

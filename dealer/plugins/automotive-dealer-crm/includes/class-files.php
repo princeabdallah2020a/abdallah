@@ -100,6 +100,23 @@ final class Files {
 		return $rows ? $rows : array();
 	}
 
+	/** Delete a file (disk and record). */
+	public static function delete( $id ) {
+		global $wpdb;
+		$table = Database::table( 'files' );
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$file = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table WHERE id = %d", absint( $id ) ) );
+		if ( ! $file ) {
+			return;
+		}
+		$upload = wp_upload_dir();
+		$path   = trailingslashit( $upload['basedir'] ) . $file->path;
+		if ( false === strpos( $file->path, '..' ) && 0 === strpos( $file->path, 'adc-private/' ) && is_file( $path ) ) {
+			wp_delete_file( $path );
+		}
+		$wpdb->delete( $table, array( 'id' => (int) $file->id ) );
+	}
+
 	public static function url( $id ) {
 		return wp_nonce_url( add_query_arg( array( 'action' => 'adc_file', 'id' => absint( $id ) ), admin_url( 'admin-post.php' ) ), 'adc_file_' . absint( $id ) );
 	}

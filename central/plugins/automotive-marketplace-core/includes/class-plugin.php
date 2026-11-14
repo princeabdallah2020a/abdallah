@@ -39,6 +39,9 @@ final class Plugin {
 		Sync_Api::init();
 		Webhooks::init();
 		Marketplace_Leads::init();
+		Whatsapp::init();
+		Telephony::init();
+		Privacy::init();
 
 		if ( is_admin() ) {
 			Admin::init();

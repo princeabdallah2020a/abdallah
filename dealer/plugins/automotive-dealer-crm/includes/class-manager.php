@@ -264,6 +264,11 @@ final class Manager {
 				return array( 'message' => __( 'Settings saved. Your website is updated.', 'automotive-dealer-crm' ) );
 		}
 
+		/** Actions provided by extensions: return array|WP_Error to handle it. */
+		$custom = apply_filters( 'adc_manager_action', null, $action, $in );
+		if ( null !== $custom ) {
+			return $custom;
+		}
 		return new \WP_Error( 'adc_action', __( 'Unknown action.', 'automotive-dealer-crm' ) );
 	}
 

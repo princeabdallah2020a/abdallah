@@ -55,6 +55,13 @@ final class Platform_Admin {
 				$queued = Webhooks::enqueue( $id, 'resync.requested', array( 'reason' => 'staff' ) );
 				Audit::log( 'connection.resync', 'dealer', $id );
 				return $queued ? array( 'message' => __( 'Full resynchronisation requested. The dealer website will send all its vehicles again.', 'automotive-marketplace-core' ) ) : new \WP_Error( 'amc_conn', __( 'This dealer website has never connected: nothing can be sent.', 'automotive-marketplace-core' ) );
+			case 'wa_test':
+				$phone = Ai_Contacts::normalize( $text( 'phone', 32 ) );
+				if ( '' === $phone || ! Whatsapp::enabled() ) {
+					return new \WP_Error( 'amc_wa', __( 'Enter a valid number in international format, with WhatsApp enabled.', 'automotive-marketplace-core' ) );
+				}
+				$sent = Whatsapp::send_text( $phone, __( 'Test message from AutoBuzy: the WhatsApp channel works.', 'automotive-marketplace-core' ) );
+				return is_wp_error( $sent ) ? $sent : array( 'message' => __( 'Test message sent.', 'automotive-marketplace-core' ) );
 			case 'webhook_retry':
 				$ok_send = Webhooks::retry( $id );
 				return $ok_send ? array( 'message' => __( 'Delivered.', 'automotive-marketplace-core' ) ) : new \WP_Error( 'amc_webhook', __( 'Delivery failed again. See the error in the list.', 'automotive-marketplace-core' ) );
