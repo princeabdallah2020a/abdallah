@@ -1482,3 +1482,25 @@ a.amc-kpi:hover {
 	max-width: none;
 	height: min(720px, calc(100vh - 200px));
 }
+
+/* Connections (Phase 4) ----------------------------------------------- */
+.amc-stack {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 10px;
+	margin-bottom: 16px;
+}
+.amc-text-danger {
+	color: var(--amds-danger);
+}
+.amc-conn-code {
+	border-color: var(--amds-accent);
+	background: var(--amds-accent-soft);
+}
+.amc-conn-code__value {
+	width: 100%;
+	font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+	font-size: var(--amds-text-sm);
+	word-break: break-all;
+}

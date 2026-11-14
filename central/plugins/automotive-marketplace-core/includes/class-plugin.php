@@ -36,6 +36,9 @@ final class Plugin {
 		Portal::init();
 		Documents::init();
 		Subscriptions::init();
+		Sync_Api::init();
+		Webhooks::init();
+		Marketplace_Leads::init();
 
 		if ( is_admin() ) {
 			Admin::init();
@@ -59,6 +62,7 @@ final class Plugin {
 
 	public static function deactivate() {
 		wp_clear_scheduled_hook( 'amc_daily' );
+		wp_clear_scheduled_hook( Webhooks::CRON );
 		flush_rewrite_rules();
 	}
 }

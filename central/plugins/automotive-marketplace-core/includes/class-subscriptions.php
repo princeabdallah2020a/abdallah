@@ -155,6 +155,7 @@ final class Subscriptions {
 		);
 		$wpdb->update( Database::table( 'dealers' ), array( 'visibility_boost' => (int) $sub->visibility_boost ), array( 'id' => (int) $sub->dealer_id ) );
 		Audit::log( 'subscription.activated', 'subscription', $id );
+		do_action( 'amc_dealer_changed', (int) $sub->dealer_id );
 		Memberships::maybe_activate_dealer( $sub->dealer_id );
 		Notifications::subscription_active( $id );
 		return true;
@@ -181,6 +182,7 @@ final class Subscriptions {
 			array( 'id' => (int) $id )
 		);
 		Audit::log( 'subscription.extended', 'subscription', $id, array( 'months' => $months ) );
+		do_action( 'amc_dealer_changed', (int) $sub->dealer_id );
 		return true;
 	}
 
@@ -192,6 +194,7 @@ final class Subscriptions {
 		}
 		$wpdb->update( Database::table( 'subscriptions' ), array( 'status' => 'cancelled', 'updated_at' => current_time( 'mysql', true ) ), array( 'id' => (int) $id ) );
 		Audit::log( 'subscription.cancelled', 'subscription', $id );
+		do_action( 'amc_dealer_changed', (int) $sub->dealer_id );
 		Memberships::maybe_activate_dealer( $sub->dealer_id );
 		return true;
 	}
@@ -209,6 +212,7 @@ final class Subscriptions {
 			if ( strtotime( $sub->grace_ends_at . ' UTC' ) < time() ) {
 				$wpdb->update( $table, array( 'status' => 'expired', 'updated_at' => current_time( 'mysql', true ) ), array( 'id' => (int) $sub->id ) );
 				Audit::log( 'subscription.expired', 'subscription', $sub->id );
+				do_action( 'amc_dealer_changed', (int) $sub->dealer_id );
 				Memberships::maybe_activate_dealer( $sub->dealer_id );
 				if ( ! $renewed ) {
 					Notifications::subscription_expired( $sub->id );

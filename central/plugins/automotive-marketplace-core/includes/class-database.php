@@ -223,7 +223,7 @@ final class Database {
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 		$c = $wpdb->get_charset_collate();
 		$t = array();
-		foreach ( array( 'dealers', 'plans', 'applications', 'subscriptions', 'payments', 'documents', 'provisioning_jobs', 'tickets', 'ticket_messages', 'api_credentials', 'sync_events', 'webhook_deliveries', 'marketplace_leads' ) as $name ) {
+		foreach ( array( 'dealers', 'plans', 'applications', 'subscriptions', 'payments', 'documents', 'provisioning_jobs', 'tickets', 'ticket_messages' ) as $name ) {
 			$t[ $name ] = self::table( $name );
 		}
 
@@ -521,7 +521,7 @@ final class Database {
 	 */
 	public static function drop_all() {
 		global $wpdb;
-		foreach ( array( 'vehicle_media', 'vehicles', 'dealers', 'inquiries', 'audit_log', 'ai_usage', 'plans', 'applications', 'subscriptions', 'payments', 'documents', 'provisioning_jobs', 'tickets', 'ticket_messages' ) as $name ) {
+		foreach ( array( 'vehicle_media', 'vehicles', 'dealers', 'inquiries', 'audit_log', 'ai_usage', 'plans', 'applications', 'subscriptions', 'payments', 'documents', 'provisioning_jobs', 'tickets', 'ticket_messages', 'api_credentials', 'sync_events', 'webhook_deliveries', 'marketplace_leads' ) as $name ) {
 			$table = self::table( $name );
 			$wpdb->query( "DROP TABLE IF EXISTS $table" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		}

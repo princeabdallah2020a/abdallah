@@ -94,6 +94,7 @@ final class Portal {
 				'payments'      => Payments::pending_count(),
 				'websites'      => Provisioning::open_count(),
 				'support'       => Support::open_count(),
+				'connections'   => Credentials::problem_count(),
 			);
 		}
 		$count = static function ( $key ) use ( $counts ) {
@@ -107,6 +108,7 @@ final class Portal {
 			'payments'      => array( __( 'Payments', 'automotive-marketplace-core' ), 'calendar', $count( 'payments' ) ),
 			'websites'      => array( __( 'Dealer websites', 'automotive-marketplace-core' ), 'globe', $count( 'websites' ) ),
 			'listings'      => array( __( 'Listings', 'automotive-marketplace-core' ), 'car', 0 ),
+			'connections'   => array( __( 'Connections', 'automotive-marketplace-core' ), 'sync', $count( 'connections' ) ),
 			'plans'         => array( __( 'Plans and prices', 'automotive-marketplace-core' ), 'filter', 0 ),
 			'support'       => array( __( 'Support', 'automotive-marketplace-core' ), 'chat', $count( 'support' ) ),
 			'assistant'     => array( __( 'AI assistant', 'automotive-marketplace-core' ), 'sparkle', 0 ),

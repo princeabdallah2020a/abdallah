@@ -32,6 +32,33 @@ final class Platform_Admin {
 		};
 
 		switch ( $action ) {
+			// Dealer website connections (Phase 4).
+			case 'conn_issue':
+				$dealer = Memberships::get_dealer( $id );
+				if ( ! $dealer ) {
+					return new \WP_Error( 'amc_dealer', __( 'Dealer not found.', 'automotive-marketplace-core' ) );
+				}
+				$issued = Credentials::issue( $id );
+				// Shown once, to this user only, on the next page view.
+				set_transient( 'amc_conn_code_' . get_current_user_id(), array( 'dealer' => $id, 'code' => $issued['code'] ), 10 * MINUTE_IN_SECONDS );
+				return array(
+					'message'  => __( 'Connection code generated. Copy it now: it will not be shown again.', 'automotive-marketplace-core' ),
+					'redirect' => Portal::url( 'platform', 'connections', $id ),
+				);
+			case 'conn_revoke':
+				$credential = Credentials::active_for_dealer( $id );
+				if ( $credential ) {
+					Credentials::revoke( $credential->id );
+				}
+				return array( 'message' => __( 'Connection revoked. The dealer website can no longer publish on the marketplace.', 'automotive-marketplace-core' ) );
+			case 'conn_resync':
+				$queued = Webhooks::enqueue( $id, 'resync.requested', array( 'reason' => 'staff' ) );
+				Audit::log( 'connection.resync', 'dealer', $id );
+				return $queued ? array( 'message' => __( 'Full resynchronisation requested. The dealer website will send all its vehicles again.', 'automotive-marketplace-core' ) ) : new \WP_Error( 'amc_conn', __( 'This dealer website has never connected: nothing can be sent.', 'automotive-marketplace-core' ) );
+			case 'webhook_retry':
+				$ok_send = Webhooks::retry( $id );
+				return $ok_send ? array( 'message' => __( 'Delivered.', 'automotive-marketplace-core' ) ) : new \WP_Error( 'amc_webhook', __( 'Delivery failed again. See the error in the list.', 'automotive-marketplace-core' ) );
+
 			// Applications.
 			case 'app_review':
 				return $ok( Memberships::start_review( $id ), __( 'Application marked as under review.', 'automotive-marketplace-core' ) );

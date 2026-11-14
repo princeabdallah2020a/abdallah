@@ -707,3 +707,41 @@
 	height: 1px;
 	overflow: hidden;
 }
+
+/* Message the dealer ------------------------------------------------- */
+.amc-lead {
+	margin-top: 12px;
+}
+.amc-lead > summary {
+	list-style: none;
+	cursor: pointer;
+}
+.amc-lead > summary::-webkit-details-marker {
+	display: none;
+}
+.amc-lead[open] > summary {
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+}
+.amc-lead__body {
+	padding: 16px;
+	border: 1px solid var(--amds-border);
+	border-top: 0;
+	border-radius: 0 0 var(--amds-radius) var(--amds-radius);
+	background: var(--amds-bg);
+}
+.amc-lead__body .amds-form {
+	display: grid;
+	gap: 12px;
+}
+.amc-lead__consent {
+	display: flex;
+	gap: 8px;
+	align-items: flex-start;
+	font-size: var(--amds-text-sm);
+	color: var(--amds-text-muted);
+}
+.amc-lead__consent input {
+	margin-top: 3px;
+	accent-color: var(--amds-accent);
+}

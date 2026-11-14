@@ -114,7 +114,7 @@ final class Credentials {
 		$d = Database::table( 'dealers' );
 		$c = Database::table( 'api_credentials' );
 		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		$rows = $wpdb->get_results( "SELECT d.id AS dealer_id, d.business_name, d.status AS dealer_status, c.* FROM $d d LEFT JOIN $c c ON c.dealer_id = d.id AND c.status = 'active' WHERE d.is_demo = 0 ORDER BY d.business_name ASC" );
+		$rows = $wpdb->get_results( "SELECT c.*, d.id AS dealer_id, d.business_name, d.status AS dealer_status FROM $d d LEFT JOIN $c c ON c.dealer_id = d.id AND c.status = 'active' WHERE d.is_demo = 0 ORDER BY d.business_name ASC" );
 		return $rows ? $rows : array();
 	}
 

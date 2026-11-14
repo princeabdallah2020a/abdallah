@@ -145,6 +145,7 @@ get_header();
 								<a class="amds-btn amds-btn--secondary amds-btn--lg amds-btn--block" href="<?php echo esc_url( 'tel:' . $dealer->phone ); ?>"><?php echo amc_icon( 'phone', 18 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?><?php echo esc_html( $dealer->phone ); ?></a>
 							<?php endif; ?>
 						</div>
+						<?php AMC\Marketplace_Leads::render_form( $vehicle ); ?>
 					<?php endif; ?>
 				</div>
 

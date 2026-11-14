@@ -411,6 +411,7 @@ final class Memberships {
 		);
 		Vehicles::flush_cache();
 		Audit::log( 'dealer.status.' . $status, 'dealer', $dealer_id, $reason ? array( 'reason' => $reason ) : array() );
+		do_action( 'amc_dealer_changed', absint( $dealer_id ) );
 		return true;
 	}
 
