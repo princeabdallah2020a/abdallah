@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       AutoBuzy Marketplace Core
  * Description:       AutoBuzy central platform: marketplace, dealer memberships and subscriptions, platform administration and AI assistant.
- * Version:           0.2.0
+ * Version:           0.4.0
  * Requires at least: 6.5
  * Requires PHP:      8.1
  * Author:            AutoBuzy
@@ -15,7 +15,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'AMC_VERSION', '0.2.0' );
+define( 'AMC_VERSION', '0.4.0' );
 define( 'AMC_DB_VERSION', 5 );
 define( 'AMC_FILE', __FILE__ );
 define( 'AMC_DIR', plugin_dir_path( __FILE__ ) );

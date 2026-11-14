@@ -16,4 +16,6 @@ Nothing external is needed for Phase 1 beyond hosting. Later phases depend on ac
 | Telephony / SIP | 6 | SIP trunk or programmable-voice provider | Availability of Senegalese numbers, inbound/outbound rules, cost per minute, recording/consent regulation (ARTP, CDP) | Provider account, number |
 | Error monitoring, uptime | 6 | Any (e.g. Sentry, UptimeRobot) | — | Accounts |
 
+Integration status: WhatsApp (Meta Cloud API), speech-to-text (any `/audio/transcriptions`-compatible API) and the voice gateway are **implemented but disabled by default** and untested against real accounts — see docs/07. Payment gateways and hosting/domain APIs remain manual (extension points `amc_payment_providers`, `amc_provisioning_providers`).
+
 Credentials are never committed: they go in `wp-config.php` constants or encrypted options, and the code ships placeholders only.

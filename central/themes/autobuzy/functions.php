@@ -8,7 +8,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'AUTOBUZY_VERSION', '0.2.0' );
+define( 'AUTOBUZY_VERSION', '0.4.0' );
 
 require get_template_directory() . '/inc/setup.php';
 require get_template_directory() . '/inc/customizer.php';

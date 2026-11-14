@@ -42,3 +42,7 @@ HTTPS with HSTS; `DISALLOW_FILE_EDIT`; unique salts; automatic minor updates; a 
 - Rate limiting uses the visitor IP as seen by PHP. Behind a reverse proxy/CDN, configure the real-IP header at the web-server level (or the `amc_client_ip` filter); otherwise all visitors share one bucket.
 - No CAPTCHA on forms (honeypot + rate limit only). Add one if spam appears.
 - The privacy policy and terms are templates in draft: legal validation (Senegal law 2008-12, CDP declaration) is required before launch.
+
+## Phases 4–6
+
+The controls added for the dealer sync API, webhooks, the WhatsApp/voice assistant and personal-data retention, with the residual risks, are listed in [SECURITY-REVIEW.md](SECURITY-REVIEW.md).

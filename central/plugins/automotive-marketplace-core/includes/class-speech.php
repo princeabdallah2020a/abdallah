@@ -9,7 +9,7 @@
  *                       offered by several vendors and self-hosted Whisper servers.
  *
  * Wolof recognition quality depends entirely on the chosen model: test it with
- * real voice notes before enabling it for dealers (see docs/05-ai-assistant.md).
+ * real voice notes before enabling it for dealers (see docs/07-whatsapp-and-voice.md).
  *
  * @package AutomotiveMarketplaceCore
  */

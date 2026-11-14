@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'AUTODEALER_VERSION', '0.3.0' );
+define( 'AUTODEALER_VERSION', '0.4.0' );
 
 require get_template_directory() . '/inc/setup.php';
 require get_template_directory() . '/inc/template-tags.php';

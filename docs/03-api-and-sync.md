@@ -38,76 +38,70 @@ curl "https://example.com/wp-json/marketplace/v1/vehicles?type=sale&brand=toyota
 
 Responses are built from explicit allow-lists (`Api::vehicle_summary()`, `Api::dealer_public()`): a new database column is never exposed by accident.
 
-## 3.2 Central dealer API — contract for Phase 4 (not implemented yet)
+## 3.2 Central dealer sync API — implemented (Phase 4, not tested)
 
-Authentication on every request (HTTPS only):
+Base: `https://{marketplace}/wp-json/marketplace/v1/sync` · code: `AMC\Sync_Api`.
+
+Authentication on every request (HTTPS):
 
 ```
-X-AMC-Key:        key_id issued to this dealer
-X-AMC-Timestamp:  unix seconds (rejected if more than 300 s off)
-X-AMC-Signature:  hex( HMAC-SHA256( secret, timestamp + "\n" + METHOD + "\n" + path + "\n" + sha256(body) ) )
-Idempotency-Key:  UUID of the outbox event (required on writes)
+X-AMC-Key:        key id (ab_…) issued to this dealer
+X-AMC-Timestamp:  unix seconds (rejected beyond ±300 s)
+X-AMC-Signature:  hex( HMAC-SHA256( secret, timestamp + "\n" + METHOD + "\n" + route + "\n" + sha256(body) ) )
+Idempotency-Key:  required on every write; a replay returns the first response (header Idempotent-Replay: true)
 ```
 
-The server resolves the dealer **from the key** — a `dealer_id` in the body is ignored. Checks in order: key exists and not revoked → signature → timestamp window → rate limit per key → dealer status `active` and subscription valid → plan limit (number of active listings) → payload validation.
+`route` is the REST route, e.g. `/marketplace/v1/sync/vehicles/9b2c…`. The dealer is resolved **from the key**: any `dealer_id` in a body is ignored; `is_featured`, `is_demo`, `published_at` sent by a dealer are dropped. Checks in order: key exists and active → signature → timestamp → 600 requests/minute per key → idempotency replay → dealer `active` (else **402**) → plan limit of active listings (else **409**) → payload validation (`AMC\Vehicles::upsert`).
 
 | Method | Route | Purpose |
 |---|---|---|
-| POST | `/sync/handshake` | Connector registers site URL + version; returns plan limits and server time |
-| PUT | `/sync/vehicles/{external_id}` | Create or update the listing (full public representation) |
+| POST | `/sync/handshake` | Registers the website URL and connector version; returns account, subscription, limits, server time |
+| GET | `/sync/status` | Same information |
+| PUT | `/sync/vehicles/{external_id}` | Create/update the listing (public fields only, see below). `200` update, `201` create, `{ "ignored": "stale" }` if an older version arrives after a newer one |
 | PATCH | `/sync/vehicles/{external_id}/status` | `active · reserved · sold · rented · unpublished` |
-| DELETE | `/sync/vehicles/{external_id}` | Remove listing |
-| POST | `/sync/vehicles/batch` | Full resynchronisation: list of `{external_id, payload_hash}`; server answers which to send, and unpublishes those absent |
-| POST | `/sync/heartbeat` | "Still online; these external_ids are still published" → refreshes `last_synced_at` |
-| GET | `/sync/status` | Subscription status, limits, listing count |
+| DELETE | `/sync/vehicles/{external_id}` | Remove the listing and its media |
+| POST | `/sync/heartbeat` | `{ vehicles: [{external_id, updated_at}] }` = everything the dealer wants online. Listings not in the list are unpublished; the answer lists `missing` ids the connector must send again |
+| POST | `/sync/contacts` | WhatsApp numbers of team members allowed to use the assistant (Phase 5) |
 
-`PUT /sync/vehicles/{external_id}` body — **public fields only**:
+`PUT` body (built by the connector from the CRM; never purchase price, VIN, notes or customers):
 
 ```json
 {
-  "brand": "Toyota", "model": "Corolla", "year": 2019, "mileage_km": 62000,
-  "fuel_type": "petrol", "transmission": "automatic", "body_type": "sedan",
-  "vehicle_condition": "imported", "color": "Gris",
-  "listing_type": "sale", "price_amount": 9500000, "price_period": "total", "currency": "XOF",
-  "city": "Dakar", "country_code": "SN",
-  "description": "…", "features": ["Climatisation", "Bluetooth"],
+  "title": "Toyota Corolla 2019", "brand": "Toyota", "model": "Corolla", "year": 2019, "mileage_km": 62000,
+  "fuel_type": "petrol", "transmission": "automatic", "body_type": "sedan", "vehicle_condition": "imported",
+  "color": "Gris", "listing_type": "sale", "price_amount": 9500000, "price_period": "total", "currency": "XOF",
+  "city": "Dakar", "country_code": "SN", "description": "…", "features": ["Climatisation"],
+  "thumbnail_url": "https://dealer-a.com/…jpg",
+  "media": [{ "url": "https://dealer-a.com/…jpg", "alt": "…", "width": 1600, "height": 1067 }],
   "source_url": "https://dealer-a.com/vehicle/toyota-corolla-2019/",
-  "status": "active",
-  "media": [{ "url": "https://dealer-a.com/wp-content/uploads/…jpg", "alt": "…", "width": 1600, "height": 1067 }],
-  "source_updated_at": "2026-11-13T16:00:00Z"
+  "status": "active", "source_updated_at": "2026-11-13T16:00:00+00:00"
 }
 ```
 
-This is exactly the input of `AMC\Vehicles::upsert()`, which already exists and is tested (validation, enum rejection, HTML stripping, stable slug, uniqueness). Responses: `200/201 {id, url, status}` · `400` validation · `401` auth · `402` subscription inactive · `409` plan limit reached · `429` rate limit.
+Media are referenced on the dealer website (not copied). Copying/resizing images centrally remains a possible improvement.
 
-Media: the centre downloads each image once (hash-deduplicated), validates type/size, generates responsive sizes and serves its own copy, so the marketplace does not depend on dealer hosting speed.
+**Credentials** (`AMC\Credentials`): staff click *Generate a connection code* (Platform admin → Connections → dealer). The code `AB1.<base64url JSON {v,url,key,secret}>` is shown **once**; the secret is stored encrypted (libsodium, key derived from the WordPress salts). Rotating revokes the previous key immediately. Health: *Healthy* (success < 3 h), *No recent contact*, *Errors* (3 failures in a row).
 
-## 3.3 Dealer API — contract for Phase 3–5 (`https://{dealer}/wp-json/dealer/v1`)
+## 3.3 Marketplace → dealer — implemented (Phases 4–5, not tested)
 
-| Caller | Auth | Routes |
+Signed with the same secret and scheme (route `/dealer/v1/…`), sent by `wp_safe_remote_post` (no private/internal addresses).
+
+| Route on the dealer site | Sent by | Purpose |
 |---|---|---|
-| CRM front-end (`/manager/`) | WordPress cookie + REST nonce + capability check | `/vehicles`, `/leads`, `/customers`, `/sales`, `/rentals`, `/team`, `/reports/*` |
-| Central marketplace → dealer | Signed webhook (HMAC, timestamp, unique `X-AMC-Delivery` id) | `POST /webhooks/marketplace` — events: `lead.created`, `subscription.updated`, `listing.rejected`, `resync.requested`, `credentials.rotated` |
-| AI service → dealer | Bearer token restricted to the `ai` scope + acting user id | `POST /ai/tools/{tool}` (read tools), `POST /ai/actions` (create pending action + preview), `POST /ai/actions/{id}/confirm` |
+| `POST /wp-json/dealer/v1/webhooks/marketplace` | `AMC\Webhooks` (queue + WP-Cron every 5 min, backoff 1 min → 5 → 15 → 1 h → 3 h → 6 h → 12 h → 24 h, then *failed*) | Events `lead.created` (message from a marketplace vehicle page → CRM lead, source *Marketplace*), `resync.requested`, `dealer.updated` (status / plan changed). Header `X-AMC-Delivery` = unique id; the dealer stores it and ignores replays |
+| `POST /wp-json/dealer/v1/ai/execute` | `AMC\Dealer_Agent` | AI assistant tools, run as the CRM user linked to the WhatsApp number (see docs/07) |
 
-## 3.4 Synchronisation protocol
+If a dealer website is not connected, or a `lead.created` delivery finally fails, the request is emailed to the dealer instead — a buyer's message is never lost.
 
-**Principle:** dealer CRM = source of truth; every change writes to the dealer database first, then an event is appended to `adc_outbox` *in the same transaction*; a background worker delivers events in order.
+## 3.4 Synchronisation protocol — implemented in the Marketplace Connector
 
-| Dealer action | Outbox event | Central effect |
-|---|---|---|
-| Vehicle published / edited | `vehicle.upsert` | Listing created/updated (same `external_id` ⇒ same listing) |
-| Price changed | `vehicle.upsert` | Price updated |
-| Reserved / sold / rented | `vehicle.status` | Status changed; sold/rented leave the results |
-| Unpublished / archived / deleted | `vehicle.status` unpublished or `vehicle.delete` | Removed from active results |
-| Every 6 h (cron) | `heartbeat` | `last_synced_at` refreshed for listed IDs |
-| Manual "Resynchronise" button | `batch` | Full reconciliation |
+Plugin **AutoBuzy Marketplace Connector** (`dealer/plugins/automotive-marketplace-connector`, namespace `ACX`), installed next to the Dealer CRM.
 
-Reliability:
-
-- **Idempotency:** each event carries a UUID; the centre stores `(dealer_id, idempotency_key)` and replays return the first result.
-- **Ordering:** events carry `source_updated_at`; the centre ignores an event older than the stored one.
-- **Retries:** exponential backoff 1 min → 5 → 15 → 1 h → 6 h (max 24 h), then the event is parked as `failed` and shown on the connection screen; a later success for the same vehicle supersedes it.
-- **Dealer offline / connector broken:** nothing arrives, so no heartbeat. After `stale_after_hours` (default 72 h) listings show "availability to confirm"; after `hide_after_hours` (default 168 h) they are hidden. **This freshness rule is already implemented and tested in Phase 1.** A vehicle can therefore never stay "available" indefinitely without confirmation.
-- **Centre offline:** events wait in the dealer outbox; the dealer site and CRM are unaffected.
-- **Monitoring:** `amc_connections` (last heartbeat, failure counter) drives the "API Connections" screen and alerts.
+- **Trigger:** every CRM change fires `adc_vehicle_changed`; the connector marks the vehicle *pending* in `acx_items` (one row per vehicle — rapid edits are coalesced, the payload is built when sent, so only the latest state travels).
+- **Wanted on the marketplace** = "Also publish on the AutoBuzy marketplace" ticked **and** status published or reserved. Sold/rented/unpublished vehicles already online are updated (status) rather than silently left.
+- **Delivery:** right after the change (single cron event) and every 5 minutes; batch of 20; lock against parallel runs; backoff 1 min → 5 → 15 → 1 h → 3 h → 6 h. Errors that a retry cannot fix (400, 402 inactive account, 409 plan limit) stop immediately and appear in the CRM *Marketplace* screen with the reason. When the account becomes active again (`dealer.updated`), refused vehicles are retried automatically.
+- **Idempotency:** the key is derived from (vehicle, operation, last change), so a retry after a timeout is never applied twice.
+- **Ordering:** `source_updated_at` — the marketplace ignores an older version.
+- **Self-healing:** hourly heartbeat with every wanted vehicle; the marketplace unpublishes the others and returns the ones it is missing, which are queued again.
+- **Dealer offline / connector broken:** no heartbeat → after `stale_after_hours` (72 h) listings show "availability to confirm", after `hide_after_hours` (168 h) they are hidden (Phase 1 freshness rule).
+- **Marketplace offline:** changes wait in `acx_items`; the dealer website and CRM are unaffected.

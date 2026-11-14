@@ -91,3 +91,4 @@ node_modules/
 
 # Composer dependencies (run: composer install --no-dev)
 /central/plugins/*/vendor/
+dist/

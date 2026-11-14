@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       AutoBuzy Dealer CRM
  * Description:       Independent dealership CRM (vehicles, leads, customers, sales, rentals, team) and public inventory for the dealer's own website.
- * Version:           0.3.0
+ * Version:           0.4.0
  * Requires at least: 6.5
  * Requires PHP:      8.1
  * Author:            AutoBuzy
@@ -15,7 +15,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'ADC_VERSION', '0.3.0' );
+define( 'ADC_VERSION', '0.4.0' );
 define( 'ADC_DB_VERSION', 1 );
 define( 'ADC_FILE', __FILE__ );
 define( 'ADC_DIR', plugin_dir_path( __FILE__ ) );

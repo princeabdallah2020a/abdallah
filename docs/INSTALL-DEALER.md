@@ -1,4 +1,4 @@
-# Dealer website + CRM — installation (Phase 3)
+# Dealer website + CRM — installation (Phases 3–5)
 
 One installation per dealership, on its **own** domain and hosting (not a Multisite).
 
@@ -9,8 +9,8 @@ WordPress 6.5+, PHP 8.1+, MySQL 5.7+/MariaDB 10.4+, HTTPS, pretty permalinks. No
 ## 2. Install
 
 1. Install WordPress on the dealer's domain (Settings → General → Site language: Français).
-2. Plugins → Add new → Upload `autobuzy-dealer-crm-0.3.0.zip` → Activate.
-3. Appearance → Themes → Add new → Upload `autodealer-theme-0.3.0.zip` → Activate.
+2. Plugins → Add new → Upload `autobuzy-dealer-crm-0.4.0.zip` → Activate, then `autobuzy-marketplace-connector-0.4.0.zip` → Activate.
+3. Appearance → Themes → Add new → Upload `autodealer-theme-0.4.0.zip` → Activate.
 4. Settings → Permalinks → "Post name" → Save.
 5. Users → Add new → create the dealer's account with the role **Dealer owner** (strong password).
 6. Send the dealer the address **`https://their-domain/manager/login/`**.
@@ -38,6 +38,8 @@ Then: **Vehicles → Add a vehicle** (photos uploaded several at a time), **Team
 | Sales | Confirming a sale marks the vehicle sold and the lead won; cancelling puts the vehicle back on sale; payment follow-up |
 | Rentals | 14-day availability planner; quote → confirmed → vehicle out → returned; **overlapping confirmed rentals are refused** (checked in a locked transaction); live total; deposit, payment, mileage, return condition |
 | Team | Invitations by email (7-day single-use link); roles Owner, Manager, Sales agent, Rental agent, Viewer; extra permissions per person |
+| Marketplace | Connection to AutoBuzy (paste the connection code), plan and listing limit, synchronisation status, refused vehicles with the reason, connection log, **my WhatsApp number** for the AI assistant |
+| Reports | Lead sources and conversion, sales, gross margin, average time to sell, vehicles for sale for more than 60 days, rental income and fleet occupancy, team results (30 days / 90 days / 12 months) |
 | Settings, Activity | Business and website settings; activity log |
 
 ### Permissions
@@ -62,3 +64,15 @@ Every action is checked on the server. Team members never see wp-admin. The last
 - Vehicle photos go into the normal media library (they are public on the website).
 - Deleting the plugin removes the roles but **never deletes business data**.
 - Public API (read-only, no private field): `/wp-json/dealer/v1/vehicles`, `/wp-json/dealer/v1/business`.
+
+## 7. Connect to the AutoBuzy marketplace (Phase 4)
+
+1. The AutoBuzy team generates a **connection code** (Platform admin → Connections) and sends it to you.
+2. CRM → **Marketplace** → paste the code → **Connect** (owner only).
+3. Every vehicle with **"Also publish on the AutoBuzy marketplace"** ticked and status Published or Reserved is sent automatically; changes (price, photos, reserved, sold, archived, deleted) follow within minutes. Messages sent by buyers from the marketplace arrive in **Leads** with the source *Marketplace*.
+4. If a vehicle is refused (plan limit reached, account inactive), the reason is shown in the Marketplace screen; fix it and click **Retry refused vehicles**.
+
+## 8. WhatsApp AI assistant (Phase 5, when AutoBuzy enables it)
+
+Each team member enters **their own** WhatsApp number in CRM → Marketplace → *My WhatsApp number*. They can then write or send voice notes to the AutoBuzy WhatsApp number: "what do I have under 10 million?", "add a lead: Awa Diop 77 123 45 67 interested in the Corolla", "mark the Corolla as sold". The assistant has exactly that person's CRM permissions. Changes of status or price are **only applied after the person answers OUI / YES / WAAW**; NON / NO / DEEDET cancels. Each action appears in the CRM activity log.
+

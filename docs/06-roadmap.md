@@ -60,14 +60,23 @@ Built: plugin **AutoBuzy Dealer CRM** (13 custom tables, `/manager/` application
 Acceptance criteria:
 Acceptance: installable theme + CRM plugin on a blank WordPress; `/manager/` with dashboard, vehicles (7 statuses, photos), leads pipeline, customers, sales (confirm ⇒ vehicle sold), rentals (no overlapping confirmed rentals), team invites with 5 roles; all permissions enforced server-side; dealer branding without code.
 
-## Phase 4 — API + connector ○
-Acceptance: connector installs, handshake succeeds, publishing/price change/sold/unpublish reach the marketplace within the retry policy; duplicates impossible; forged, replayed or expired requests rejected; revoked key stops working immediately; offline dealer ⇒ stale then hidden; connection monitoring and manual resync; marketplace leads delivered to the CRM by signed webhook.
+## Phase 4 — API + connector ◐ (built, not tested)
 
-## Phase 5 — WhatsApp + AI assistant ○
-Acceptance: text commands in French and English for all 15 tools; sensitive actions require preview + confirmation; unknown numbers refused; per-dealer quotas; Wolof text and audio evaluated on a recorded test set with a published accuracy figure before activation.
+Built: signed sync API `marketplace/v1/sync/*` (handshake, status, upsert, status, delete, heartbeat/reconciliation, contacts) with HMAC, timestamp window, idempotency replay, per-key rate limit, plan limits and stale-update protection; per-dealer credentials (connection code shown once, encrypted secret, rotation, revocation, health); signed webhooks with queue, backoff and retry (`lead.created`, `resync.requested`, `dealer.updated`); "Message the dealer" form on marketplace vehicle pages, delivered to the CRM as a lead or by email as fallback; Platform admin → **Connections**. New dealer plugin **AutoBuzy Marketplace Connector** (connection by code, coalesced outbox, backoff, hourly heartbeat with self-healing, webhook receiver with replay protection, CRM screen *Marketplace*). Docs: docs/03.
 
-## Phase 6 — Telephony, reporting, hardening ○
-Acceptance: provider/regulatory verification documented; inbound call flow with human handoff and summaries; advanced reports; security review, load test, backup/restore drill, deployment runbook.
+**Not tested** (owner's request, syntax checks only). Acceptance to run on staging: connect a dealer site; publish, change price, reserve, sell, unpublish and delete a vehicle and check the marketplace each time; send the same request twice (same Idempotency-Key) and check one effect; alter one byte of a signed request and expect 401; revoke the key and expect 401; switch off the dealer site 72 h/168 h (or lower the windows) and check stale then hidden; send a message from a marketplace vehicle page and find the lead in the CRM; disconnect the dealer site and check the email fallback.
+
+## Phase 5 — WhatsApp + AI assistant ◐ (built, not tested, disabled by default)
+
+Built: WhatsApp Cloud API webhook (signature, dedupe, async processing), dealer agent with 11 CRM tools executed on the dealer site as the linked team member, server-side confirmation (OUI/YES/WAAW · NON/NO/DEEDET, 15 min expiry) for status and price changes, public buyer assistant for unknown numbers, plan quotas and flood limits, provider-independent speech-to-text for voice notes, team members' numbers registered from the CRM, Platform admin → **WhatsApp & voice**. Docs: docs/07.
+
+**Not tested.** Acceptance before enabling: Meta number verified; each tool exercised in French and English from a dealer number, and with a user lacking the permission; confirm/cancel/expiry paths; unknown number answered by the buyer assistant; quota reached message; **Wolof text and voice evaluated on a recorded test set by native speakers** with a written accuracy figure.
+
+## Phase 6 — Telephony, reporting, hardening ◐ (built, not tested; telephony disabled by default)
+
+Built: voice gateway endpoint (signed, provider-independent) using the same assistant, call log; Reports in the CRM (lead sources and conversion, sales, margin, time to sell, aging stock, rental income and occupancy, team) and in Platform admin (12-month growth, most requested dealers); privacy export/erase tools and retention purges (central and CRM); cache and security headers; docs/DEPLOYMENT.md (runbook, backups, restore drill, monitoring, load-test script), docs/SECURITY-REVIEW.md, `tools/dev/build-release.sh`.
+
+**Not done / to do by the owner:** choose and verify a telephony provider (Senegalese numbers, cost, recording consent rules ARTP/CDP), test the gateway end to end with human handoff; run the load test and the restore drill; independent penetration test.
 
 ## Decisions to confirm with the product owner
 

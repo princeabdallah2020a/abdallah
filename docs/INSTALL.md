@@ -70,7 +70,7 @@ Pages created automatically (no WordPress page needed):
 | `/dealer-registration/` | public | 5-step application: plan → account → dealership + documents → website/domain → payment |
 | `/dealer-login/` | dealers | Login |
 | `/dealer-dashboard/` | dealers | Status timeline, getting started, subscription and payment, payments, website setup progress, public profile, documents, support |
-| `/platform-admin/` | staff | Overview, applications, dealers, subscriptions, payments, dealer websites, listings, plans and prices, support, AI assistant, AI usage, audit log, settings |
+| `/platform-admin/` | staff | Overview, reports, applications, dealers, subscriptions, payments, dealer websites, listings, connections, plans and prices, support, AI assistant, WhatsApp & voice, AI usage, audit log, settings |
 
 Aliases: `/dealer-onboarding/`, `/subscription-checkout/`, `/application-status/` open the matching dealer-space section.
 
@@ -90,6 +90,14 @@ Aliases: `/dealer-onboarding/`, `/subscription-checkout/`, `/application-status/
 **Documents** (RCCM, NINEA, ID, receipts) are stored in `wp-content/uploads/amc-private/` with web access denied and are served only to staff and to the owning dealer. On Nginx, add `location ^~ /wp-content/uploads/amc-private/ { deny all; }` (Apache is covered by the bundled `.htaccess`).
 
 **Cron:** reminders and expiry run with WP-Cron once a day. On low-traffic sites, configure a real cron calling `wp-cron.php`.
+
+## 4d. Dealer website connections (Phase 4)
+
+**/platform-admin/connections/** lists every dealer with the health of its website connection. Open a dealer → **Generate a connection code** → copy it (shown once) and send it to the dealer, who pastes it in their CRM (Marketplace section). From then on their vehicles are published, updated and withdrawn automatically, and messages sent by buyers from marketplace vehicle pages ("Send a message to the dealer") arrive in their CRM — or by email when their website is not connected. Also on this screen: rotate or revoke a key, request a full resynchronisation, retry a webhook, and the log of API calls. Details: docs/03 and docs/DEPLOYMENT.md §7.
+
+## 4e. WhatsApp & voice assistant (Phases 5–6, off by default)
+
+**/platform-admin/channels/**: WhatsApp Cloud API credentials, webhook URL and verify token, voice-note transcription provider, voice gateway. Nothing is sent or received until you tick *Enable*. Set the monthly **AI quota** of each plan in Plans and prices (0 = not included). Step-by-step setup and the safety model: docs/07-whatsapp-and-voice.md.
 
 ## 5. Preview with demo data
 

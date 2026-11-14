@@ -20,7 +20,7 @@
  *
  * The answer comes from the same assistant as WhatsApp (same permissions,
  * same spoken yes/no confirmation for sensitive actions). Keep it disabled
- * until the gateway has been tested end to end (docs/05-ai-assistant.md).
+ * until the gateway has been tested end to end (docs/07-whatsapp-and-voice.md).
  *
  * @package AutomotiveMarketplaceCore
  */
