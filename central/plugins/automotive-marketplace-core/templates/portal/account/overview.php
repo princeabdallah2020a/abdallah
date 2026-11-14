@@ -113,3 +113,46 @@ Portal::page_head( sprintf( __( 'Hello, %s', 'automotive-marketplace-core' ), $d
 		<?php endforeach; ?>
 	</ul>
 </section>
+
+<?php
+$amc_credential = AMC\Credentials::active_for_dealer( $dealer->id );
+$amc_health     = AMC\Credentials::health( $amc_credential );
+$amc_quota      = $current ? (int) $current->ai_quota : 0;
+$amc_used       = AMC\Whatsapp::month_count( $dealer->id );
+$amc_wa_number  = (string) AMC\Settings::get( 'wa_business_number' );
+$amc_health_txt = array(
+	'none'  => __( 'Not connected yet: our team will send you a connection code for your CRM.', 'automotive-marketplace-core' ),
+	'ok'    => __( 'Connected: your vehicles are synchronised automatically.', 'automotive-marketplace-core' ),
+	'stale' => __( 'No recent contact from your website. Check the Marketplace section of your CRM.', 'automotive-marketplace-core' ),
+	'error' => __( 'Your website reports errors. Open the Marketplace section of your CRM or contact support.', 'automotive-marketplace-core' ),
+);
+?>
+<div class="amc-grid-2">
+	<section class="amc-panel">
+		<div class="amc-panel__head"><h2><?php esc_html_e( 'Website ↔ marketplace', 'automotive-marketplace-core' ); ?></h2></div>
+		<p><?php echo esc_html( $amc_health_txt[ $amc_health ] ); ?></p>
+		<?php if ( $amc_credential && $amc_credential->last_success_at ) : ?>
+			<p class="amc-muted">
+				<?php
+				/* translators: %s: date */
+				echo esc_html( sprintf( __( 'Last synchronisation: %s', 'automotive-marketplace-core' ), Portal::date( $amc_credential->last_success_at, true ) ) );
+				?>
+			</p>
+		<?php endif; ?>
+	</section>
+	<section class="amc-panel">
+		<div class="amc-panel__head"><h2><?php esc_html_e( 'AI assistant on WhatsApp', 'automotive-marketplace-core' ); ?></h2><?php if ( $amc_quota ) : ?><span class="amc-panel__meta"><?php echo esc_html( $amc_used . ' / ' . $amc_quota ); ?></span><?php endif; ?></div>
+		<?php if ( ! AMC\Whatsapp::enabled() ) : ?>
+			<p class="amc-muted"><?php esc_html_e( 'Coming soon: manage your CRM by WhatsApp, in French, Wolof or English.', 'automotive-marketplace-core' ); ?></p>
+		<?php elseif ( ! $amc_quota ) : ?>
+			<p><?php esc_html_e( 'Not included in your plan. Choose a higher plan to manage your CRM by WhatsApp.', 'automotive-marketplace-core' ); ?></p>
+		<?php else : ?>
+			<p>
+				<?php
+				/* translators: %s: WhatsApp number */
+				echo esc_html( sprintf( __( 'Register your number in your CRM (Marketplace section), then write to %s. Messages used this month are shown above.', 'automotive-marketplace-core' ), $amc_wa_number ? $amc_wa_number : 'AutoBuzy' ) );
+				?>
+			</p>
+		<?php endif; ?>
+	</section>
+</div>

@@ -467,6 +467,14 @@ final class Vehicles {
 			'updated_at'        => $now,
 		);
 
+		// Flags set by staff (featured) or by the demo importer are only changed when explicitly given:
+		// a dealer synchronisation never resets them.
+		foreach ( array( 'is_featured', 'is_demo' ) as $flag ) {
+			if ( ! array_key_exists( $flag, $input ) ) {
+				unset( $data[ $flag ] );
+			}
+		}
+
 		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$existing = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM $table WHERE dealer_id = %d AND external_id = %s", $dealer_id, $external_id ) );
 
