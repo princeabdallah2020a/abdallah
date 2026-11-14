@@ -223,7 +223,7 @@ final class Database {
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 		$c = $wpdb->get_charset_collate();
 		$t = array();
-		foreach ( array( 'dealers', 'plans', 'applications', 'subscriptions', 'payments', 'documents', 'provisioning_jobs', 'tickets', 'ticket_messages' ) as $name ) {
+		foreach ( array( 'dealers', 'plans', 'applications', 'subscriptions', 'payments', 'documents', 'provisioning_jobs', 'tickets', 'ticket_messages', 'api_credentials', 'sync_events', 'webhook_deliveries', 'marketplace_leads' ) as $name ) {
 			$t[ $name ] = self::table( $name );
 		}
 
@@ -425,6 +425,93 @@ final class Database {
 
 		Plans::seed();
 		Permissions::install_roles();
+		update_option( 'amc_flush_rewrites', 1, false );
+	}
+
+	/**
+	 * Migration 4 — Phase 4: dealer API credentials, sync event log
+	 * (idempotency), outbound webhooks, marketplace leads.
+	 */
+	private static function migration_4() {
+		global $wpdb;
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+		$c = $wpdb->get_charset_collate();
+		$t = static function ( $name ) {
+			return self::table( $name );
+		};
+		dbDelta(
+			"CREATE TABLE {$t('api_credentials')} (
+			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			dealer_id bigint(20) unsigned NOT NULL,
+			key_id varchar(40) NOT NULL,
+			secret_enc text NOT NULL,
+			status varchar(20) NOT NULL DEFAULT 'active',
+			site_url varchar(500) NOT NULL DEFAULT '',
+			connector_version varchar(20) NOT NULL DEFAULT '',
+			last_handshake_at datetime DEFAULT NULL,
+			last_heartbeat_at datetime DEFAULT NULL,
+			last_success_at datetime DEFAULT NULL,
+			last_error varchar(255) NOT NULL DEFAULT '',
+			failures int(10) unsigned NOT NULL DEFAULT 0,
+			created_by bigint(20) unsigned NOT NULL DEFAULT 0,
+			created_at datetime NOT NULL,
+			revoked_at datetime DEFAULT NULL,
+			PRIMARY KEY  (id),
+			UNIQUE KEY key_id (key_id),
+			KEY dealer_status (dealer_id,status)
+			) $c;"
+		);
+		dbDelta(
+			"CREATE TABLE {$t('sync_events')} (
+			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			dealer_id bigint(20) unsigned NOT NULL,
+			idempotency_key varchar(64) NOT NULL DEFAULT '',
+			method varchar(10) NOT NULL DEFAULT '',
+			route varchar(191) NOT NULL DEFAULT '',
+			external_id varchar(64) NOT NULL DEFAULT '',
+			status_code smallint(5) unsigned NOT NULL DEFAULT 0,
+			response longtext NOT NULL,
+			error varchar(255) NOT NULL DEFAULT '',
+			created_at datetime NOT NULL,
+			PRIMARY KEY  (id),
+			KEY dealer_key (dealer_id,idempotency_key),
+			KEY dealer_created (dealer_id,created_at)
+			) $c;"
+		);
+		dbDelta(
+			"CREATE TABLE {$t('webhook_deliveries')} (
+			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			dealer_id bigint(20) unsigned NOT NULL,
+			delivery_id char(36) NOT NULL,
+			event varchar(40) NOT NULL,
+			payload longtext NOT NULL,
+			status varchar(20) NOT NULL DEFAULT 'pending',
+			attempts smallint(5) unsigned NOT NULL DEFAULT 0,
+			next_attempt_at datetime NOT NULL,
+			last_error varchar(255) NOT NULL DEFAULT '',
+			delivered_at datetime DEFAULT NULL,
+			created_at datetime NOT NULL,
+			PRIMARY KEY  (id),
+			KEY status_next (status,next_attempt_at),
+			KEY dealer_id (dealer_id)
+			) $c;"
+		);
+		dbDelta(
+			"CREATE TABLE {$t('marketplace_leads')} (
+			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			dealer_id bigint(20) unsigned NOT NULL,
+			vehicle_id bigint(20) unsigned NOT NULL DEFAULT 0,
+			name varchar(150) NOT NULL,
+			phone varchar(32) NOT NULL DEFAULT '',
+			email varchar(191) NOT NULL DEFAULT '',
+			message text NOT NULL,
+			channel varchar(20) NOT NULL DEFAULT 'webhook',
+			status varchar(20) NOT NULL DEFAULT 'pending',
+			created_at datetime NOT NULL,
+			PRIMARY KEY  (id),
+			KEY dealer_created (dealer_id,created_at)
+			) $c;"
+		);
 		update_option( 'amc_flush_rewrites', 1, false );
 	}
 
