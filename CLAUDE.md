@@ -207,7 +207,7 @@ Le **CEO** (session principale) découpe, délègue, fait passer revue + sécuri
 - **Journal** : chaque agent (CEO inclus) ajoute son rapport dans `.claude/coaching/WORKLOG.md` à la fin de chaque tâche.
 
 ### Coaching quotidien (chaque nuit à 3 h, heure de Casablanca)
-- **Tâche programmée active** : « Coaching quotidien équipe IA Wotoyi » (id `trig_01SRHzLCVzynfNdaKzs59En9`), session cloud Opus, approbation automatique, notification push. Elle travaille sur la branche `claude/ai-team-kit` et ne pousse jamais sur `master`. Modifiable ou supprimable dans les tâches programmées de Claude.
+- **Tâche programmée active** : « Coaching quotidien équipe IA Wotoyi » (id `trig_01SRHzLCVzynfNdaKzs59En9`), session cloud Opus, approbation automatique, notification push. Elle travaille sur la branche de code `ccr-eb9afd1c-kenxwj` et ne pousse jamais sur `master`. Modifiable ou supprimable dans les tâches programmées de Claude.
 - Skills du coach : `agent-coaching`, `code-review-and-quality`, `security-and-hardening`, `doubt-driven-development`, `verification-before-completion`, `requesting-code-review` / `receiving-code-review`.
 - Tâche programmée qui lance `coach-quality-controller` dans une session cloud : il lit le WORKLOG + les commits des dernières 24 h, note chaque agent (exactitude, preuves, sécurité, process, efficacité, valeur business), écrit le rapport `.claude/coaching/reports/AAAA-MM-JJ.md` et met à jour la section **« Coaching notes »** de chaque agent (8 leçons max).
 - Garde-fous : le coach ne modifie que les « Coaching notes », les rapports et le WORKLOG ; jamais les rôles, outils, modèles, règles de sécurité ni ce fichier (il les **propose** au propriétaire).
@@ -277,7 +277,7 @@ Autres collections utiles (à installer seulement si besoin, après relecture du
 
 | Dépôt | Contenu | Branches |
 |---|---|---|
-| `princeabdallah2020a/abdallah` (public) | **Monorepo Wotoyi** (nom de code AutoBuzy) : marketplace centrale, CRM concessionnaires, connecteur, thèmes, design system, outils, docs, et ce kit Claude (`CLAUDE.md` + `.claude/`) | `master` (ne contient que le README) · `ccr-eb9afd1c-kenxwj` (tout le code, phases 1–6) · `claude/ai-team-kit` (ce kit) |
+| `princeabdallah2020a/abdallah` (public) | **Monorepo Wotoyi** (nom de code AutoBuzy) : marketplace centrale, CRM concessionnaires, connecteur, thèmes, design system, outils, docs, et ce kit Claude (`CLAUDE.md` + `.claude/`) | `master` (ne contient que le README) · **`ccr-eb9afd1c-kenxwj` = branche de travail** (tout le code phases 1–6 + ce kit Claude, fusionné le 2026-11-16) · `claude/ai-team-kit` (ancienne branche du kit, obsolète — ne plus l'utiliser) |
 | `princeabdallah2020a/andallah` | Ancien dépôt (2020), non utilisé | — |
 
 ⚠️ Le dépôt est **public** : n'y mettre aucun secret (clés API, mots de passe, données clients). À fusionner dans `master` quand le code est validé.
@@ -412,7 +412,7 @@ Score each criterion 0–5. Back every negative point with a file:line, commit o
    - Max **8** short, concrete, actionable lessons ("Always run `php -l` on templates too — missed on 2026-11-17").
    - Replace outdated/applied lessons; never just append forever.
 3. Clear the processed entries from `WORKLOG.md` (move them under the report's "Sources" section).
-4. Commit: `coach: daily review YYYY-MM-DD` and push to the current kit branch.
+4. Commit: `coach: daily review YYYY-MM-DD` and push to the working code branch `ccr-eb9afd1c-kenxwj` (never `master`).
 
 #### Hard limits (to avoid drift)
 - You may edit **only** the "Coaching notes" section of agent files, the reports, and WORKLOG.md.
@@ -1154,4 +1154,4 @@ Check current model names/features in official Claude docs — never guess.
 
 ---
 
-*Dernière mise à jour : 2026-11-16 — 23 agents (CEO, 21 spécialistes, coach) reliés à leurs skills ; 35 skills (10 maison + 25 externes) ; validation CEO obligatoire ; coaching quotidien programmé à 3 h ; pack CEO ; dépôts ; kit réutilisable ; annexes A et B à jour.*
+*Dernière mise à jour : 2026-11-16 — kit fusionné dans la branche de code ; 23 agents (CEO, 21 spécialistes, coach) reliés à leurs skills ; 35 skills (10 maison + 25 externes) ; validation CEO obligatoire ; coaching quotidien programmé à 3 h ; pack CEO ; dépôts ; kit réutilisable ; annexes A et B à jour.*

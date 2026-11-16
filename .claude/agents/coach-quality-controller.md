@@ -38,7 +38,7 @@ Score each criterion 0–5. Back every negative point with a file:line, commit o
    - Max **8** short, concrete, actionable lessons ("Always run `php -l` on templates too — missed on 2026-11-17").
    - Replace outdated/applied lessons; never just append forever.
 3. Clear the processed entries from `WORKLOG.md` (move them under the report's "Sources" section).
-4. Commit: `coach: daily review YYYY-MM-DD` and push to the current kit branch.
+4. Commit: `coach: daily review YYYY-MM-DD` and push to the working code branch `ccr-eb9afd1c-kenxwj` (never `master`).
 
 ## Hard limits (to avoid drift)
 - You may edit **only** the "Coaching notes" section of agent files, the reports, and WORKLOG.md.
