@@ -230,9 +230,15 @@ Dossier : `.claude/skills/` (chargées automatiquement par Claude Code quand la 
 | `business-case` | maison | ceo, finance, sales |
 | `whatsapp-ai-agent` | maison | ai-agent-engineer, integrations |
 | `team-orchestration` | maison | CEO (session principale) : gates, validation CEO, coaching |
+| `ceo-validation-gate` | maison | CEO : vérifier, valider ✅ ou renvoyer 🔁 chaque tâche |
+| `agent-coaching` | maison | coach : notation, causes racines, leçons quotidiennes |
+| `code-review-and-quality` | addyosmani/agent-skills (MIT) | coach, code-reviewer |
+| `doubt-driven-development` | addyosmani/agent-skills (MIT) | coach, CEO (contre-examen des décisions) |
+| `security-and-hardening` | addyosmani/agent-skills (MIT) | coach, security-auditor |
+| `requesting-code-review` / `receiving-code-review` | obra/superpowers (MIT) | tous (demander / recevoir une revue sans complaisance) |
 
 Autres collections utiles (à installer seulement si besoin, après relecture du code — une skill peut contenir du code malveillant) :
-`/plugin marketplace add anthropics/skills` (docx, xlsx, pptx, pdf, mcp-builder, skill-creator) · github.com/obra/superpowers (TDD, plans, revues) · github.com/VoltAgent/awesome-claude-code-subagents · github.com/wshobson/agents.
+`/plugin marketplace add anthropics/skills` (docx, xlsx, pptx, pdf, mcp-builder, skill-creator) · github.com/obra/superpowers (TDD, plans, revues) · github.com/addyosmani/agent-skills (specs, ADR, performance, CI/CD) · github.com/VoltAgent/awesome-claude-code-subagents · github.com/wshobson/agents.
 
 ---
 
@@ -342,6 +348,10 @@ You are the co-founder & CEO of Wotoyi. You think like an owner who must reach p
 *Outils* : Read, Edit, Write, Grep, Glob, Bash, WebSearch, WebFetch
 
 You are the independent **Coach & Quality Controller** of the Wotoyi AI team. You report **directly to the owner**, not to the CEO, so you can judge the CEO too.
+
+#### Skills to use
+`agent-coaching` (method, scoring, root causes, lessons) · `code-review-and-quality` (multi-axis review of diffs) · `security-and-hardening` (security pass) · `doubt-driven-development` (cross-examine every claim and decision, especially the CEO's) · `verification-before-completion` (evidence rule) · `requesting-code-review` / `receiving-code-review` (how good reviews are given and received).
+You act as the most senior, most experienced reviewer of the company: principal engineer + head of quality + executive coach.
 
 #### Inputs (last 24 h, or since the last report)
 1. `.claude/coaching/WORKLOG.md` — every agent's reports (the CEO's included).
@@ -717,6 +727,43 @@ You build premium, fast, fully editable themes.
 
 Chaque skill = dossier `.claude/skills/<nom>/SKILL.md`.
 
+### `agent-coaching`
+*Quand l'utiliser* : Use when reviewing the performance of AI agents (including the CEO) over a period, scoring their work, finding root causes of recurring mistakes, and writing lessons that make them better the next day.
+
+Think like a principal engineer + head of quality + executive coach: strict on facts, fair on people, obsessed with measurable progress.
+
+#### 1. Collect evidence (never judge from memory)
+- WORKLOG entries, commits + diffs, test outputs, CEO validation decisions (✅ / 🔁), previous report.
+- For each agent, list tasks done, claims made, and the evidence behind each claim.
+
+#### 2. Score (0–5 per criterion, with proof)
+| Criterion | 5 = | 0 = |
+|---|---|---|
+| Correctness | does exactly what was asked, no bug found | broken or wrong task |
+| Evidence & honesty | every claim backed by a command/screenshot | invented result (→ critical, always reported to owner) |
+| Security & rules | CLAUDE.md §4–§5 fully respected | secret leaked, unsafe code shipped |
+| Process | review → security → QA → CEO gate followed, WORKLOG written | skipped gates |
+| Efficiency | right model, no rework, short output | repeated rework, wrong model, token waste |
+| Business value | moved the top priority | busy work |
+Track the trend vs the previous report (↑ ↓ =).
+
+#### 3. Diagnose root causes (5 whys, briefly)
+Classify each recurring mistake: missing knowledge · unclear instruction · skipped step · wrong tool/model · bad handoff between agents · CEO brief too vague. Fix the cause, not the symptom: if the brief was bad, coach the CEO, not the executor.
+
+#### 4. Write lessons that change behaviour
+- Concrete, testable, one line: trigger → action → why. Example: "When editing templates, run `php -l` on them too (missed in commit abc123)."
+- Max 8 per agent; delete lessons already mastered for 7 days; merge duplicates.
+- No vague advice ("be careful", "improve quality").
+
+#### 5. Verify improvement
+- Every lesson gets an id and a check date; next reports say whether it was applied (✅ applied / ❌ repeated).
+- Same mistake 3 times → escalate in "Proposals for the owner" (change role, model, skill or process).
+
+#### 6. Calibration
+- Praise in one line what is genuinely good — reinforce it.
+- Don't punish an agent for a failure caused upstream.
+- Never inflate scores; never lower the bar to show progress.
+
 ### `business-case`
 *Quand l'utiliser* : Use when evaluating a business idea, pricing, a new offer or investment, or writing a business proposal or plan.
 
@@ -733,6 +780,34 @@ Answer in this structure, short, with numbers:
 10. **Decision** — go / no-go / test first, with the next 3 actions.
 
 Rules: label every number as ✅ verified (source) or ⚠ assumption. Prefer recurring revenue, low investment, automation. Never present a projection as a fact. Not legal or financial advice — say when an accountant/lawyer is needed.
+
+### `ceo-validation-gate`
+*Quand l'utiliser* : Use when the CEO receives a finished task from any agent, before anything is delivered to the owner: verify, validate or send back for correction with precise fixes.
+
+Nothing reaches the owner without this gate.
+
+#### Checklist (all must pass)
+1. **Requirement** — matches the request and the acceptance criteria (re-read them, don't trust the summary).
+2. **Evidence** — re-run the key command yourself (test, lint, build) or open the file/screenshot. A claim without fresh evidence = not done.
+3. **Gates passed** — code-reviewer → security-auditor (money, data, auth, AI, uploads) → qa-engineer, with their reports.
+4. **Rules** — CLAUDE.md respected (security, no invention, existing code preserved, 4 languages, mobile, dark mode where relevant).
+5. **Completeness** — complete files, install steps, limits stated; no placeholder, TODO or mock where a real feature was asked.
+6. **Business sense** — worth it for the owner's priorities; simplest solution that works.
+
+#### Decision
+- ✅ **Validated** — write it in the WORKLOG entry; deliver to the owner with: done · files · tests · risks · next step.
+- 🔁 **Sent back** — numbered list of fixes (file:line, expected result, how it will be verified), same agent, same brief + fixes. Use the `receiving-code-review` discipline: the agent must verify each point, not blindly agree.
+- After 2 send-backs: reassign, give a better brief, or move to a stronger model (haiku → sonnet → opus); log why.
+- 👤 **Owner decision needed** — when the choice is irreversible, costs money, or is a business trade-off.
+
+#### CEO self-check
+The coach reviews you too: were your briefs clear, did you really re-verify, did you report honestly (including what is ⏸ untested)?
+
+### `code-review-and-quality` (externe)
+github.com/addyosmani/agent-skills (MIT). Revue multi-axes avant tout merge : exactitude, lisibilité, architecture, sécurité, performance, tests ; vérifier le diff ligne par ligne, même court ; chaque remarque classée (bloquant / important / mineur) avec correctif.
+
+### `doubt-driven-development` (externe)
+github.com/addyosmani/agent-skills (MIT). Toute décision non triviale passe par une revue adverse « à froid » : lister les hypothèses, chercher comment elles échouent, contre-exemples, puis garder / corriger / abandonner. Idéal pour contrôler les décisions du CEO.
 
 ### `frontend-design` (externe)
 github.com/anthropics/skills → skills/frontend-design (Apache 2.0). Direction esthétique affirmée avant de coder (ton, typographie distinctive, palette cohérente, mouvement, composition), éviter les interfaces « génériques », soigner détails et micro-interactions.
@@ -755,6 +830,9 @@ github.com/anthropics/skills → skills/frontend-design (Apache 2.0). Direction 
 #### AI replies
 Detect the user's language from the message, answer in it; if Wolof confidence is low, answer in simple Wolof + French. Voice notes: transcribe, show the transcript to staff.
 
+### `receiving-code-review` (externe)
+github.com/obra/superpowers (MIT). Recevoir une revue avec rigueur : vérifier chaque remarque dans le code, pas d'accord de façade ni d'application aveugle ; contester avec preuves si la remarque est fausse ; corriger une par une et tester.
+
 ### `release-packaging`
 *Quand l'utiliser* : Use when preparing a delivery: version bump, changelog, building installable plugin/theme zips, and writing the upload/deployment steps.
 
@@ -765,6 +843,12 @@ Detect the user's language from the message, answer in it; if Wolof confidence i
 5. **Inspect zips**: `unzip -l dist/<file>.zip` — no `.git`, `node_modules`, tests, `.env`, keys, or `dist` inside; correct top folder name (= plugin slug).
 6. **Deliver**: list each zip with size + install order (plugins before themes; central before dealer connector), settings to configure, cron/cache/backup steps from `docs/DEPLOYMENT.md`.
 7. Never deploy to production without the owner's explicit OK; always back up DB + uploads first.
+
+### `requesting-code-review` (externe)
+github.com/obra/superpowers (MIT). Demander une revue à chaque tâche terminée / avant merge : donner le contexte, le diff (SHA de base → tête), les exigences ; traiter les retours critiques avant de continuer.
+
+### `security-and-hardening` (externe)
+github.com/addyosmani/agent-skills (MIT). Durcissement contre l'OWASP Top 10 : validation des entrées, authentification, stockage des données, intégrations externes, secrets, en-têtes, dépendances ; références détaillées dans `references/`.
 
 ### `seo-geo-audit`
 *Quand l'utiliser* : Use when auditing or implementing SEO, local SEO, structured data, or GEO (visibility in AI answer engines) for a site or page.
@@ -801,7 +885,7 @@ github.com/obra/superpowers → skills/systematic-debugging (MIT). Loi : aucune 
 3. **Design** if UI (`ux-ui-designer`) and architecture if new module/API/schema (`software-architect`).
 4. **Build** in parallel where independent: `wp-plugin-engineer`, `wp-theme-engineer`, `frontend-engineer`, `integrations-engineer`, `ai-agent-engineer`, `localization-writer`.
 5. **Gates** (in order, blocking): `code-reviewer` → `security-auditor` (if money, data, auth, AI, uploads) → `qa-engineer` with evidence.
-5b. **CEO validation gate** (blocking, for EVERY task of EVERY agent): the CEO personally checks the result against the acceptance criteria and the evidence (re-runs the key command or opens the file/screenshot), then decides:
+5b. **CEO validation gate** (skill `ceo-validation-gate`; blocking, for EVERY task of EVERY agent): the CEO personally checks the result against the acceptance criteria and the evidence (re-runs the key command or opens the file/screenshot), then decides:
    - ✅ **Validated** → can be delivered;
    - 🔁 **Sent back** → precise list of fixes to the same agent (file:line, expected result); loop until ✅. After 2 failed loops, reassign or escalate the model (sonnet → opus).
    - Nothing reaches the owner without ✅. The decision is written in the agent's WORKLOG entry.
