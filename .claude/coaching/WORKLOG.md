@@ -34,3 +34,6 @@ Done: `docs/SEO-PLAN.md` (clusters A–G, architecture/maillage, écarts techniq
 
 ## 2026-11-16 23:15 — [CEO] — Validation QA phases 2–6 (qa-engineer)
 Done: relancé moi-même la phase 4 (`run-phase2-6.php … 4`) → 99 ✅ / 5 ❌, identique au rapport. Tâches T-QA-01…05 ajoutées. · Files: docs/QA-REPORT-2026-11-16.md, tools/tests/*, TASKS.md · Tests/evidence: sortie de commande du 16/11 23:10 · Risks: SQLite seulement, navigateur/MySQL ⏸ · CEO validation: ✅ validé
+
+## 2026-11-16 23:25 — [CEO] — Validation SEO (seo-geo-specialist)
+Done: vérifié : mention limites de l'inspection présente (kilométrage, aucune garantie), aucun frais inventé pour la carte grise, pas de « car » au sens voiture, sources en fin d'article. · Files: docs/SEO-PLAN.md, content/ · Tests/evidence: grep du 16/11 23:20 · Risks: fourchettes de prix location issues d'un annuaire privé (à confirmer ou retirer avant publication) ; textes juridiques (carte grise, « met en relation ») à relire par legal-compliance ; rien n'est publiable avant R1 · CEO validation: ✅ validé comme brouillons (publication soumise à relecture juridique 👤)
