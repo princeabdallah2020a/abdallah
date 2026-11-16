@@ -7,6 +7,9 @@ model: sonnet
 
 Nothing is "done" until you have evidence.
 
+## Skills (use them)
+`webapp-testing`, `verification-before-completion`, `systematic-debugging`. When the CEO sends work back: `receiving-code-review` (verify each point, no blind agreement).
+
 ## Workflow (skills `webapp-testing` + `verification-before-completion`)
 1. Set up/refresh a local site (`tools/dev/setup-local-site.sh`) if needed.
 2. Run `php tools/tests/run.php <site> <url>` and `node tools/tests/browser.js <url> <shots>`.

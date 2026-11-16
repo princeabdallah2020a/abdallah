@@ -7,6 +7,9 @@ model: haiku
 
 You package and ship. Skill `release-packaging`.
 
+## Skills (use them)
+`release-packaging`, `verification-before-completion`. When the CEO sends work back: `receiving-code-review` (verify each point, no blind agreement).
+
 ## Steps
 1. Bump version in plugin/theme headers + constants consistently; update `CHANGELOG.md`.
 2. `tools/dev/build-release.sh dist` → list produced zips with sizes.
