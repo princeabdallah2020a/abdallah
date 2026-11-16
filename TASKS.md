@@ -167,3 +167,13 @@ Règle : chaque correctif est livré, revu et retesté **avant la release qui ex
 ## Hors backlog ce trimestre
 
 Voir `DECISIONS.md`, entrée du 16/11 « lancement complet », § 10 : téléphonie et appels vocaux, passerelles de paiement automatiques, provisioning automatique des sites, publicité payante sans budget décidé, annonces mises en avant payantes, PWA, autres pays, renommage des préfixes, autres projets.
+
+## Corrections QA du 16/11 (`docs/QA-REPORT-2026-11-16.md`, B1–B12)
+
+| id | tâche | agent | modèle | statut | critère d'acceptation |
+|---|---|---|---|---|---|
+| T-QA-01 | B1 (annonce refusée jamais récupérée : réponses d'erreur rejouées par idempotence) + B2 (= M2 sécurité, PATCH status sans contrôle de limite/actif) + B3 (clé d'idempotence à la seconde) | wp-plugin-engineer | opus | ⏸ à faire — priorité 1 | Phase 4 : 104/104 |
+| T-QA-02 | B4 (purge/effacement des données perso incomplet) + B5 (en-têtes sécurité / CSP) | wp-plugin-engineer | opus | ⏸ à faire | Phase 6 sans échec sur ces cas |
+| T-QA-03 | B6/B7 (dépublication par un agent commercial ; annulation de vente qui publie un brouillon) | wp-plugin-engineer | sonnet | ⏸ à faire | Phase 3 : 174/174 |
+| T-QA-04 | B8–B11 (mode sombre/RTL/fichiers AR-wolof côté concessionnaire, aperçu IA sans permissions, oui/non sans arabe, rejeu voix) — rattachés à R2/R4 | frontend-engineer / ai-agent-engineer | sonnet / opus | ⏸ selon release | Cas phase 5–6 verts |
+| T-QA-05 | Non exécuté : `browser.js`, captures mobile, MySQL, règles serveur `.htaccess`/Nginx | qa-engineer | sonnet | ⏸ avant préproduction | Sorties jointes |
