@@ -296,7 +296,7 @@ tools/dev/  tools/tests/  docs/                outils, tests PHP + Playwright, d
 .claude/agents/  .claude/skills/  .claude/coaching/   équipe IA (22 agents + coach) + skills + journal et rapports
 ```
 État (README) : phase 1 testée ; phases 2–6 construites **mais non testées** → QA lancée le 2026-11-16 (`docs/QA-REPORT-2026-11-16.md`, `docs/SECURITY-AUDIT-2026-11-16.md`).
-**Cap du trimestre** : pilote Dakar (voir `DECISIONS.md`) — toutes les tâches doivent servir l'une des 3 priorités de `TASKS.md`.
+**Cap du trimestre** : lancement complet en 4 langues par train de releases R1 à R4 (voir `DECISIONS.md`, entrée « lancement complet ») — toutes les tâches doivent servir l'une des 3 priorités de `TASKS.md`.
 
 ## 14. Réutiliser ce kit dans un futur projet
 

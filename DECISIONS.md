@@ -8,7 +8,7 @@
 
 ## 2026-11-16 — Cadrage T1 (17 nov. 2026 – 28 fév. 2027)
 
-**Auteur** : [CEO] (`ceo-strategist`, session Fable) · **Statut** : proposé, en attente de validation propriétaire 👤 · **Type** : porte à double sens (réversible à chaque jalon), sauf marque/domaine/juridique (sens unique → 👤).
+**Auteur** : [CEO] (`ceo-strategist`, session Fable) · **Statut** : **option B rejetée par le propriétaire le 16/11 (D1, D5)** ; § 3, 4, 5, 6, 7, 9 et 10 remplacés par l'entrée « Décision du propriétaire : lancement complet + 4 langues » plus bas ; § 1 et § 8 toujours valables · **Type** : porte à double sens (réversible à chaque jalon), sauf marque/domaine/juridique (sens unique → 👤).
 
 ### 1. Contexte (état réel au 16/11/2026)
 
@@ -155,3 +155,161 @@ Cadence : revue hebdomadaire chaque lundi (indicateurs, pipeline, 1 enseignement
 
 - `CLAUDE.md` § 13 décrit le plugin central comme incluant « paiements, inspection » : l'inspection n'existe pas dans le code ; le paiement est manuel uniquement.
 - `CLAUDE.md` § 2.1 présente « modes clair et sombre partout » et « 4 langues » comme décisions validées : ce sont des cibles, pas l'état du code.
+
+---
+
+## 2026-11-16 — Décision du propriétaire : lancement complet + 4 langues
+
+**Auteur** : [CEO] (`ceo-strategist`, session Fable) · **Origine** : décision du propriétaire du 16/11/2026 à 19 h 21 · **Statut** : décision prise (D1, D5) ; plan d'exécution ci-dessous en attente de validation CEO puis des décisions 👤 restantes · **Remplace** : l'option B (« pilote étroit ») du cadrage T1 pour D1 et D5, ainsi que ses § 3, 4, 5, 6, 7, 9 et 10. Le § 1 (état réel du code) et le § 8 (risques R1 à R12) restent valables.
+
+### 1. La décision
+
+Le propriétaire **refuse le pilote** et retient un **lancement complet** : marketplace, comptes et sites concessionnaires, inspection payante, assistant IA, dans **les 4 langues dès l'ouverture (FR, wolof, EN, AR/RTL)**, avec amélioration continue ensuite. Il demande aussi que le pôle SEO/GEO/SEA produise articles, blog et tout le contenu nécessaire. Le CEO exécute cette décision ; son rôle devient de rendre ce lancement aussi sûr et rapide que possible, sans cacher l'état réel.
+
+### 2. Conséquences et risques, dits simplement
+
+Le périmètre passe d'une phase testée à cinq phases jamais exécutées, plus un module inspection qui n'existe pas et une couche multilingue absente du code (aucun sélecteur de langue, aucun `hreflang`, aucune détection de locale, seul `fr_FR` traduit : vérifié par grep le 16/11). Le volume est d'environ 1 730 chaînes françaises (1 035 côté central, 700 côté concessionnaire ; comptage des fichiers `.l10n.php` du 16/11), soit environ 5 200 chaînes à écrire et environ 3 500 à faire relire par des locuteurs natifs (wolof, arabe), avant les textes de l'inspection et de l'IA. Le budget « zéro » ne tient plus : domaine et hébergement sont nécessaires dès fin novembre, puis hébergement des sites concessionnaires, API d'IA, WhatsApp, relecteurs, avis juridique (montants non chiffrés : rien n'est inventé ici, voir T-FIN-01). La charge du propriétaire augmente (relecteurs, inspecteurs à Dakar, vérification Meta, entité juridique) alors que le goulot humain R1 n'a pas changé. La preuve de marché reste à zéro : on construit tout avant de savoir qui paie. Estimation franche du CEO ⚠ : la Release 1 est tenable à sa date si D2, D3, D4 et D9 sont tranchées avant le 27/11 ; les Releases 3 et 4 ont un risque élevé de glisser au-delà de leur date, et la Release 4 dépend d'un délai externe (vérification Meta) que personne ici ne maîtrise. Les résultats de la QA en cours sont inconnus ⏸ ; ils peuvent déplacer tout le calendrier.
+
+### 3. Principe d'exécution : un train de releases dans le lancement complet
+
+Le lancement complet est livré en **4 mises en production datées**, chacune complète, dans les 4 langues, et chacune bloquée par les mêmes portes qualité. **Quand une porte échoue, la date glisse ; la barre ne baisse pas.**
+
+| Release | Date cible | Go / no-go | Périmètre | Correctifs sécurité obligatoires avant | Dépend de |
+|---|---|---|---|---|---|
+| **Préproduction** (non publique) | ven. 18/12/2026 | — | Hébergeur réel, MySQL, HTTPS, e-mails, sauvegarde et restauration testées ; périmètre R1 complet en code ; 4 langues à 100 % (niveau N1) ; marque Wotoyi | — | D3, D4 |
+| **R1 — Marketplace publique + comptes concessionnaires + 4 langues** | mar. 12/01/2027 | ven. 08/01 | Phase 1 (site, catalogue, fiches, SEO) ; phase 2 (formules, inscription, documents, validation, paiement manuel, abonnement) ; saisie directe d'annonces ; mesure des contacts ; sélecteur de langue, `hreflang`, RTL ; blog avec 8 articles ; bouton « Signaler une traduction » ; CGU et confidentialité | M5, M6, L2 (central), L4, L6, L7, L8 ; vérification des dossiers privés sur l'hébergeur (nginx) | Préproduction, D6, D7, D9 |
+| **R2 — Sites + CRM concessionnaires + synchro** | mar. 02/02/2027 | ven. 29/01 | Phase 3 (thème AutoDealer, `/manager/`) ; phase 4 (connecteur, synchro signée, contacts vers le CRM) ; mode sombre (tokens) ; 3 premiers sites, puis à la demande | M2, M4, L1, L5, L2 (concessionnaire) | R1, coût par site (T-FIN-01) |
+| **R3 — Inspection payante** | mar. 16/02/2027 | ven. 12/02 | Module v1 : bouton sur la fiche, formules et prix administrables, marge calculée, paiement manuel vérifié, statuts, assignation d'un inspecteur, rapport PDF à 4 mentions, espace acheteur | Revue sécurité complète du nouveau module (argent, données, fichiers) | R1, D7, D11 |
+| **R4 — Assistant IA WhatsApp (texte)** | mar. 23/02/2027 | ven. 19/02 | Assistant acheteur public + assistant concessionnaire, 4 langues ; notes vocales seulement si un fournisseur de transcription est choisi (D12) | **H1, M1, M3, H2**, L3 ; accord de sous-traitance et mention de confidentialité (T-SEC-07) ; jeu d'évaluation ≥ 30 cas par langue avec injections | R2, D12, vérification Meta |
+| Revue du trimestre | ven. 26/02/2027 | — | Résultat face à l'objectif, décision T2 | — | — |
+
+Règles du train :
+1. **Gel du code 5 jours ouvrés avant chaque release** ; ensuite, correctifs de bugs uniquement.
+2. **Glissement par pas d'une semaine** (mardi suivant), écrit ici avec la cause. Une release en retard ne retarde pas les suivantes si elles n'en dépendent pas (R3 ne dépend que de R1).
+3. Tout ce qui n'a pas passé ses portes reste **désactivé en production** (les interrupteurs existent déjà : IA, WhatsApp et téléphonie sont éteints par défaut).
+4. Aucun déploiement sans accord écrit du propriétaire 👤 et sauvegarde préalable.
+5. La **téléphonie (appels vocaux)** reste éteinte ce trimestre : fournisseur non choisi, règles ARTP/CDP non vérifiées. H2 est corrigé quand même (la voix ne donne jamais accès au CRM).
+
+### 4. Portes qualité (identiques pour chaque release, toutes bloquantes)
+
+| # | Porte | Preuve exigée | Responsable |
+|---|---|---|---|
+| Q1 | **QA verte** sur la préproduction MySQL pour tout le périmètre livré : 100 % des tests, parcours de bout en bout, mobile + ordinateur, 4 langues dont arabe RTL, chaque rôle | Sorties de commandes + captures, tableau cas · attendu · obtenu | `qa-engineer` |
+| Q2 | **0 faille High ou Medium ouverte** sur le périmètre livré ; second passage après correctifs | Rapport daté dans `docs/` | `security-auditor` |
+| Q3 | **Langues** : 0 chaîne manquante dans les 4 langues ; variables (`%s`) intactes ; captures RTL ; **textes critiques en wolof et en arabe relus par un locuteur natif (niveau N2)** | Rapport d'extraction + fiche de relecture signée 👤 | `localization-writer` + relecteurs 👤 |
+| Q4 | **Juridique** : CGU, confidentialité, consentements, démarche CDP engagée ; pour R3, texte de limites de l'inspection ; pour R4, accord de sous-traitance | Liste de risques traitée ; avis professionnel 👤 là où il est exigé | `legal-compliance` |
+| Q5 | **Exploitation** : zips inspectés, restauration prouvée, surveillance active, données de démo retirées | Sortie de `build-release.sh`, `unzip -l`, essai de restauration | `devops-release` |
+| Q6 | **Validation CEO** : preuves rouvertes, commande clé relancée, puis accord écrit du propriétaire | Entrée datée ici | `ceo-strategist` puis 👤 |
+
+### 5. Amélioration continue des langues (définition)
+
+« Améliorer en continu » ne veut pas dire « publier n'importe quoi puis corriger ». Le processus :
+
+1. **Glossaire unique** `docs/i18n/GLOSSARY.md` (à créer, T-L10N-02) : termes automobiles et d'interface dans les 4 langues, termes interdits (« car » au Sénégal), format des prix (`1 500 000 FCFA`), ton. Toute traduction s'y conforme ; il est mis à jour à chaque revue.
+2. **Trois niveaux par chaîne** : **N0** brouillon (jamais publié) · **N1** rédigé par `localization-writer` + contrôles automatiques (chaînes manquantes, variables, longueur sur mobile, glossaire) : publiable, la langue porte une mention « bêta » · **N2** relu par un locuteur natif 👤 : la mention disparaît quand toute la langue est en N2. Personne n'écrit « vérifié » pour du wolof ou de l'arabe sans relecture native tracée.
+3. **Textes critiques** (consentement, CGU et confidentialité, paiement, messages d'erreur de paiement, limites de l'inspection, confirmations de l'IA) : **N2 obligatoire avant publication**. À défaut de relecteur à la date, ces textes s'affichent en français accompagnés de la traduction N1 marquée « traduction indicative » ; **la version française fait foi**.
+4. **Relecteurs natifs 👤** : un pour le wolof, un pour l'arabe (D9), travaillant par lots dans l'ordre : textes critiques → parcours acheteur → parcours concessionnaire → reste.
+5. **Bouton « Signaler une traduction »** sur chaque page non française : page, langue, texte concerné, suggestion ; aucune donnée personnelle obligatoire ; limitation de débit ; file visible dans `/platform-admin/`.
+6. **Revue mensuelle par `localization-writer`** (premier lundi : 01/02/2027, puis 01/03) : signalements traités, phrases mal comprises par l'IA, nouvelles chaînes, glossaire ; tri hebdomadaire des signalements, correction dans la release suivante.
+7. **Le coach suit la qualité** dans son rapport nocturne : part de chaînes N2 par langue, signalements ouverts depuis plus de 7 jours, et toute affirmation « vérifié » sans preuve native (classée critique).
+8. **IA (R4)** : jeu d'évaluation d'au moins 30 cas réels par langue, taux de réussite publié avant et après chaque changement ; wolof peu sûr → réponse en wolof simple + français.
+
+### 6. Contenu SEO / GEO / SEA (demande du propriétaire)
+
+- **Articles** : `seo-geo-specialist` rédige en français dans `content/` dès maintenant (rien n'est publiable avant R1) : **8 articles prêts pour R1**, puis **2 par semaine** ⚠ (rythme à confirmer selon la capacité de relecture). `localization-writer` livre EN et AR sous 7 jours, wolof pour 1 article sur 2 (limité par la relecture native), avec `hreflang`.
+- **Règles de qualité** : faits vérifiables avec source et date ; **aucun prix, statistique ou classement inventé** ; pas de pages quasi identiques générées en masse (risque de pénalité pour contenu produit à grande échelle ⚠, consigne Google à revérifier par `seo-geo-specialist`) ; tout article sur l'inspection respecte la règle absolue du § 7.
+- **GEO** : pages factuelles et citables (processus, limites, FAQ réelles), données structurées validées.
+- **SEA** : `growth-marketer` prépare un plan prêt à lancer (structure de campagnes, mots-clés, pages d'atterrissage, suivi des conversions). **Aucune dépense** sans budget décidé par le propriétaire (D13) et sans mesure des contacts en production.
+
+### 7. Règles maintenues
+
+- **Inspection** : ne jamais garantir le kilométrage réel ni l'absence d'accident, ne jamais prétendre qu'un outil lit le kilométrage sur toutes les marques. Le rapport distingue **vérifié · anomalie détectée · donnée indisponible · limites de l'inspection**, dans les 4 langues, textes en N2. Aucune vente d'inspection avant D7 (entité qui encaisse, responsabilité) et D11 (inspecteurs).
+- **IA** : contenu client = données, jamais instructions ; confirmation construite par le serveur ; validation humaine pour toute action sensible.
+- Paiement : fournisseur manuel avec reçu vérifié ; uniquement des partenaires agréés.
+- Préfixes techniques (`abz_`, `dp_`, `amc_`) inchangés. Dépôt public : aucun secret.
+- Les entretiens concessionnaires (`mom-test`) continuent en parallèle : ils ne bloquent plus le lancement, mais ils décident des prix et des priorités après R1.
+
+### 8. Objectif du trimestre (révisé)
+
+> **Au 28 février 2027, Wotoyi est lancé publiquement à Dakar dans les 4 langues, avec les Releases 1 à 4 en production, chacune ayant passé ses portes qualité ; 10 concessionnaires actifs et 150 annonces réelles à jour ; au moins 30 contacts acheteurs qualifiés par semaine ; premiers encaissements réels (abonnements et inspections).**
+
+Les cibles commerciales ne sont pas relevées : le périmètre a grandi, pas la capacité de vente sur le terrain (D2).
+
+| # | Indicateur | Base au 16/11 | Cible 28/02/2027 | Nature |
+|---|---|---|---|---|
+| NS | Contacts qualifiés livrés / semaine | 0 ✅ (non instrumenté) | ≥ 30 | ⚠ à recalibrer 4 semaines après R1 (09/02) |
+| K1 | Concessionnaires actifs (≥ 1 annonce mise à jour < 14 j) | 0 ✅ | 10 | ⚠ |
+| K2 | Annonces réelles · part mise à jour < 7 j | 0 ✅ | 150 · ≥ 70 % | ⚠ |
+| K3 | Liquidité : annonces avec ≥ 1 contact en 14 j | non mesurable ✅ | ≥ 30 % | ⚠ |
+| K4 | Encaissements réels | 0 FCFA ✅ | ≥ 3 abonnements payés et ≥ 5 inspections payées | ⚠ ; aucun objectif de MRR (ce serait inventé) |
+| K5 | Qualité par release | Phase 1 : 127/127 + 32/32 sur SQLite ✅ documenté ⏸ non relancé ; phases 2 à 6 ⏸ | 100 % des tests verts sur MySQL ; 0 High/Medium ouvert sur le périmètre livré ; 0 incident de données | engagement interne |
+| K6 | Entretiens concessionnaires | 0 ✅ | 15 avant le 15/12 | engagement interne |
+| K7 | Train de releases | 0/4 ✅ | 4/4 livrées avec portes passées ; glissement cumulé mesuré en jours | ⚠ R3 et R4 à risque élevé |
+| K8 | Langues | FR 100 %, wolof 0 %, EN source, AR 0 % ✅ | 0 chaîne manquante × 4 langues à chaque release ; textes critiques 100 % N2 ; ≥ 50 % de l'ensemble en N2 pour wolof et arabe ; signalements traités ≤ 7 j | ⚠ dépend de D9 |
+| K9 | Contenu | 0 article publié ✅ | 8 articles à R1, puis 2 par semaine ; visites organiques mesurées (pas de cible avant 4 semaines de données) | ⚠ |
+| K10 | Dépenses | 0 ✅ | Dépense réelle ≤ budget validé (D3) ; 0 achat sans décision écrite | engagement interne |
+
+### 9. Les 3 priorités (révisées)
+
+1. **P1 — Livrer le train R1 à R4 en passant toutes les portes.** Responsables : ingénierie, qualité et sécurité, `localization-writer`, `legal-compliance`, `devops-release`.
+2. **P2 — Recruter l'offre : 10 concessionnaires de Dakar avec annonces réelles** avant et pendant R1 (inchangée ; propriétaire ou relais 👤 pour les appels et visites).
+3. **P3 — Créer la demande et encaisser** : contenu SEO/GEO, canaux gratuits, mesure des contacts, premières inspections et premiers abonnements payés.
+
+### 10. Pas maintenant (liste révisée)
+
+Sortent de la liste (désormais dans le trimestre) : assistant WhatsApp texte, module inspection, anglais, arabe/RTL, wolof complet, mode sombre, sites concessionnaires au-delà du pilote.
+Restent refusés ce trimestre : téléphonie et appels vocaux ; passerelles automatiques Wave / Orange Money / cartes (paiement manuel avec reçu ; hypothèse du CEO, à rouvrir si le volume le justifie) ; provisioning automatique des sites concessionnaires ; publicité payante sans budget décidé (D13) ; annonces mises en avant payantes et commissions ; PWA et nouvelles animations ; autres pays et autres villes ; renommage des préfixes ; autres projets (Sunu Kesug, SunuDeal, voyage, change).
+
+### 11. Risques ajoutés par cette décision (complètent R1 à R12)
+
+| # | Risque | Prob. ⚠ | Parade | Signal d'alerte |
+|---|---|---|---|---|
+| R13 | La QA révèle des phases 2 à 6 lourdement cassées : tout le train glisse | Moyenne à élevée | Tri au 30/11 ; correctifs par release, dans l'ordre du train ; glissement écrit | > 10 bugs bloquants sur le périmètre R1 au 30/11 |
+| R14 | Pas de relecteur natif à temps : wolof et arabe publiés en N1 | Élevée | Mention « bêta », textes critiques en français faisant foi, bouton de signalement | D9 non tranchée au 27/11 |
+| R15 | Module inspection à construire de zéro en 6 semaines, avec une opération réelle (inspecteurs, responsabilité) | Élevée | Version 1 minimale, paiement manuel ; pas de vente sans D7 et D11 | Spécification non validée au 18/12 |
+| R16 | Vérification Meta et coûts d'API : délai et dépense hors de notre contrôle | Élevée | Lancer la démarche dès le 04/12 (D12) ; plafond de dépense quotidien ; R4 glisse seule | Vérification non obtenue au 05/02 |
+| R17 | Budget : le lancement complet a un coût mensuel récurrent avant tout revenu | Certaine | Chiffrage T-FIN-01 avant tout achat ; K10 | Achat sans décision écrite |
+| R18 | Contenu produit en volume par IA : qualité faible, pénalité de référencement, erreurs factuelles | Moyenne | Règles du § 6, sources obligatoires, validation CEO par échantillon | Article sans source |
+| R19 | Dispersion : 4 releases + contenu + ventes avec un propriétaire salarié | Élevée | Train séquentiel, une release à la fois en préproduction, liste « Pas maintenant » | Tâches hors train |
+| R20 | Ramadan vers le 8 février 2027 ⚠ (date à vérifier) : R2 à R4 tombent pendant | Certaine | Recrutement des concessionnaires bouclé fin janvier ; contenus adaptés | — |
+
+### 12. Décisions du propriétaire 👤 (liste à jour)
+
+Tranchées le 16/11 : **D1** (lancement complet, pas de pilote) · **D5** (4 langues dès l'ouverture, amélioration continue).
+
+| # | Décision attendue | Recommandation du CEO | Échéance |
+|---|---|---|---|
+| D2 | Temps disponible et relais à Dakar (appels, visites, collecte du stock) | 8 à 10 h par semaine + 1 relais ; sans relais, K1 ramené à 5 | 20/11 |
+| D6 | Saisie directe d'annonces côté plateforme, en complément des sites concessionnaires | Oui (sinon aucune annonce possible à R1, les sites n'arrivant qu'à R2) | 18/11 |
+| D8 | Passer le dépôt GitHub en privé | Oui | 20/11 |
+| D4 | Acheter le domaine maintenant (révise « achat après tests ») | Oui, dès la vérification de marque (T-P1-09, 20/11) | 23/11 |
+| D3 | Budget du trimestre : domaine, hébergement central + préproduction, e-mail, sites concessionnaires, API d'IA, WhatsApp, relecteurs, avis juridique | À décider sur le chiffrage T-FIN-01 (livré le 23/11) ; aucun montant avancé avant | 25/11 |
+| D7 | Entité qui exploite et encaisse (LLC américaine ou structure sénégalaise), avis juridique, formalités CDP | Avis professionnel nécessaire ; bloquant pour R1 (données personnelles), R3 (encaissement, responsabilité) et la vérification Meta | **27/11** (avancée) |
+| D9 | Relecteurs natifs : **un pour le wolof, un pour l'arabe** | À désigner ; sans eux, ces langues sortent en « bêta » | **27/11** (avancée) |
+| D10 | Conditions « partenaire fondateur » | Proposition T-P2-04 à valider | 27/11 |
+| D12 | IA et WhatsApp : compte Meta Business, numéro, vérification, clé d'API, fournisseur de transcription, plafond de dépense | Lancer la démarche Meta tôt, car le délai est externe | 04/12 |
+| D11 | Inspection : inspecteurs ou garages partenaires à Dakar, formules et prix, qui gère les rendez-vous | Prix relevés auprès d'au moins 2 garages 👤 avant de fixer les formules | 18/12 |
+| D14 | Mode sombre livré avec R2 (et non R1) | Oui : il ne doit pas retarder R1 (hypothèse du CEO, le propriétaire ne l'a pas précisé) | 18/11 |
+| D13 | Budget publicitaire (SEA) | 0 par défaut ; décision sur 2 semaines de conversions organiques mesurées | 26/01 |
+| D15 | Accord écrit avant chaque mise en production | Requis à chaque go / no-go | 08/01, 29/01, 12/02, 19/02 |
+
+### 13. Jalons et revue
+
+| Jalon | Date | Critère |
+|---|---|---|
+| G0 | lun. 30/11/2026 | QA triée ; MariaDB locale verte (phase 1) ; ADR multilingue et ADR saisie directe ; glossaire v1 ; T-SEC-01 et 02 livrés ; D2, D3, D4, D6, D7, D8, D9 tranchées |
+| Revue marché | mar. 15/12/2026 | 15 entretiens synthétisés ; cibles et prix recalibrés (n'arrête pas le train) |
+| Préproduction | ven. 18/12/2026 | Voir § 3 |
+| R1 | mar. 12/01/2027 | Portes Q1 à Q6 |
+| R2 | mar. 02/02/2027 | Portes Q1 à Q6 |
+| R3 | mar. 16/02/2027 | Portes Q1 à Q6 |
+| R4 | mar. 23/02/2027 | Portes Q1 à Q6 |
+| Revue du trimestre | ven. 26/02/2027 | Résultat, enseignements, décision T2 |
+
+Cadence : revue hebdomadaire chaque lundi (indicateurs, train, pipeline, 1 enseignement client) ; test de résistance du plan le 15/12, le 18/01 et le 15/02.
+
+**Hypothèses non vérifiées de ce plan** : capacité des agents à corriger les phases 2 à 6 dans les délais (QA inconnue ⏸) ; disponibilité de relecteurs et d'inspecteurs ; délai Meta ; coûts ; date du Ramadan ; rythme de 2 articles par semaine. **Vérifié le 16/11** : absence de couche multilingue, de mode sombre et de module inspection dans le code ; volume de chaînes ; 8 constats High/Medium de l'audit.
+
+**Écart de documentation à corriger (proposition au propriétaire)** : `CLAUDE.md` § 13 indique encore « Cap du trimestre : pilote Dakar » ; à remplacer par « lancement complet par train de releases R1 à R4 ». Le CEO ne modifie pas ce fichier sans accord.
+
+**Responsable** : [CEO]. **Prochaine revue** : G0, 30/11/2026.
