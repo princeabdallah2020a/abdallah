@@ -46,6 +46,8 @@ Légende : 🟢 axe prioritaire · 🟡 concept étudié · ⚪ piste ancienne.
 ⚠️ Le code de ce dépôt utilise encore le nom **AutoBuzy** et les préfixes `abz_` / `dp_` : ne pas renommer les préfixes techniques sans tâche explicite (risque de casse des données).
 ⚠️ Au Sénégal, « car » = grand véhicule (bus, car rapide) ; dire « auto » / « voiture » dans les textes marketing.
 
+> ⚠️ **Cible ≠ état actuel** (vérifié le 2026-11-16) : pas encore de module inspection, pas de mode sombre, seul le français est traduit, marque Wotoyi absente du code. Objectif et priorités du trimestre : `DECISIONS.md` (cadrage T1) et `TASKS.md`.
+
 **Décisions validées**
 - Thèmes, builder et plugins **propriétaires** pour chaque plateforme (remplace Flatsome/UX Builder).
 - UI **ultra-premium animée**, modes clair et sombre partout, direction visuelle **« Teranga »**.
@@ -284,7 +286,7 @@ Autres collections utiles (à installer seulement si besoin, après relecture du
 
 **Structure du monorepo**
 ```
-central/plugins/automotive-marketplace-core/   plugin central (données, catalogue, API, SEO, IA, paiements, inspection…)
+central/plugins/automotive-marketplace-core/   plugin central (données, catalogue, API, SEO, IA, adhésions, paiement manuel ; **pas encore de module inspection**)
 central/themes/autobuzy/                       thème du site central + marketplace
 dealer/plugins/automotive-dealer-crm/          CRM concessionnaire (/manager/) + inventaire public
 dealer/plugins/automotive-marketplace-connector/  liaison site concessionnaire ↔ marketplace (sync, leads, IA)
@@ -293,7 +295,8 @@ shared/design-system/                          tokens + composants (source uniqu
 tools/dev/  tools/tests/  docs/                outils, tests PHP + Playwright, documentation
 .claude/agents/  .claude/skills/  .claude/coaching/   équipe IA (22 agents + coach) + skills + journal et rapports
 ```
-État (README) : phase 1 testée ; phases 2–6 construites **mais non testées** → priorité QA avant toute mise en ligne.
+État (README) : phase 1 testée ; phases 2–6 construites **mais non testées** → QA lancée le 2026-11-16 (`docs/QA-REPORT-2026-11-16.md`, `docs/SECURITY-AUDIT-2026-11-16.md`).
+**Cap du trimestre** : pilote Dakar (voir `DECISIONS.md`) — toutes les tâches doivent servir l'une des 3 priorités de `TASKS.md`.
 
 ## 14. Réutiliser ce kit dans un futur projet
 
