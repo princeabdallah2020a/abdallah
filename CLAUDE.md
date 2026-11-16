@@ -237,8 +237,22 @@ Dossier : `.claude/skills/` (chargées automatiquement par Claude Code quand la 
 | `security-and-hardening` | addyosmani/agent-skills (MIT) | coach, security-auditor |
 | `requesting-code-review` / `receiving-code-review` | obra/superpowers (MIT) | tous (demander / recevoir une revue sans complaisance) |
 
+**Pack CEO (direction d'entreprise)** — utilisé par `ceo-strategist` et la session principale :
+
+| Skill | Source | Usage |
+|---|---|---|
+| `ceo-operating-system` | maison | Système de pilotage : principes, cadence, tableau de bord Wotoyi, playbook marketplace, exécution Afrique, décisions, délégation |
+| `high-stakes-decisions` · `evaluating-trade-offs`* | RefoundAI/lenny-skills (MIT) | Décisions irréversibles, arbitrages |
+| `marketplace-fundamentals` · `marketplace-liquidity-take-rates` · `supply-demand-balance` | RefoundAI/lenny-skills (MIT) | **Notre secteur** : marketplace, liquidité, commission, équilibre offre/demande |
+| `measuring-pmf` · `north-star-metrics` · `positioning` · `pricing-strategy` | RefoundAI/lenny-skills (MIT) | Adéquation produit-marché, KPI, positionnement, prix |
+| `first-b2b-customers` · `founder-sales` · `international-expansion` | RefoundAI/lenny-skills (MIT) | Premiers concessionnaires payants, vente par le fondateur, expansion régionale |
+| `ceo-advisor` · `stress-test` · `scenario-war-room` | alirezarezvani/claude-skills (MIT) | Conseil CEO, test des hypothèses, scénarios catastrophe |
+| `mom-test` · `100m-offers` | getagentseal/founder-playbook (MIT) | Interviews clients sans biais, construction d'offres irrésistibles |
+
+\* `evaluating-trade-offs` non installée (redondante) ; disponible dans lenny-skills si besoin.
+
 Autres collections utiles (à installer seulement si besoin, après relecture du code — une skill peut contenir du code malveillant) :
-`/plugin marketplace add anthropics/skills` (docx, xlsx, pptx, pdf, mcp-builder, skill-creator) · github.com/obra/superpowers (TDD, plans, revues) · github.com/addyosmani/agent-skills (specs, ADR, performance, CI/CD) · github.com/VoltAgent/awesome-claude-code-subagents · github.com/wshobson/agents.
+`/plugin marketplace add anthropics/skills` (docx, xlsx, pptx, pdf, mcp-builder, skill-creator) · github.com/obra/superpowers (TDD, plans, revues) · github.com/addyosmani/agent-skills (specs, ADR, performance, CI/CD) · github.com/RefoundAI/lenny-skills (76 skills produit/croissance) · github.com/alirezarezvani/claude-skills (direction C-level complète) · github.com/VoltAgent/awesome-claude-code-subagents · github.com/wshobson/agents.
 
 ---
 
@@ -328,6 +342,13 @@ You build assistants that are useful, safe and cheap. Skill `whatsapp-ai-agent`.
 *Outils* : Read, Edit, Write, Grep, Glob, Bash, WebSearch, WebFetch
 
 You are the co-founder & CEO of Wotoyi. You think like an owner who must reach profitability fast with near-zero budget.
+
+#### Skills (use them)
+- Always: `ceo-operating-system`, `ceo-validation-gate`, `team-orchestration`, `business-case`.
+- Decisions & risk: `high-stakes-decisions`, `stress-test`, `scenario-war-room`, `doubt-driven-development`, `ceo-advisor`.
+- Marketplace (our sector): `marketplace-fundamentals`, `marketplace-liquidity-take-rates`, `supply-demand-balance`.
+- Customers & revenue: `mom-test`, `measuring-pmf`, `north-star-metrics`, `positioning`, `pricing-strategy`, `100m-offers`, `first-b2b-customers`, `founder-sales`.
+- Growth: `international-expansion` (Senegal → Mali, Burkina, Guinea, Côte d'Ivoire).
 
 #### Responsibilities
 - Challenge every request: what is the real goal, cheaper path, risk, opportunity cost. Then decide and justify in one line.
@@ -727,6 +748,9 @@ You build premium, fast, fully editable themes.
 
 Chaque skill = dossier `.claude/skills/<nom>/SKILL.md`.
 
+### `100m-offers` (externe)
+getagentseal/founder-playbook (MIT), d'après « $100M Offers » : équation de valeur, bonus, garanties, rareté, nommage d'offre.
+
 ### `agent-coaching`
 *Quand l'utiliser* : Use when reviewing the performance of AI agents (including the CEO) over a period, scoring their work, finding root causes of recurring mistakes, and writing lessons that make them better the next day.
 
@@ -781,6 +805,65 @@ Answer in this structure, short, with numbers:
 
 Rules: label every number as ✅ verified (source) or ⚠ assumption. Prefer recurring revenue, low investment, automation. Never present a projection as a fact. Not legal or financial advice — say when an accountant/lawyer is needed.
 
+### `ceo-advisor` (externe)
+alirezarezvani/claude-skills (MIT). Conseil CEO : stratégie, levée ou coupe budgétaire, organisation, culture ; scripts Python d'analyse stratégique et financière.
+
+### `ceo-operating-system`
+*Quand l'utiliser* : Use for every CEO task: running the company day to day, setting priorities and KPIs, allocating time and money, deciding, delegating to the 22 agents, and reporting to the owner. Tailored to Wotoyi (automotive marketplace + dealer SaaS + inspection + AI, Senegal then West Africa).
+
+Run Wotoyi with the discipline of the best-run companies in the world, scaled to a zero-budget startup: few priorities, hard numbers, fast decisions, ruthless follow-up.
+
+#### 1. Principles
+- **Focus**: one company goal per quarter, max 3 priorities. Everything else is "not now" (written).
+- **Customer truth over opinions**: talk to dealers and buyers every week (`mom-test`). No feature without a real customer problem.
+- **Cash is oxygen**: zero-cost development phase; any spend needs expected return and payback date.
+- **Speed with safety**: two-way-door decisions in minutes; one-way-door decisions (money, legal, brand, data) with `high-stakes-decisions` + owner 👤.
+- **Truth in reporting**: what is ⏸ untested is never presented as done.
+
+#### 2. Cadence
+| When | What |
+|---|---|
+| Each task | Brief → delegate → gates → `ceo-validation-gate` → report |
+| Daily | Read coach report; fix the top issue; update `TASKS.md` |
+| Weekly | KPI review, pipeline review, 1 customer insight, 1 experiment decided (kill / keep / scale) |
+| Monthly | Unit economics, priorities reset, `stress-test` on the plan |
+| Quarterly | Strategy and goal (`defining`/`positioning`/`pricing-strategy`), market expansion check (`international-expansion`) |
+
+#### 3. Wotoyi scoreboard (north star + drivers)
+- **North star**: qualified buyer contacts delivered to dealers per week (`north-star-metrics`).
+- **Supply**: active dealers, live listings, % listings updated < 7 days, photo quality.
+- **Demand**: visitors, searches, contact rate, WhatsApp clicks.
+- **Liquidity**: % listings with ≥ 1 contact in 14 days, time to first contact (`marketplace-liquidity-take-rates`).
+- **Revenue**: paying dealers, MRR (FCFA), inspections sold, take rate/margin, churn.
+- **Efficiency**: CAC by channel, payback months, AI cost per conversation.
+- **Quality**: bugs open, incidents, coach scores trend.
+Mark each number ✅ measured or ⚠ estimate. No measurement → first task is instrumentation.
+
+#### 4. Marketplace playbook (our sector)
+- Solve the chicken-and-egg: **supply first** (dealers, free onboarding + free website), then demand in **one city (Dakar)** until liquid (`marketplace-fundamentals`, `supply-demand-balance`).
+- Monetise when value is proven: SaaS subscription for dealers, paid inspection, featured listings; never tax a market before it is liquid.
+- Trust is the product in used cars: verified dealers, inspection, honest reports, fast replies, reviews.
+- Prevent disintermediation by giving dealers tools they can't get elsewhere (CRM, website, AI assistant, leads analytics).
+
+#### 5. Africa-first execution (Senegal → West Africa)
+- WhatsApp-first, mobile-first, low data, French + Wolof first; Arabic and English for reach.
+- Payments: mobile money (Wave, Orange Money) + manual fallback; cash reality for vehicle sales.
+- Sales are relationship-based: field visits, referrals, community leaders, demo on the dealer's own phone (`founder-sales`, `first-b2b-customers`).
+- Regulatory: personal data (CDP), consumer protection, licensed payment partners; check before launch.
+- Expansion only after Dakar unit economics are positive; reuse the playbook per city/country.
+
+#### 6. Decisions
+1. Classify: reversible? cost? who is affected?
+2. Options (2–3) with expected value, risk, cost; run `stress-test` or `scenario-war-room` if big.
+3. Decide with ~70 % information; write in `DECISIONS.md` (context, decision, owner, review date).
+4. Review the outcome on the date; learn, don't hide failures.
+
+#### 7. Delegation
+Brief = goal · context files · constraints · acceptance criteria · deadline · report format · model. Right agent, cheapest capable model (CLAUDE.md §7). No micromanagement, but every result through the gates.
+
+#### 8. Report to the owner
+Short: what changed · numbers (✅/⚠) · decisions taken · decisions needed from you (👤) · risks · next 3 actions. Challenge the owner when his request hurts the priorities, then propose the better path.
+
 ### `ceo-validation-gate`
 *Quand l'utiliser* : Use when the CEO receives a finished task from any agent, before anything is delivered to the owner: verify, validate or send back for correction with precise fixes.
 
@@ -809,8 +892,32 @@ github.com/addyosmani/agent-skills (MIT). Revue multi-axes avant tout merge : ex
 ### `doubt-driven-development` (externe)
 github.com/addyosmani/agent-skills (MIT). Toute décision non triviale passe par une revue adverse « à froid » : lister les hypothèses, chercher comment elles échouent, contre-exemples, puis garder / corriger / abandonner. Idéal pour contrôler les décisions du CEO.
 
+### `first-b2b-customers` (externe)
+RefoundAI/lenny-skills (MIT). Signer les premiers clients B2B : design partners, vente directe, preuves avant échelle.
+
+### `founder-sales` (externe)
+RefoundAI/lenny-skills (MIT). Vente menée par le fondateur : découverte, démo, objections, closing, quand embaucher un commercial.
+
 ### `frontend-design` (externe)
 github.com/anthropics/skills → skills/frontend-design (Apache 2.0). Direction esthétique affirmée avant de coder (ton, typographie distinctive, palette cohérente, mouvement, composition), éviter les interfaces « génériques », soigner détails et micro-interactions.
+
+### `high-stakes-decisions` (externe)
+RefoundAI/lenny-skills (MIT). Porte à sens unique ou double ; trouver la question décisive ; pré-mortem contre les biais ; décider avec ~70 % d'information et un propriétaire clair.
+
+### `international-expansion` (externe)
+RefoundAI/lenny-skills (MIT). Quand et comment s'étendre à un nouveau pays : localisation, équipe, réglementation, séquencement.
+
+### `marketplace-fundamentals` (externe)
+RefoundAI/lenny-skills (MIT). Démarrer une marketplace : côté contraint, une zone géographique d'abord, faire des choses non scalables, confiance et qualité de l'offre.
+
+### `marketplace-liquidity-take-rates` (externe)
+RefoundAI/lenny-skills (MIT). Mesurer la liquidité (taux de match, délai) et fixer la commission sans tuer la marketplace ni pousser à la désintermédiation.
+
+### `measuring-pmf` (externe)
+RefoundAI/lenny-skills (MIT). Mesurer l'adéquation produit-marché : rétention, test des 40 % « très déçu », signaux qualitatifs.
+
+### `mom-test` (externe)
+getagentseal/founder-playbook (MIT), d'après « The Mom Test » : interroger les clients sur leur passé et leurs actes réels, jamais sur l'idée ; questions à éviter, signaux d'engagement.
 
 ### `multilingual-wolof-arabic`
 *Quand l'utiliser* : Use when writing or reviewing UI strings, translations, content or AI replies in French, Wolof, English or Arabic, or when building RTL layouts.
@@ -830,6 +937,15 @@ github.com/anthropics/skills → skills/frontend-design (Apache 2.0). Direction 
 #### AI replies
 Detect the user's language from the message, answer in it; if Wolof confidence is low, answer in simple Wolof + French. Voice notes: transcribe, show the transcript to staff.
 
+### `north-star-metrics` (externe)
+RefoundAI/lenny-skills (MIT). Choisir une métrique étoile du nord reliée à la valeur client et la décomposer en leviers.
+
+### `positioning` (externe)
+RefoundAI/lenny-skills (MIT). Positionnement (méthode April Dunford) : alternatives, attributs uniques, valeur, clients cibles, catégorie.
+
+### `pricing-strategy` (externe)
+RefoundAI/lenny-skills (MIT). Prix basé sur la valeur, paliers, essais/freemium, hausses de prix, tests de prix.
+
 ### `receiving-code-review` (externe)
 github.com/obra/superpowers (MIT). Recevoir une revue avec rigueur : vérifier chaque remarque dans le code, pas d'accord de façade ni d'application aveugle ; contester avec preuves si la remarque est fausse ; corriger une par une et tester.
 
@@ -846,6 +962,9 @@ github.com/obra/superpowers (MIT). Recevoir une revue avec rigueur : vérifier c
 
 ### `requesting-code-review` (externe)
 github.com/obra/superpowers (MIT). Demander une revue à chaque tâche terminée / avant merge : donner le contexte, le diff (SHA de base → tête), les exigences ; traiter les retours critiques avant de continuer.
+
+### `scenario-war-room` (externe)
+alirezarezvani/claude-skills (MIT). Scénarios « et si X et Y arrivent ensemble ? » avec effets en cascade sur toutes les fonctions ; script scenario_modeler.py.
 
 ### `security-and-hardening` (externe)
 github.com/addyosmani/agent-skills (MIT). Durcissement contre l'OWASP Top 10 : validation des entrées, authentification, stockage des données, intégrations externes, secrets, en-têtes, dépendances ; références détaillées dans `references/`.
@@ -873,6 +992,12 @@ Factual, quotable sentences (prices, specs, process, guarantees and limits), cle
 
 #### Output
 Issue · impact (high/med/low) · fix · how to verify. Check current Google guidance online before asserting a rule.
+
+### `stress-test` (externe)
+alirezarezvani/claude-skills (MIT). Attaquer un plan fondé sur des hypothèses non testées (courbe en crosse de hockey, pilote long) : hypothèses critiques, contre-preuves, scénarios.
+
+### `supply-demand-balance` (externe)
+RefoundAI/lenny-skills (MIT). Diagnostiquer quel côté manque, équilibrer offre et demande par zone/catégorie, leviers d'acquisition de chaque côté.
 
 ### `systematic-debugging` (externe)
 github.com/obra/superpowers → skills/systematic-debugging (MIT). Loi : aucune correction sans cause racine. 4 phases : (1) investigation — lire l'erreur, reproduire, changements récents, tracer le flux de données ; (2) comparer avec un exemple qui marche ; (3) une seule hypothèse testée à la fois, changement minimal ; (4) test qui échoue d'abord, correction unique, vérification. Après 3 échecs : remettre l'architecture en question.
