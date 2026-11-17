@@ -18,6 +18,32 @@
 | Medium | 7 | M1–M7 |
 | Low | 8 | L1–L8 |
 
+## Remediation status (2026-11-17, plugin v0.2.0)
+
+`bin/check.sh`: php -l OK, **215 passed, 0 failed, 5,355 assertions** (PHP 8.3.6, shim: not real WordPress/MySQL). The 42 new regression tests were also run against the unfixed v0.1.0 code: 39 of them failed there (the 3 that pass are guards: the shim self-check, "authenticated requests are still rate limited" and "a trusted proxy can vouch for TLS"), and the pre-existing wrapper test failed too; the fixed code passes all of them. The M1 shim bug is fixed: `WP_REST_Request` now uses WordPress's parameter order, which also turned the old `test_rest_style_put_and_delete_wrappers` red until the controller was fixed.
+
+| ID | Status | Test(s) |
+|---|---|---|
+| H1 | Fixed | SecurityFixesTest::test_h1_previous_secret_cannot_rotate_or_disconnect, SecurityFixesTest::test_h1_staff_can_revoke_the_previous_secret_immediately |
+| H2 | Fixed (legal values to confirm) | PrivacyTest::test_h2_* (14 tests, incl. `test_h2_review_probe_email_does_not_survive_400_days`) |
+| M1 | Fixed | SecurityFixesTest::test_m1_unsigned_query_string_cannot_redirect_a_signed_delete, SecurityFixesTest::test_m1_json_body_source_id_cannot_override_the_signed_url, SecurityFixesTest::test_m1_query_string_is_refused_on_every_signed_route_but_rest_route_is_allowed, SyncAuthTest::test_rest_style_put_and_delete_wrappers (now real) |
+| M2 | Fixed (real CAPTCHA is a plug-in) | SecurityFixesTest::test_m2_* (8 tests) |
+| M3 | Fixed | SecurityFixesTest::test_m3_forged_requests_naming_a_real_key_id_do_not_throttle_the_dealer, SecurityFixesTest::test_m3_junk_pairing_codes_cannot_lock_out_a_valid_code, SecurityFixesTest::test_m3_authenticated_requests_are_still_rate_limited_per_key |
+| M4 | Fixed | SecurityFixesTest::test_m4_* (5 tests) |
+| M5 | Fixed | SecurityFixesTest::test_m5_vehicle_documents_are_never_public |
+| M6 | Open | — |
+| M7 | Fixed | SecurityFixesTest::test_m7_staff_and_security_actions_are_audited_without_secrets, SecurityFixesTest::test_m7_audit_log_endpoint_needs_the_staff_capability_and_has_no_mutators, SecurityFixesTest::test_m7_audit_details_are_whitelisted |
+| L1 | Fixed | SecurityFixesTest::test_l1_pairing_cannot_omit_the_bound_dealer_identity, SecurityFixesTest::test_l1_pairing_cannot_overwrite_the_public_profile |
+| L2 | Open | — |
+| L3 | Open | — |
+| L4 | Open | — |
+| L5 | Open | — |
+| L6 | Open | — |
+| L7 | Open | — |
+| L8 | Partially fixed | PrivacyTest::test_h2_consent_proof_is_stored_with_the_lead |
+
+Behaviour changes visible to the Dealer Platform: rotate-key/disconnect need the current secret (H1); `/sync/*` needs HTTPS and no query string (M1, M4); pairing needs the exact bound `source_dealer_uuid` and no longer overwrites existing profile fields (L1). Everything else (signing canonical string, route names, payloads) is unchanged; new response fields are additive (`consent_at`, `consent_version` on pulled leads, `bound` on the lead token).
+
 What is solid (verified):
 - **SQL:** every query goes through `Db::prepare()`. Column names and SQL fragments are hard-coded, and `LIKE` input is escaped. I found no injection path.
 - **Tenant isolation on HTTP sync:** the dealer comes from the authenticated key. Every repository write filters on `dealer_id`, and `pull_leads`, `ack_leads` and `manifest` are scoped to that dealer.
@@ -31,6 +57,8 @@ What is solid (verified):
 ## HIGH
 
 ### H1 — Previous (grace-period) secret can call `/sync/rotate-key` and take over the dealer key  [VERIFIED-PROBE]
+
+> **Status: Fixed.** Test: SecurityFixesTest::test_h1_previous_secret_cannot_rotate_or_disconnect, SecurityFixesTest::test_h1_staff_can_revoke_the_previous_secret_immediately. Authenticator records the matched slot; rotate-key/disconnect need `current` (401 `wotoyi_secret_superseded`); staff `revoke_previous_secret`.
 
 - **Where:** `includes/Sync/Authenticator.php:86-91` accepts current **and** previous secrets on every route. `includes/Rest/SyncController.php:175-180` and `includes/Repository/DealerRepository.php:216-230` (`rotate_secret` copies the *current* secret into `prev_secret_enc`).
 - **Exploit:**
@@ -47,6 +75,8 @@ What is solid (verified):
   - Also invalidate `prev_secret_enc` immediately when staff force a rotation after an incident (staff endpoint, see M7).
 
 ### H2 — No retention, erasure or export for buyer personal data (leads, favourites, saved searches)  [VERIFIED-PROBE + CODE]
+
+> **Status: Fixed (legal values to confirm).** Test: PrivacyTest::test_h2_* (14 tests, incl. `test_h2_review_probe_email_does_not_survive_400_days`). Daily retention job (30/90/30 days, configurable), WP exporter + eraser, `delete_user` cleanup, consent proof columns, policy text. Step 5 (written record of processing) is in README; Legal must confirm periods and CDP declaration.
 
 - **Where:**
   - `includes/Plugin.php:86-89`: `prune()` only cleans nonces and sync_log.
@@ -72,6 +102,8 @@ What is solid (verified):
 
 ### M1 — Unsigned query string (and JSON body) overrides `source_id` on signed PUT/DELETE wrappers  [VERIFIED-PROBE with WP-core parameter order; not run on real WP]
 
+> **Status: Fixed.** Test: SecurityFixesTest::test_m1_unsigned_query_string_cannot_redirect_a_signed_delete, SecurityFixesTest::test_m1_json_body_source_id_cannot_override_the_signed_url, SecurityFixesTest::test_m1_query_string_is_refused_on_every_signed_route_but_rest_route_is_allowed, SyncAuthTest::test_rest_style_put_and_delete_wrappers (now real). `source_id` from `get_url_params()` only; any query string refused in `Authenticator::permission()` (except `rest_route`); shim now reproduces WP parameter order (`SecurityFixesTest::test_m1_request_shim_uses_wordpress_parameter_precedence`).
+
 - **Where:** `includes/Rest/SyncController.php:111-115` uses `$request['source_id']` (= `get_param`).
 - **Why it matters:** in WordPress core, `get_param()` looks in the sources in this order: **JSON → POST → GET (query string) → URL**. The signature covers the route but not the query string (`Signer.php:147-149`). So `DELETE /wotoyi/v1/sync/vehicles/A?source_id=B` passes the signature check for `/vehicles/A` but **deletes B**.
 - **The 422 check is dead code on real WP:** with a JSON body, `$request['source_id']` *is* `$body['source_id']`, so the "body/URL mismatch" check at line 112 never fires. The shim (`tests/shim/wp-shim.php:74`) gives URL params priority, so the test passes while production would behave differently.
@@ -83,6 +115,8 @@ What is solid (verified):
   - Make the shim reproduce WP's parameter order and add a regression test.
 
 ### M2 — Lead anti-spam is weak: one token gives unlimited leads, per-IP limits are bypassable with IPv6, no per-dealer cap  [VERIFIED-PROBE]
+
+> **Status: Fixed (real CAPTCHA is a plug-in).** Test: SecurityFixesTest::test_m2_* (8 tests). Single-use token bound to IP bucket and optionally to the listing, IPv6 /64 buckets, per-dealer / per-contact / per-contact-per-dealer daily caps, `wotoyi_mp_lead_challenge` provider filter + `lead_challenge_required`. No provider is bundled.
 
 - **Where:**
   - `includes/Support/LeadGuard.php:253-267`: the token is stateless and not single-use. It is valid for 2 h and bound to nothing (no IP, no session, no target).
@@ -99,6 +133,8 @@ What is solid (verified):
 
 ### M3 — Unauthenticated denial of service: global pairing lockout and per-key sync throttling  [VERIFIED-PROBE]
 
+> **Status: Fixed.** Test: SecurityFixesTest::test_m3_forged_requests_naming_a_real_key_id_do_not_throttle_the_dealer, SecurityFixesTest::test_m3_junk_pairing_codes_cannot_lock_out_a_valid_code, SecurityFixesTest::test_m3_authenticated_requests_are_still_rate_limited_per_key. Per-key limit counted after HMAC; global pairing guard only stops misses; per-IP guard is per /64.
+
 - **Where:**
   - `includes/Sync/Pairing.php:221` (`pairfail:global` 100/h).
   - `includes/Sync/Authenticator.php:79`: `sync:{key_id}` is counted **before** the signature is checked.
@@ -112,6 +148,8 @@ What is solid (verified):
 
 ### M4 — No TLS enforcement on secret-bearing endpoints  [VERIFIED-CODE]
 
+> **Status: Fixed.** Test: SecurityFixesTest::test_m4_* (5 tests). `Support\Tls`: `/sync/*` and `/sync/pair` need HTTPS (403 `wotoyi_https_required`); `HttpTransport` throws on non-https; `WOTOYI_MP_ALLOW_INSECURE` / filter for non-production only; `wotoyi_mp_request_is_secure` for TLS-terminating proxies.
+
 - **Where:**
   - `grep is_ssl` finds no match. `/sync/pair` (`SyncController.php:58-70`) and `/sync/rotate-key` (`:175-180`) return the clear HMAC secret.
   - `includes/Sync/HttpTransport.php:27` accepts any `base_url` scheme, including `http://`.
@@ -122,6 +160,8 @@ What is solid (verified):
 
 ### M5 — Vehicle `documents` URLs are public, which can expose owner personal data the plugin otherwise hides  [VERIFIED-CODE; content risk is an assumption]
 
+> **Status: Fixed.** Test: SecurityFixesTest::test_m5_vehicle_documents_are_never_public. `documents` is now `private` (stored, never returned publicly). Onboarding-guide wording for dealers is still to be written.
+
 - **Where:** `includes/Schema/VehicleFields.php:140` (`documents`, group `media`, not `private`). `includes/Presenter/VehiclePresenter.php:72-82` publishes every non-private field.
 - **Exploit:** dealers will naturally attach the registration card (carte grise), customs papers or invoices. These show the previous owner's name and address, the VIN and the plate. The plugin deliberately hides VIN and plate (`:44-45`), then publishes the same data in a document link on the public detail endpoint. Scraping all `/vehicles/{ref}` gives a dataset of owner identities.
 - **Fix:**
@@ -130,6 +170,8 @@ What is solid (verified):
   - Tell dealers in their onboarding guide not to publish identity documents.
 
 ### M6 — Local transport: no caller authorisation, auto-activated dealers, can be enabled from the DB  [VERIFIED-CODE]
+
+> **Status: Open.** Test: —. Not fixed (documented in README Known limits #13). Keep local mode OFF in production.
 
 - **Where:**
   - `includes/api.php:203-218`, `includes/Sync/LocalTransport.php:125-151`: `ensure_dealer` creates the dealer **active** with no staff approval.
@@ -145,6 +187,8 @@ What is solid (verified):
 
 ### M7 — No audit log for staff and security actions (PROJECT §14.5)  [VERIFIED-CODE]
 
+> **Status: Fixed.** Test: SecurityFixesTest::test_m7_staff_and_security_actions_are_audited_without_secrets, SecurityFixesTest::test_m7_audit_log_endpoint_needs_the_staff_capability_and_has_no_mutators, SecurityFixesTest::test_m7_audit_details_are_whitelisted. Append-only `audit_log`, whitelisted details, `GET /admin/audit-log`; written from every admin route, rotate-key, disconnect, pairing success, retention and privacy erasure.
+
 - **Where:** `includes/Rest/AdminController.php:25-84`. Issuing pairing codes, changing status (suspend, reactivate), granting the `verified` badge, rotating keys and disconnecting leave no who/when/from-where/before-after record. `sync_log` covers only content events.
 - **Exploit:** a rogue or compromised staff account can issue a pairing code for an active dealer and re-pair it to an attacker system (the old platform is silently cut off), or sell "verified" badges, with no trace.
 - **Fix:** add an append-only `audit_log` table (actor user id, action, target dealer, before/after of `status`/`verified`, IP hash, correlation id). Write to it from every admin route, from rotate-key, from disconnect and from pairing success. Never log secrets or codes.
@@ -155,17 +199,23 @@ What is solid (verified):
 
 ### L1 — The pairing identity binding is skippable, and pairing can rewrite the public dealer profile  [VERIFIED-PROBE]
 
+> **Status: Fixed.** Test: SecurityFixesTest::test_l1_pairing_cannot_omit_the_bound_dealer_identity, SecurityFixesTest::test_l1_pairing_cannot_overwrite_the_public_profile. Exact `source_dealer_uuid` match required when staff set one; pairing fills only empty profile fields.
+
 - **Where:** `includes/Sync/Pairing.php:233-241, 249-253`.
 - **Problem:** if staff created the dealer with a `source_dealer_uuid`, a pair call that simply **omits** that field passes. The "Code was issued for another dealer identity" check only runs when a different value is sent. Whoever intercepts a code (it is often sent by WhatsApp) can pair and also set `website_url`/`logo_url`/`phone` to phishing values (probe: 201).
 - **Fix:** when the dealer record has a `source_dealer_uuid`, require an exact match. Apply pairing-time profile changes only to empty fields, or queue them for staff review.
 
 ### L2 — A buyer cannot remove a favourite once the item is unpublished  [VERIFIED-PROBE]
 
+> **Status: Open.** Test: —. Documented.
+
 - **Where:** `includes/Rest/AccountController.php:131-138` resolves the target through `published_*_ref`.
 - **Probe result:** the row is still there after `DELETE`.
 - **Fix:** resolve by uuid or slug regardless of status (still scoped to `user_id`). Purge favourites of deleted items in the prune job.
 
 ### L3 — Media URLs accept `http` and any host. No SSRF today.  [VERIFIED-CODE]
+
+> **Status: Open.** Test: —. Documented.
 
 - **Where:** `includes/Schema/Fields.php:243-249`, presenters.
 - **No SSRF today:** `grep` shows that the marketplace never fetches media server-side. The only outbound request is `HttpTransport`, which is the client side.
@@ -180,11 +230,15 @@ What is solid (verified):
 
 ### L4 — No per-dealer quotas; batch amplification  [VERIFIED-CODE]
 
+> **Status: Open.** Test: —. Documented.
+
 - **Where:** `includes/Sync/Receiver.php:123-135`, `Authenticator.php:79`.
 - **Problem:** rate limits count requests, not events: 240 × 50 = 12,000 writes per minute per key, with unbounded listings and tombstones (`AbstractListingRepository.php:179-199` creates tombstones for unknown ids). A compromised dealer key can flood the catalogue and the DB.
 - **Fix:** count events in the limiter. Enforce plan quotas in `wotoyi_mp_can_publish` (currently a no-op hook). Cap tombstone creation for never-seen ids.
 
 ### L5 — Rate limiter on transients: non-atomic and write-amplifying  [VERIFIED-CODE; impact on MySQL UNVERIFIED]
+
+> **Status: Open.** Test: —. Documented; IPv6 /64 bucketing (M2) reduces the row growth from address rotation.
 
 - **Where:** `includes/Support/RateLimiter.php:454-470`, `PublicController.php:105-109`.
 - **Problem:** on hosts without a persistent object cache (InfinityFree), every public GET does 1–2 `wp_options` writes. Each new IP or vehicle pair creates rows, so IP rotation inflates `wp_options` and inflates `views`, which drives `sort=views` ranking.
@@ -192,17 +246,23 @@ What is solid (verified):
 
 ### L6 — Body-size cap enforced after the whole body is read  [VERIFIED-CODE]
 
+> **Status: Open.** Test: —. Documented.
+
 - **Where:** `Authenticator.php:73`.
 - **Problem:** WP has already read `php://input`, so the 1 MB cap does not protect memory.
 - **Fix:** also check `$_SERVER['CONTENT_LENGTH']` first, and set `post_max_size`/web-server limits on the sync path.
 
 ### L7 — Case-insensitive collation on nonce and event-id keys  [UNVERIFIED on MySQL]
 
+> **Status: Open.** Test: —. Documented.
+
 - **Where:** `includes/Schema/Schema.php:236-242` (`sync_nonces` PK) and the `sync_log` `dealer_event` unique key both use the default `utf8mb4_unicode_ci`.
 - **Problem:** nonces or event ids that differ only in case would collide, which gives false replays or 409s (availability only, not a bypass).
 - **Fix:** declare those columns `COLLATE ascii_bin` (or `utf8mb4_bin`).
 
 ### L8 — Lead PII in clear at rest; consent proof is a bare boolean  [VERIFIED-CODE]
+
+> **Status: Partially fixed.** Test: PrivacyTest::test_h2_consent_proof_is_stored_with_the_lead. Consent text version, timestamp and purpose are stored. Encryption of phone/email/message at rest is still open.
 
 - **Where:** `includes/Schema/Schema.php:159-184`, `PublicController.php:177-180`.
 - **Fix:** encrypt `phone`/`email`/`message` with the existing `Crypto` (decrypt only in `pending_for_dealer`). Store a consent text version, a timestamp and the purpose ("transmit to dealer X"). Make sure backups are encrypted (PROJECT §14.4).

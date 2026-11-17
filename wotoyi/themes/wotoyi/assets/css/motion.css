@@ -1,0 +1,37 @@
+/* ---- reveal + split (hidden state only under html.wy-js so no-JS shows content) ---- */
+@keyframes wy-rise{from{opacity:0;transform:translateY(var(--wy-distance-reveal))}to{opacity:1;transform:none}}
+html.wy-js [data-motion~="reveal"]{opacity:0;transform:translateY(var(--wy-distance-reveal))}
+html.wy-js [data-motion~="reveal"].is-in{opacity:1;transform:none;transition:opacity var(--wy-duration-reveal) var(--wy-easing-out),transform var(--wy-duration-reveal) var(--wy-easing-out)}
+html.wy-sd [data-motion~="reveal"]{opacity:1;transform:none;animation:wy-rise linear both;animation-timeline:view();animation-range:entry 0% entry 40%}
+html[data-motion="lite"] [data-motion~="reveal"]{--wy-distance-reveal:16px}
+html[data-motion="reduced"][data-motion] [data-motion~="reveal"]{transform:none!important}
+html[data-motion="reduced"] [data-motion~="reveal"].is-in{transition:opacity 160ms linear}
+.wy-split__w{display:inline-block;overflow:clip;vertical-align:top;padding-block-end:.14em;margin-block-end:-.14em}
+.wy-split__w>span{display:inline-block}
+html.wy-js .wy-split__w>span{transform:translateY(105%);transition:transform var(--wy-duration-reveal) var(--wy-easing-out) calc(var(--i,0)*var(--wy-duration-stagger))}
+html.wy-js .wy-words.is-in .wy-split__w>span{transform:none}
+html.wy-js .wy-words .wy-em{background:none;-webkit-text-fill-color:currentColor;color:inherit}
+html.wy-js .wy-words .wy-em .wy-split__w>span.wy-em,.wy-split__w>span.wy-em{background:var(--wy-em);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+html[data-motion="lite"].wy-js .wy-split__w>span{transform:none;opacity:0;transition:opacity 280ms linear calc(var(--i,0)*30ms)}
+html[data-motion="lite"].wy-js .wy-words.is-in .wy-split__w>span{opacity:1}
+html[data-motion="reduced"].wy-js .wy-split__w>span{transform:none;opacity:0;transition:opacity 160ms linear}
+html[data-motion="reduced"].wy-js .wy-words.is-in .wy-split__w>span{opacity:1}
+
+/* ---- custom cursor (adornment; system cursor stays visible) ---- */
+.wy-cursor__dot,.wy-cursor__ring{position:fixed;inset-block-start:0;inset-inline-start:0;z-index:var(--wy-z-cursor);pointer-events:none;opacity:0;transition:opacity var(--wy-duration-ui)}
+html.wy-has-cursor .wy-cursor__dot,html.wy-has-cursor .wy-cursor__ring{opacity:1}
+.wy-cursor__dot{inline-size:8px;block-size:8px;margin:-4px;border-radius:50%;background:var(--wy-color-accent);mix-blend-mode:difference}
+.wy-cursor__ring{inline-size:36px;block-size:36px;margin:-18px;border-radius:50%;border:1.5px solid var(--wy-color-accent-graphic);display:grid;place-items:center;font-style:normal;font-size:.6875rem;font-weight:800;color:var(--wy-color-accent-ink)}
+.wy-cursor__ring span{opacity:0;transition:opacity var(--wy-duration-ui)}
+.wy-cursor__ring.is-card{background:var(--wy-color-accent);scale:1.9}.wy-cursor__ring.is-card span{opacity:1;scale:.55}
+.wy-cursor__ring.is-off{opacity:0!important}
+.wy-cursor__ring,.wy-cursor__dot{display:none}html.wy-has-cursor .wy-cursor__ring,html.wy-has-cursor .wy-cursor__dot{display:grid}
+
+/* ---- view transitions (MPA) ---- */
+@view-transition{navigation:auto}
+::view-transition-group(root){animation-duration:var(--wy-duration-page);animation-timing-function:var(--wy-easing-in-out,cubic-bezier(.65,0,.35,1))}
+::view-transition-group(*){animation-duration:var(--wy-duration-page);animation-timing-function:cubic-bezier(.65,0,.35,1)}
+html[data-motion="reduced"]::view-transition-group(*),html[data-motion="reduced"]::view-transition-old(*),html[data-motion="reduced"]::view-transition-new(*){animation:none!important}
+html.wy-theme-vt::view-transition-old(root),html.wy-theme-vt::view-transition-new(root){animation:none;mix-blend-mode:normal}
+html.wy-theme-vt::view-transition-new(root){z-index:2}html.wy-theme-vt::view-transition-old(root){z-index:1}
+

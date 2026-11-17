@@ -5,7 +5,8 @@
  * Canonical string (newline separated):
  *   WOTOYI-HMAC-SHA256 \n timestamp \n nonce \n METHOD \n route-path \n sha256-hex(body)
  * The route path (e.g. /wotoyi/v1/sync/events) is signed, so a captured signature cannot be replayed against
- * another endpoint or entity id. Query strings are never read by sync handlers.
+ * another endpoint or entity id. The query string is NOT signed, so signed routes refuse any query string
+ * (Authenticator::permission(), SECURITY-REVIEW M1).
  *
  * @package Wotoyi\Marketplace
  */

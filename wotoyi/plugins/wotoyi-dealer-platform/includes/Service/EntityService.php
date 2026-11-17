@@ -165,7 +165,13 @@ class EntityService {
 				$clean               = $san['clean'];
 				$this->check_required( $clean );
 				$this->check_refs( $clean );
-				$merged = $this->defaults() + $clean + $system;
+				$defaults = $this->defaults();
+				$merged   = array_merge( $defaults, $clean, $system );
+				foreach ( $defaults as $k => $v ) {
+					if ( null === $merged[ $k ] ) {
+						$merged[ $k ] = $v; // Explicit null on create means "use the default".
+					}
+				}
 				$merged = $this->finalize( $merged, null ) ?? $merged;
 				$now    = Clock::mysql();
 				$data   = Fields::to_db( $this->all_defs(), $merged ) + $this->system_columns( $merged );
@@ -226,6 +232,11 @@ class EntityService {
 		foreach ( $this->def['fields'] as $name => $fd ) {
 			if ( ! empty( $fd['required'] ) && array_key_exists( $name, $clean ) && null === $clean[ $name ] ) {
 				throw ApiException::invalid( 'Invalid values.', array( 'fields' => array( $name ) ) );
+			}
+		}
+		foreach ( $this->defaults() as $name => $default ) {
+			if ( null !== $default && array_key_exists( $name, $clean ) && null === $clean[ $name ] && 'enum' === ( $this->def['fields'][ $name ]['type'] ?? '' ) ) {
+				throw ApiException::invalid( 'This field cannot be cleared.', array( 'fields' => array( $name ) ) );
 			}
 		}
 		$this->check_refs( $clean );

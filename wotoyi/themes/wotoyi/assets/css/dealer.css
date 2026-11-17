@@ -1,0 +1,10 @@
+/* ---- dealer page ---- */
+.wy-dealer-cover{position:relative;isolation:isolate;overflow:clip;margin-block-start:calc(-1*var(--wy-layout-header-h));padding-block:calc(var(--wy-layout-header-h) + clamp(32px,5vw,64px)) clamp(32px,4vw,56px)}
+.wy-dealer-cover__in{position:relative;z-index:1;display:grid;gap:20px;align-items:end}
+.wy-dealer-cover__id{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.wy-dealer-cover .wy-dcard__logo{inline-size:88px;block-size:88px;border-radius:24px;font-size:1.5rem;overflow:clip}
+.wy-dealer-cover .wy-dcard__logo img{inline-size:100%;block-size:100%;object-fit:cover}
+.wy-dealer-cover .wy-caption{color:var(--wy-color-on-night-muted)}
+.wy-dealer-figures{display:flex;flex-wrap:wrap;gap:12px 40px;padding-block:24px;border-block-end:1px solid var(--wy-color-border)}
+.wy-dealer-figures div{display:grid}.wy-dealer-figures dd{font-weight:800;font-size:1.75rem;font-variant-numeric:tabular-nums}.wy-dealer-figures dt{color:var(--wy-color-muted)}
+.wy-dealer-body{padding-block:clamp(32px,4vw,64px);display:grid;gap:clamp(32px,4vw,56px)}

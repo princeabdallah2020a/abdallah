@@ -1,0 +1,33 @@
+/* ---- block styles (register_block_style in inc/blocks.php) + core block adjustments ---- */
+.wp-site-blocks{display:block}
+.wp-site-blocks>*+*{margin-block-start:0}
+.wp-block-group.wy-container,.wp-block-group.wy-container-wide{margin-inline:auto}
+.is-style-wy-night{background:var(--wy-color-night);color:var(--wy-color-on-night)}
+.is-style-wy-sand{background:var(--wy-color-surface-2)}
+.is-style-wy-section{padding-block:var(--wy-space-section);position:relative}
+.is-style-wy-card{padding:24px;border-radius:var(--wy-radius-lg);background:var(--wy-color-surface);border:1px solid var(--wy-color-border);box-shadow:var(--wy-elev-1)}
+.is-style-wy-glass{padding:24px;border-radius:var(--wy-radius-xl)}
+.is-style-wy-lead{font-size:var(--wy-font-size-body-l);line-height:1.6;max-inline-size:var(--wy-layout-measure);color:var(--wy-color-muted)}
+.wy-night .is-style-wy-lead{color:var(--wy-color-on-night-muted)}
+.is-style-wy-overline{font-size:var(--wy-font-size-overline);font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--wy-color-accent-text);margin-block-end:12px}
+html[lang="ar"] .is-style-wy-overline{text-transform:none;letter-spacing:0}
+.is-style-wy-caption{font-size:var(--wy-font-size-caption);line-height:1.4;color:var(--wy-color-muted)}
+h1.is-style-wy-display-xl,h2.is-style-wy-display-xl,h2.is-style-wy-display-l,h2.is-style-wy-display-m,h1.is-style-wy-display-m{font-family:var(--wy-font-display);font-weight:400;margin:0}
+.is-style-wy-display-xl{font-size:var(--wy-font-size-display-xl);line-height:.98;letter-spacing:-.02em}
+.is-style-wy-display-l{font-size:var(--wy-font-size-display-l);line-height:1.02;letter-spacing:-.015em}
+.is-style-wy-display-m{font-size:var(--wy-font-size-display-m);line-height:1.08}
+html[lang="ar"] :is(.is-style-wy-display-xl,.is-style-wy-display-l,.is-style-wy-display-m){font-family:var(--wy-font-display-ar);font-weight:700;letter-spacing:0;line-height:1.25}
+.wp-block-list.is-style-wy-checks{list-style:none;padding:0;display:grid;gap:12px;margin-block:24px}
+.wp-block-list.is-style-wy-checks li{position:relative;padding-inline-start:36px}
+.wp-block-list.is-style-wy-checks li::before{content:"";position:absolute;inset-inline-start:0;inset-block-start:.15em;inline-size:22px;block-size:22px;background:var(--wy-color-success);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 12.5 4.5 4.5L19 7.5'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 12.5 4.5 4.5L19 7.5'/%3E%3C/svg%3E") center/contain no-repeat}
+/* buttons: core/button styled as .wy-btn */
+.wp-block-buttons{gap:12px}
+.wp-block-button__link{display:inline-flex;align-items:center;justify-content:center;min-block-size:var(--wy-layout-touch-min);padding:10px 24px;border-radius:var(--wy-radius-pill);font-weight:700;text-decoration:none;border:1px solid transparent;transition:transform var(--wy-duration-instant)}
+.wp-block-button__link:active{transform:scale(var(--wy-distance-press-scale))}
+.wp-block-button.is-style-fill .wp-block-button__link,.wp-block-button:not([class*="is-style-"]) .wp-block-button__link{background:var(--wy-gradient-sunset);color:var(--wy-color-accent-ink)}
+.wp-block-button.is-style-wy-ghost .wp-block-button__link{background:transparent;color:inherit;border-color:var(--wy-color-border-strong)}
+.wp-block-button.is-style-wy-secondary .wp-block-button__link{background:var(--wy-color-secondary);color:var(--wy-color-secondary-ink)}
+.wp-block-button.is-style-wy-whatsapp .wp-block-button__link{background:var(--wy-color-whatsapp);color:#fff}
+/* split-text words (server-side wrap, inc/split.php) */
+.wy-night .wp-block-heading,.wy-night p{color:inherit}
+@media(max-width:767.98px){.wp-block-buttons .wp-block-button{inline-size:100%}.wp-block-button__link{inline-size:100%}}

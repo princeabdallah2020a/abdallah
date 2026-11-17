@@ -181,7 +181,7 @@ function is_ssl(): bool { return $GLOBALS['wotoyi_is_ssl'] ?? true; }
 function wp_get_environment_type(): string { return $GLOBALS['wotoyi_env'] ?? 'production'; }
 function get_user_by( string $field, $value ) {
 	foreach ( $GLOBALS['wotoyi_users'] ?? array() as $u ) {
-		if ( ( $u[ $field ] ?? null ) === $value ) {
+		if ( strtolower( (string) ( $u[ $field ] ?? '' ) ) === strtolower( (string) $value ) ) { // MySQL's default collation is case-insensitive.
 			return (object) $u;
 		}
 	}

@@ -34,7 +34,9 @@ final class Settings {
 			'lead_retention_disconnected_days' => 30, // Leads of a disconnected dealer: deleted N days after disconnection.
 			'lead_consent_version' => 'v1',   // Version label of the consent text shown with the form (client may send its own).
 			'lead_dealer_daily_cap'   => 200, // Leads per dealer per rolling day (fixed 24 h window); 0 = unlimited.
-			'lead_contact_daily_cap'  => 5,   // Leads per phone/email per day across the marketplace; 0 = unlimited.
+			'lead_contact_daily_cap'  => 10,  // Leads per phone/email per day across the marketplace; 0 = unlimited.
+			'lead_contact_dealer_daily_cap' => 5, // Leads per phone/email to the SAME dealer per day; 0 = unlimited.
+			'lead_challenge_required' => false, // true: refuse leads unless a `wotoyi_mp_lead_challenge` provider returned true.
 			'delete_on_uninstall' => false,
 		);
 	}

@@ -154,6 +154,15 @@ final class TenantDb {
 		return array( $sql, $args );
 	}
 
+	/** A failed read must never look like "no rows": surface it (message stays in the PHP error log, not in responses). */
+	private static function check( string $what ): void {
+		$err = (string) self::wpdb()->last_error;
+		if ( '' !== $err ) {
+			error_log( 'wotoyi-dealer-platform database error in ' . $what ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			throw new \RuntimeException( 'db_error:' . $what );
+		}
+	}
+
 	private static function prep( string $sql, array $args ): string {
 		return self::wpdb()->prepare( $sql, $args ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	}
@@ -203,7 +212,9 @@ final class TenantDb {
 				$args[] = max( 0, (int) $opts['offset'] );
 			}
 		}
-		return (array) self::wpdb()->get_results( self::prep( $sql, $args ), ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		$rows = (array) self::wpdb()->get_results( self::prep( $sql, $args ), ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		self::check( 'select:' . $logical );
+		return $rows;
 	}
 
 	/** @param array<string,mixed> $where @return array<string,mixed>|null */
@@ -220,7 +231,9 @@ final class TenantDb {
 	public static function count( string $logical, array $where = array() ): int {
 		$table = self::scoped( $logical );
 		[ $w, $args ] = self::where( $logical, $where );
-		return (int) self::wpdb()->get_var( self::prep( "SELECT COUNT(*) FROM {$table} WHERE {$w}", $args ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		$n = (int) self::wpdb()->get_var( self::prep( "SELECT COUNT(*) FROM {$table} WHERE {$w}", $args ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		self::check( 'count:' . $logical );
+		return $n;
 	}
 
 	/** @param array<string,mixed> $where */
@@ -229,6 +242,7 @@ final class TenantDb {
 		$c     = self::col( $logical, $column );
 		[ $w, $args ] = self::where( $logical, $where );
 		$v = self::wpdb()->get_var( self::prep( "SELECT COALESCE(SUM({$c}),0) FROM {$table} WHERE {$w}", $args ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		self::check( 'sum:' . $logical );
 		return false !== strpos( (string) $v, '.' ) ? (float) $v : (int) $v;
 	}
 
@@ -243,7 +257,8 @@ final class TenantDb {
 		$c     = self::col( $logical, $column );
 		[ $w, $args ] = self::where( $logical, $where );
 		$rows = (array) self::wpdb()->get_results( self::prep( "SELECT {$c} AS k, COUNT(*) AS n FROM {$table} WHERE {$w} GROUP BY {$c}", $args ), ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
-		$out  = array();
+		self::check( 'group:' . $logical );
+		$out = array();
 		foreach ( $rows as $r ) {
 			$out[ (string) $r['k'] ] = (int) $r['n'];
 		}

@@ -153,8 +153,19 @@ final class PublicController {
 
 	/* ------------------------------ Leads ------------------------------ */
 
-	public function lead_token(): \WP_REST_Response {
-		$r = new \WP_REST_Response( array( 'token' => LeadGuard::issue(), 'min_age' => LeadGuard::MIN_AGE ) );
+	/** Optional `vehicle=<ref>` or `service=<ref>` binds the token to that listing (recommended). */
+	public function lead_token( ?\WP_REST_Request $request = null ): \WP_REST_Response {
+		$target = '';
+		if ( $request ) {
+			foreach ( array( 'vehicle', 'service' ) as $type ) {
+				$ref = $request->get_param( $type );
+				if ( is_string( $ref ) && '' !== $ref && strlen( $ref ) <= 190 ) {
+					$target = LeadGuard::target( $type, $ref );
+					break;
+				}
+			}
+		}
+		$r = new \WP_REST_Response( array( 'token' => LeadGuard::issue( $target ), 'min_age' => LeadGuard::MIN_AGE, 'bound' => '' !== $target ) );
 		$r->header( 'Cache-Control', 'no-store' );
 		return $r;
 	}
@@ -166,12 +177,24 @@ final class PublicController {
 		if ( ! empty( $p['website'] ) ) {
 			return new \WP_REST_Response( array( 'ok' => true ), 201 );
 		}
-		if ( ! LeadGuard::valid( $p['token'] ?? null ) ) {
-			return new \WP_Error( 'wotoyi_challenge_failed', 'Form token missing, too fresh or expired.', array( 'status' => 400 ) );
+		$target_key = ! empty( $p['vehicle'] ) && is_string( $p['vehicle'] ) ? LeadGuard::target( 'vehicle', $p['vehicle'] ) : ( ! empty( $p['service'] ) && is_string( $p['service'] ) ? LeadGuard::target( 'service', $p['service'] ) : '' );
+		if ( ! LeadGuard::valid( $p['token'] ?? null, $target_key ) ) {
+			return new \WP_Error( 'wotoyi_challenge_failed', 'Form token missing, too fresh, expired, already used or issued to another visitor/listing.', array( 'status' => 400 ) );
 		}
-		$ip_hash = Ip::hash( Ip::client() );
+		$ip_hash = Ip::hash( Ip::client() ); // IPv6 addresses are limited per /64.
 		if ( ! RateLimiter::allow( 'lead:' . $ip_hash, Settings::int( 'lead_rate_limit' ), 600 ) ) {
 			return new \WP_Error( 'wotoyi_rate_limited', 'Too many requests.', array( 'status' => 429 ) );
+		}
+		// Optional challenge provider (Turnstile/hCaptcha/...): return true to pass, a WP_Error or false to refuse, null = none installed.
+		$challenge = apply_filters( 'wotoyi_mp_lead_challenge', null, $p, $request );
+		if ( is_wp_error( $challenge ) ) {
+			return $challenge;
+		}
+		if ( null === $challenge && Settings::get( 'lead_challenge_required' ) ) {
+			return new \WP_Error( 'wotoyi_challenge_unavailable', 'A challenge is required but no provider is installed.', array( 'status' => 503 ) );
+		}
+		if ( null !== $challenge && true !== $challenge ) {
+			return new \WP_Error( 'wotoyi_challenge_failed', 'Challenge failed.', array( 'status' => 400 ) );
 		}
 
 		$consent = in_array( $p['consent'] ?? null, array( true, 1, '1', 'true', 'yes', 'on' ), true );
@@ -203,6 +226,26 @@ final class PublicController {
 		if ( '' === $phone && '' === $email ) {
 			return new \WP_Error( 'wotoyi_contact_required', 'A phone number or an email address is required.', array( 'status' => 422 ) );
 		}
+
+		// Abuse caps (after validation, so refused requests do not burn them): per dealer, per contact, per contact and dealer.
+		$dealer_cap = Settings::int( 'lead_dealer_daily_cap' );
+		if ( $dealer_cap > 0 && ! RateLimiter::allow( 'leaddealer:' . (int) $target['dealer_id'], $dealer_cap, DAY_IN_SECONDS ) ) {
+			return new \WP_Error( 'wotoyi_rate_limited', 'This dealer cannot receive more requests today.', array( 'status' => 429 ) );
+		}
+		$contact_cap = Settings::int( 'lead_contact_daily_cap' );
+		$pair_cap    = Settings::int( 'lead_contact_dealer_daily_cap' );
+		foreach ( array_filter( array( '' !== $phone ? 'p:' . preg_replace( '/\D/', '', $phone ) : '', '' !== $email ? 'e:' . strtolower( $email ) : '' ) ) as $contact ) {
+			$h = Crypto::keyed_hash( 'lead-contact', $contact );
+			if ( ( $contact_cap > 0 && ! RateLimiter::allow( 'leadcontact:' . $h, $contact_cap, DAY_IN_SECONDS ) )
+				|| ( $pair_cap > 0 && ! RateLimiter::allow( 'leadpair:' . $h . ':' . (int) $target['dealer_id'], $pair_cap, DAY_IN_SECONDS ) ) ) {
+				return new \WP_Error( 'wotoyi_rate_limited', 'Too many requests for this contact.', array( 'status' => 429 ) );
+			}
+		}
+		if ( ! LeadGuard::consume( (string) $p['token'] ) ) { // Single use: a second request with the same token is refused.
+			return new \WP_Error( 'wotoyi_challenge_failed', 'Form token already used.', array( 'status' => 400 ) );
+		}
+
+		$consent_version = isset( $p['consent_version'] ) && is_string( $p['consent_version'] ) && 1 === preg_match( '/^[A-Za-z0-9_.\-]{1,32}$/', $p['consent_version'] ) ? $p['consent_version'] : substr( (string) Settings::get( 'lead_consent_version' ), 0, 32 );
 		$channel = isset( $p['channel'] ) && is_string( $p['channel'] ) && in_array( $p['channel'], LeadRepository::CHANNELS, true ) ? $p['channel'] : 'web';
 		$locale  = isset( $p['locale'] ) && is_string( $p['locale'] ) && in_array( $p['locale'], Enums::LANGS, true ) ? $p['locale'] : null;
 
@@ -219,6 +262,8 @@ final class PublicController {
 				'channel'    => $channel,
 				'locale'     => $locale,
 				'consent'    => true,
+				'consent_version' => $consent_version,
+				'consent_purpose' => 'transmit_to_dealer', // Proof of what the buyer agreed to: sending this request to the vehicle/service's dealer.
 				'ip_hash'    => $ip_hash,
 			)
 		);

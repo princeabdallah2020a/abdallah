@@ -83,6 +83,33 @@ final class Directory {
 		return $row ?: null;
 	}
 
+	/**
+	 * Update the profile fields a tenant owner may change.
+	 *
+	 * @param array<string,mixed> $data name, city, country, currency, locale
+	 */
+	public static function update_profile( int $tenant_id, array $data ): void {
+		$set = array();
+		if ( isset( $data['name'] ) && '' !== trim( sanitize_text_field( (string) $data['name'] ) ) ) {
+			$set['name'] = mb_substr( trim( sanitize_text_field( (string) $data['name'] ) ), 0, 160 );
+		}
+		if ( array_key_exists( 'city', $data ) ) {
+			$set['city'] = null === $data['city'] ? null : mb_substr( sanitize_text_field( (string) $data['city'] ), 0, 80 );
+		}
+		if ( isset( $data['country'] ) && 1 === preg_match( '/^[A-Za-z]{2}$/', (string) $data['country'] ) ) {
+			$set['country'] = strtoupper( (string) $data['country'] );
+		}
+		if ( isset( $data['currency'] ) && 1 === preg_match( '/^[A-Za-z]{3}$/', (string) $data['currency'] ) ) {
+			$set['currency'] = strtoupper( (string) $data['currency'] );
+		}
+		if ( isset( $data['locale'] ) && in_array( $data['locale'], array( 'fr', 'en', 'wo', 'ar' ), true ) ) {
+			$set['locale'] = $data['locale'];
+		}
+		if ( $set ) {
+			TenantDb::wpdb()->update( self::t( 'tenants' ), $set + array( 'updated_at' => Clock::mysql() ), array( 'id' => $tenant_id ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		}
+	}
+
 	/** @return list<array<string,mixed>> Platform operator view: tenant rows only (no business data). */
 	public static function list_tenants( int $limit = 100 ): array {
 		return (array) TenantDb::wpdb()->get_results( self::prep( 'SELECT * FROM ' . self::t( 'tenants' ) . ' ORDER BY id ASC LIMIT %d', array( max( 1, min( 500, $limit ) ) ) ), ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery

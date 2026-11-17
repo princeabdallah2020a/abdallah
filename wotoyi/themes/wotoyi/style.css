@@ -1,0 +1,15 @@
+/*
+Theme Name: Wotoyi
+Theme URI: https://wotoyi.com
+Author: Wotoyi
+Description: Wotoyi Marketplace v2 "Luxe Motion" block theme. Light/dark, RTL-ready, self-hosted fonts, per-template assets with inline critical CSS. Works on its own (graceful empty states) and is filled by the wotoyi-marketplace plugin through documented filters (see README.md).
+Version: 2.0.0
+Requires at least: 6.6
+Tested up to: 6.7
+Requires PHP: 8.0
+License: GNU General Public License v2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: wotoyi
+Tags: block-patterns, full-site-editing, block-styles, custom-colors, editor-style, rtl-language-support, translation-ready, accessibility-ready
+*/
+/* Styles are loaded per template from assets/css (see inc/assets.php). This file only carries the theme header. */

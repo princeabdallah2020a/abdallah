@@ -147,6 +147,10 @@ class wpdb { // phpcs:ignore
 		return $rows[0] ?? null;
 	}
 
+	public function get_col( string $sql ): array {
+		return array_map( static fn( array $r ) => array_values( $r )[0], $this->get_results( $sql ) );
+	}
+
 	public function get_var( string $sql ) {
 		$row = $this->get_row( $sql );
 		return $row ? array_values( $row )[0] : null;
