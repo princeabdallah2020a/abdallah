@@ -87,3 +87,7 @@ node_modules/
 *.zip
 .env
 *.log
+
+# Wotoyi: project scripts live in bin/ folders and must be tracked
+!wotoyi/**/bin/
+!wotoyi/**/bin/**
