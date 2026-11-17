@@ -1,7 +1,7 @@
 # STATUS (update after every slice)
-Updated: 2026-11-17 16:30
-- Done (verified by CEO re-run): design spec + tokens (contrast 0 failures); animated prototype (3 pages, no console errors); wotoyi-marketplace plugin (215 tests pass on SQLite shim) incl. security fixes from CISO review; wotoyi-dealer-platform core plugin (7 tests + 7 cross-plugin integration tests pass on SQLite shim).
-- PARTIAL: block theme `wotoyi` — assets, fonts, PHP helpers exist; theme.json, templates, parts, patterns MISSING (agent stopped). Being resumed.
-- Unproven: real MySQL/WordPress for both plugins; Lighthouse; Coach review (Fable unavailable -> Opus fallback).
-- Next: finish theme; wotoyi-i18n, wotoyi-seo, wotoyi-builder, wotoyi-ai, wotoyi-pro PWA, wotoyi-connector, 4 dealer themes; CISO review of dealer-platform; Coach gate M2.
-- Blockers (founder only): payment provider, Wolof/Arabic native review, legal review, domain purchase.
+Updated: 2026-11-17 17:10
+- Coach gate M2 (marketplace slice): SENT BACK (wotoyi/COACH-REPORT-M2.md). Blockers: theme never run in real WordPress; theme is French-only (no wotoyi-i18n); Dealer Platform H1/H2 security findings open.
+- Delivered to founder as TEST package (not validated): prototype zip, theme, marketplace plugin, dealer-platform plugin (pre-fix), demo plugin, PPTX guide.
+- In progress: Dealer Platform security fixes (H1,H2,M1-M5); theme/prototype defect fixes (accents, headline w/o JS, Arabic band, assistant overlap, filters, lead form); distinct vehicle SVG silhouettes.
+- Next: re-run Coach on a FROZEN commit; build wotoyi-i18n, wotoyi-seo, wotoyi-builder, wotoyi-ai, wotoyi-pro, wotoyi-connector, 4 dealer themes.
+- Founder-only: real vehicle renders/photos source; payment provider; Wolof/Arabic native review; legal review (incl. CDP declaration); domain purchase; hosting for real WordPress test.

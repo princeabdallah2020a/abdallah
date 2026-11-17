@@ -49,4 +49,12 @@ final class Settings {
 	public static function allow_insecure_marketplace(): bool {
 		return defined( 'WOTOYI_DP_ALLOW_INSECURE_MARKETPLACE' ) && true === WOTOYI_DP_ALLOW_INSECURE_MARKETPLACE;
 	}
+
+	/**
+	 * Optional fixed marketplace origin (wp-config.php: define( 'WOTOYI_DP_MARKETPLACE_URL', 'https://wotoyi.com' )).
+	 * When set, pairing can only ever target this origin (SECURITY-REVIEW M1); the dealer need not type a URL.
+	 */
+	public static function pinned_marketplace_url(): ?string {
+		return defined( 'WOTOYI_DP_MARKETPLACE_URL' ) && is_string( WOTOYI_DP_MARKETPLACE_URL ) && '' !== WOTOYI_DP_MARKETPLACE_URL ? rtrim( WOTOYI_DP_MARKETPLACE_URL, '/' ) : null;
+	}
 }
