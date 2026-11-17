@@ -38,6 +38,14 @@ final class Handler {
 		return self::guard( static fn() => $fn( $request ) );
 	}
 
+	/** For routes that need a logged-in user but no tenant (invitation acceptance). */
+	public static function run_user( \WP_REST_Request $request, callable $fn ) {
+		if ( ! is_user_logged_in() ) {
+			return new \WP_Error( 'wotoyi_unauthorized', 'Authentication required.', array( 'status' => 401 ) );
+		}
+		return self::guard( static fn() => $fn( $request ) );
+	}
+
 	private static function guard( callable $call ) {
 		try {
 			$out = $call();

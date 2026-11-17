@@ -15,7 +15,7 @@
 defined( 'ABSPATH' ) || exit;
 
 define( 'WOTOYI_DP_VERSION', '0.1.0' );
-define( 'WOTOYI_DP_DB_VERSION', '1' );
+define( 'WOTOYI_DP_DB_VERSION', '2' );
 define( 'WOTOYI_DP_FILE', __FILE__ );
 define( 'WOTOYI_DP_DIR', plugin_dir_path( __FILE__ ) );
 

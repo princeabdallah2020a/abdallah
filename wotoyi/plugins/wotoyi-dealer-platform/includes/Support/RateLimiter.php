@@ -36,4 +36,12 @@ final class RateLimiter {
 		$key = self::key( $bucket, $window );
 		set_transient( $key, (int) get_transient( $key ) + 1, $window + 5 );
 	}
+
+	/** Count $n units (for example rows read) in the window; true while the running total stays within the limit. */
+	public static function consume( string $bucket, int $n, int $limit, int $window ): bool {
+		$key   = self::key( $bucket, $window );
+		$count = (int) get_transient( $key ) + max( 0, $n );
+		set_transient( $key, $count, $window + 5 );
+		return $count <= $limit;
+	}
 }

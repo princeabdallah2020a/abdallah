@@ -23,9 +23,10 @@ final class TenantService {
 	 * Platform operator action: create a dealer account and its first owner.
 	 *
 	 * @param array<string,mixed> $data name, slug?, country?, city?, currency?, locale?
+	 * @param int                 $actor WordPress user id of the operator performing the action (audit actor, M3).
 	 * @return array<string,mixed>
 	 */
-	public function create( array $data, int $owner_user_id ): array {
+	public function create( array $data, int $owner_user_id, int $actor = 0 ): array {
 		if ( $owner_user_id <= 0 || null === get_userdata( $owner_user_id ) || false === get_userdata( $owner_user_id ) ) {
 			throw ApiException::invalid( 'owner_user_id must be an existing user.', array( 'fields' => array( 'owner_user_id' ) ) );
 		}
@@ -36,9 +37,9 @@ final class TenantService {
 		}
 		TenantContext::run(
 			$tenant,
-			function () use ( $owner_user_id ): void {
+			function () use ( $owner_user_id, $actor ): void {
 				$m = $this->members->insert( $owner_user_id, 'owner', null );
-				AuditLog::record( 'tenant.create', 'tenants', TenantContext::uuid(), array( 'owner' => $m['uuid'] ) );
+				AuditLog::record( 'tenant.create', 'tenants', TenantContext::uuid(), array( 'owner' => $m['uuid'], 'owner_user' => $owner_user_id ), $actor, 'platform' );
 			}
 		);
 		return $this->present( $tenant );

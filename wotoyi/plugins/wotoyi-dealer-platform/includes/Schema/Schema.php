@@ -22,7 +22,7 @@ final class Schema {
 
 	/** @return list<string> Tables that are NOT tenant scoped (only Data\Directory touches them). */
 	public static function global_names(): array {
-		return array( 'tenants' );
+		return array( 'tenants', 'invitations' );
 	}
 
 	/** @return list<string> */
@@ -98,6 +98,28 @@ final class Schema {
   UNIQUE KEY uuid (uuid),
   UNIQUE KEY slug (slug),
   KEY status (status)
+) $charset;";
+
+		// Pending/used member invitations (H1). Global because the invitee has no membership yet; only Data\Invitations touches it.
+		$sql['invitations'] = "CREATE TABLE {$t('invitations')} (
+  id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  uuid CHAR(36) NOT NULL,
+  tenant_id BIGINT(20) UNSIGNED NOT NULL,
+  token_hash CHAR(64) NOT NULL,
+  email VARCHAR(190) NOT NULL,
+  role VARCHAR(16) NOT NULL,
+  display_name VARCHAR(120) DEFAULT NULL,
+  invited_by BIGINT(20) UNSIGNED NOT NULL DEFAULT 0,
+  status VARCHAR(12) NOT NULL DEFAULT 'pending',
+  expires_at DATETIME NOT NULL,
+  created_at DATETIME NOT NULL,
+  accepted_at DATETIME DEFAULT NULL,
+  accepted_by BIGINT(20) UNSIGNED DEFAULT NULL,
+  PRIMARY KEY  (id),
+  UNIQUE KEY uuid (uuid),
+  UNIQUE KEY token_hash (token_hash),
+  KEY tenant_status (tenant_id,status),
+  KEY tenant_email (tenant_id,email)
 ) $charset;";
 
 		$sql['members'] = "CREATE TABLE {$t('members')} (
@@ -188,11 +210,14 @@ final class Schema {
   id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   tenant_id BIGINT(20) UNSIGNED NOT NULL,
   user_id BIGINT(20) UNSIGNED NOT NULL DEFAULT 0,
+  actor_type VARCHAR(10) NOT NULL DEFAULT 'user',
   action VARCHAR(60) NOT NULL,
   entity_type VARCHAR(24) DEFAULT NULL,
   entity_uuid CHAR(36) DEFAULT NULL,
   meta TEXT DEFAULT NULL,
   ip_hash CHAR(64) DEFAULT NULL,
+  prev_hash CHAR(64) DEFAULT NULL,
+  hash CHAR(64) DEFAULT NULL,
   created_at DATETIME NOT NULL,
   PRIMARY KEY  (id),
   KEY tenant_created (tenant_id,created_at),

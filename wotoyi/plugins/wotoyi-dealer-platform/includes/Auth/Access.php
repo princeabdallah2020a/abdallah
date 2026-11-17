@@ -60,6 +60,14 @@ final class Access {
 		return $write ? self::check_nonce( $request ) : true;
 	}
 
+	/** Logged-in user, no tenant needed (accepting an invitation: the invitee has no membership yet). Nonce on writes. */
+	public static function authorize_user( \WP_REST_Request $request, bool $write ): bool|\WP_Error {
+		if ( ! is_user_logged_in() ) {
+			return new \WP_Error( 'wotoyi_unauthorized', 'Authentication required.', array( 'status' => 401 ) );
+		}
+		return $write ? self::check_nonce( $request ) : true;
+	}
+
 	/** Any logged-in user with at least one membership (profile endpoint). */
 	public static function authorize_member( \WP_REST_Request $request ): bool|\WP_Error {
 		return self::authorize( $request, 'dashboard.read', false ) ;

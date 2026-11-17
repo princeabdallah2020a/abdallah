@@ -32,6 +32,8 @@ abstract class Wotoyi_Test_Case {
 		$GLOBALS['wpdb']              = new wpdb();
 		$GLOBALS['wotoyi_wp_users']   = array();
 		$GLOBALS['wotoyi_http_log']   = array();
+		$GLOBALS['wotoyi_mail_log']   = array();
+		\Wotoyi\DealerPlatform\Sync\Pairing::set_resolver( static fn( string $host ): array => array( '203.0.113.50' ) ); // No real DNS in tests.
 		$GLOBALS['wotoyi_http_handler'] = null;
 		$GLOBALS['wotoyi_cron_single'] = array();
 		Plugin::reset();

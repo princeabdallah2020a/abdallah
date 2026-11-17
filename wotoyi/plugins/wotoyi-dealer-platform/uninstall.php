@@ -7,7 +7,7 @@
 
 defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
 
-define( 'WOTOYI_DP_DB_VERSION', '1' );
+define( 'WOTOYI_DP_DB_VERSION', '2' );
 require_once __DIR__ . '/includes/autoload.php';
 
 $settings = get_option( 'wotoyi_dp_settings', array() );

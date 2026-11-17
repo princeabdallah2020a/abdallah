@@ -11,7 +11,7 @@ define( 'HOUR_IN_SECONDS', 3600 );
 define( 'DAY_IN_SECONDS', 86400 );
 define( 'ARRAY_A', 'ARRAY_A' );
 define( 'WOTOYI_DP_VERSION', 'test' );
-define( 'WOTOYI_DP_DB_VERSION', '1' );
+define( 'WOTOYI_DP_DB_VERSION', '2' );
 define( 'WOTOYI_DP_DIR', dirname( __DIR__, 2 ) . '/' );
 define( 'WOTOYI_DP_FILE', WOTOYI_DP_DIR . 'wotoyi-dealer-platform.php' );
 if ( ! getenv( 'WOTOYI_TEST_NO_KEY' ) ) {
@@ -233,10 +233,13 @@ function wp_generate_password( int $len = 12, bool $special = true, bool $extra 
 function wp_schedule_single_event( int $t, string $h, array $args = array() ) { $GLOBALS['wotoyi_cron_single'][ $h ] = $t; return true; }
 function wp_new_user_notification( int $id, $deprecated = null, string $notify = '' ): void { $GLOBALS['wotoyi_notified'][] = $id; }
 /* Users registry: $GLOBALS['wotoyi_wp_users'][id] = ['email'=>...]. */
-function get_userdata( int $id ) { return isset( $GLOBALS['wotoyi_wp_users'][ $id ] ) ? (object) ( array( 'ID' => $id ) + $GLOBALS['wotoyi_wp_users'][ $id ] ) : false; }
+function get_userdata( int $id ) { return isset( $GLOBALS['wotoyi_wp_users'][ $id ] ) ? (object) ( array( 'ID' => $id, 'user_email' => $GLOBALS['wotoyi_wp_users'][ $id ]['email'] ) + $GLOBALS['wotoyi_wp_users'][ $id ] ) : false; }
+/* Mail: captured, never sent. $GLOBALS['wotoyi_mail_log'][] = [to, subject, message]. */
+function wp_mail( $to, string $subject, string $message, $headers = '' ): bool { $GLOBALS['wotoyi_mail_log'][] = array( 'to' => $to, 'subject' => $subject, 'message' => $message ); return true; }
+function home_url( string $path = '' ): string { return 'https://dealer.example.com' . $path; }
 function get_user_by( string $field, string $value ) {
 	foreach ( $GLOBALS['wotoyi_wp_users'] ?? array() as $id => $u ) {
-		if ( 'email' === $field && strtolower( $u['email'] ) === strtolower( $value ) ) { return (object) ( array( 'ID' => $id ) + $u ); }
+		if ( 'email' === $field && strtolower( $u['email'] ) === strtolower( $value ) ) { return (object) ( array( 'ID' => $id, 'user_email' => $u['email'] ) + $u ); }
 	}
 	return false;
 }

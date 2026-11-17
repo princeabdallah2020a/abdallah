@@ -274,6 +274,9 @@ final class TenantDb {
 	 */
 	public static function update( string $logical, array $where, array $data ): int {
 		$table = self::scoped( $logical );
+		if ( 'audit_log' === $logical ) {
+			throw new \InvalidArgumentException( 'audit_log_is_append_only' ); // SECURITY-REVIEW M3.
+		}
 		if ( ! $where || ! $data ) {
 			throw new \InvalidArgumentException( 'update_requires_where_and_data' );
 		}
