@@ -1,0 +1,35 @@
+<!-- wp:template-part {"slug":"header","tagName":"div"} /-->
+
+<!-- wp:group {"tagName":"main","anchor":"main"} -->
+<main class="wp-block-group" id="main"><!-- wp:group {"className":"wy-container wy-page-hero"} -->
+<div class="wp-block-group wy-container wy-page-hero"><!-- wp:heading {"level":1,"className":"wy-display-m"} -->
+<h1 class="wp-block-heading wy-display-m">Actualités</h1>
+<!-- /wp:heading -->
+</div>
+<!-- /wp:group -->
+<!-- wp:query {"queryId":0,"query":{"perPage":9,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"","inherit":true},"className":"wy-container"} -->
+<div class="wp-block-query wy-container">
+<!-- wp:post-template {"className":"wy-posts"} -->
+<!-- wp:group {"className":"wy-post"} -->
+<div class="wp-block-group wy-post"><!-- wp:post-title {"level":2,"isLink":true} /-->
+<!-- wp:post-date /-->
+<!-- wp:post-excerpt {"excerptLength":28} /-->
+</div>
+<!-- /wp:group -->
+<!-- /wp:post-template -->
+<!-- wp:query-pagination -->
+<!-- wp:query-pagination-previous /-->
+<!-- wp:query-pagination-numbers /-->
+<!-- wp:query-pagination-next /-->
+<!-- /wp:query-pagination -->
+<!-- wp:query-no-results -->
+<!-- wp:paragraph -->
+<p>Aucun article pour le moment.</p>
+<!-- /wp:paragraph -->
+<!-- /wp:query-no-results -->
+</div>
+<!-- /wp:query -->
+</main>
+<!-- /wp:group -->
+
+<!-- wp:template-part {"slug":"footer","tagName":"div"} /-->

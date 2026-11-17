@@ -1,0 +1,488 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "settings": {
+    "appearanceTools": true,
+    "useRootPaddingAwareAlignments": false,
+    "layout": {
+      "contentSize": "var(--wy-layout-measure)",
+      "wideSize": "var(--wy-layout-container)"
+    },
+    "color": {
+      "custom": false,
+      "customGradient": false,
+      "defaultPalette": false,
+      "defaultGradients": false,
+      "defaultDuotone": false,
+      "palette": [
+        {
+          "slug": "base",
+          "name": "Porcelaine / Encre (fond)",
+          "color": "var(--wy-color-base)"
+        },
+        {
+          "slug": "surface",
+          "name": "Surface",
+          "color": "var(--wy-color-surface)"
+        },
+        {
+          "slug": "surface-2",
+          "name": "Sable (surface 2)",
+          "color": "var(--wy-color-surface-2)"
+        },
+        {
+          "slug": "surface-3",
+          "name": "Sable profond (surface 3)",
+          "color": "var(--wy-color-surface-3)"
+        },
+        {
+          "slug": "contrast",
+          "name": "Encre (texte)",
+          "color": "var(--wy-color-contrast)"
+        },
+        {
+          "slug": "muted",
+          "name": "Texte secondaire",
+          "color": "var(--wy-color-muted)"
+        },
+        {
+          "slug": "border",
+          "name": "Filet",
+          "color": "var(--wy-color-border)"
+        },
+        {
+          "slug": "border-strong",
+          "name": "Bordure composant",
+          "color": "var(--wy-color-border-strong)"
+        },
+        {
+          "slug": "accent",
+          "name": "Or (remplissage)",
+          "color": "var(--wy-color-accent)"
+        },
+        {
+          "slug": "accent-ink",
+          "name": "Texte sur or",
+          "color": "var(--wy-color-accent-ink)"
+        },
+        {
+          "slug": "accent-text",
+          "name": "Or (texte)",
+          "color": "var(--wy-color-accent-text)"
+        },
+        {
+          "slug": "accent-graphic",
+          "name": "Or (icone)",
+          "color": "var(--wy-color-accent-graphic)"
+        },
+        {
+          "slug": "secondary",
+          "name": "Teal",
+          "color": "var(--wy-color-secondary)"
+        },
+        {
+          "slug": "secondary-ink",
+          "name": "Texte sur teal",
+          "color": "var(--wy-color-secondary-ink)"
+        },
+        {
+          "slug": "success",
+          "name": "Succes",
+          "color": "var(--wy-color-success)"
+        },
+        {
+          "slug": "warning",
+          "name": "Alerte",
+          "color": "var(--wy-color-warning)"
+        },
+        {
+          "slug": "danger",
+          "name": "Danger",
+          "color": "var(--wy-color-danger)"
+        },
+        {
+          "slug": "night",
+          "name": "Nuit",
+          "color": "var(--wy-color-night)"
+        },
+        {
+          "slug": "on-night",
+          "name": "Texte sur nuit",
+          "color": "var(--wy-color-on-night)"
+        },
+        {
+          "slug": "on-night-muted",
+          "name": "Texte secondaire sur nuit",
+          "color": "var(--wy-color-on-night-muted)"
+        },
+        {
+          "slug": "whatsapp",
+          "name": "WhatsApp",
+          "color": "var(--wy-color-whatsapp)"
+        }
+      ],
+      "gradients": [
+        {
+          "slug": "sunset",
+          "name": "Coucher de soleil",
+          "gradient": "var(--wy-gradient-sunset)"
+        },
+        {
+          "slug": "sunset-text",
+          "name": "Coucher de soleil (texte)",
+          "gradient": "var(--wy-gradient-sunset-text)"
+        }
+      ],
+      "duotone": []
+    },
+    "typography": {
+      "customFontSize": true,
+      "fluid": false,
+      "defaultFontSizes": false,
+      "writingMode": false,
+      "fontFamilies": [
+        {
+          "slug": "display",
+          "name": "Instrument Serif (titres)",
+          "fontFamily": "var(--wy-font-display)"
+        },
+        {
+          "slug": "sans",
+          "name": "Manrope (interface)",
+          "fontFamily": "var(--wy-font-sans)"
+        },
+        {
+          "slug": "display-ar",
+          "name": "Noto Kufi Arabic (titres AR)",
+          "fontFamily": "var(--wy-font-display-ar)"
+        },
+        {
+          "slug": "sans-ar",
+          "name": "IBM Plex Sans Arabic (texte AR)",
+          "fontFamily": "var(--wy-font-sans-ar)"
+        }
+      ],
+      "fontSizes": [
+        {
+          "slug": "display-xl",
+          "name": "Display XL",
+          "size": "var(--wy-font-size-display-xl)"
+        },
+        {
+          "slug": "display-l",
+          "name": "Display L",
+          "size": "var(--wy-font-size-display-l)"
+        },
+        {
+          "slug": "display-m",
+          "name": "Display M",
+          "size": "var(--wy-font-size-display-m)"
+        },
+        {
+          "slug": "h3",
+          "name": "Titre 3",
+          "size": "var(--wy-font-size-h3)"
+        },
+        {
+          "slug": "h4",
+          "name": "Titre 4",
+          "size": "var(--wy-font-size-h4)"
+        },
+        {
+          "slug": "body-l",
+          "name": "Corps large",
+          "size": "var(--wy-font-size-body-l)"
+        },
+        {
+          "slug": "body",
+          "name": "Corps",
+          "size": "var(--wy-font-size-body)"
+        },
+        {
+          "slug": "body-s",
+          "name": "Corps petit",
+          "size": "var(--wy-font-size-body-s)"
+        },
+        {
+          "slug": "caption",
+          "name": "Legende",
+          "size": "var(--wy-font-size-caption)"
+        },
+        {
+          "slug": "overline",
+          "name": "Surtitre",
+          "size": "var(--wy-font-size-overline)"
+        },
+        {
+          "slug": "price-l",
+          "name": "Prix L",
+          "size": "var(--wy-font-size-price-l)"
+        },
+        {
+          "slug": "price",
+          "name": "Prix",
+          "size": "var(--wy-font-size-price)"
+        }
+      ]
+    },
+    "spacing": {
+      "units": [
+        "px",
+        "rem",
+        "%",
+        "vw",
+        "svh"
+      ],
+      "spacingSizes": [
+        {
+          "slug": "1",
+          "name": "1",
+          "size": "var(--wy-space-1)"
+        },
+        {
+          "slug": "2",
+          "name": "2",
+          "size": "var(--wy-space-2)"
+        },
+        {
+          "slug": "3",
+          "name": "3",
+          "size": "var(--wy-space-3)"
+        },
+        {
+          "slug": "4",
+          "name": "4",
+          "size": "var(--wy-space-4)"
+        },
+        {
+          "slug": "5",
+          "name": "5",
+          "size": "var(--wy-space-5)"
+        },
+        {
+          "slug": "6",
+          "name": "6",
+          "size": "var(--wy-space-6)"
+        },
+        {
+          "slug": "8",
+          "name": "8",
+          "size": "var(--wy-space-8)"
+        },
+        {
+          "slug": "10",
+          "name": "10",
+          "size": "var(--wy-space-10)"
+        },
+        {
+          "slug": "12",
+          "name": "12",
+          "size": "var(--wy-space-12)"
+        },
+        {
+          "slug": "16",
+          "name": "16",
+          "size": "var(--wy-space-16)"
+        },
+        {
+          "slug": "20",
+          "name": "20",
+          "size": "var(--wy-space-20)"
+        },
+        {
+          "slug": "24",
+          "name": "24",
+          "size": "var(--wy-space-24)"
+        },
+        {
+          "slug": "32",
+          "name": "32",
+          "size": "var(--wy-space-32)"
+        },
+        {
+          "slug": "section",
+          "name": "section",
+          "size": "var(--wy-space-section)"
+        },
+        {
+          "slug": "gutter",
+          "name": "gutter",
+          "size": "var(--wy-space-gutter)"
+        }
+      ],
+      "padding": true,
+      "margin": true,
+      "blockGap": true
+    },
+    "shadow": {
+      "defaultPresets": false,
+      "presets": [
+        {
+          "slug": "elev-1",
+          "name": "Elevation 1",
+          "shadow": "var(--wy-elev-1)"
+        },
+        {
+          "slug": "elev-2",
+          "name": "Elevation 2",
+          "shadow": "var(--wy-elev-2)"
+        },
+        {
+          "slug": "elev-3",
+          "name": "Elevation 3",
+          "shadow": "var(--wy-elev-3)"
+        },
+        {
+          "slug": "elev-4",
+          "name": "Elevation 4",
+          "shadow": "var(--wy-elev-4)"
+        }
+      ]
+    },
+    "border": {
+      "radius": true,
+      "color": true,
+      "style": true,
+      "width": true
+    },
+    "custom": {
+      "layout": {
+        "header": "var(--wy-layout-header-h)",
+        "touch": "var(--wy-layout-touch-min)"
+      },
+      "radius": {
+        "xs": "var(--wy-radius-xs)",
+        "sm": "var(--wy-radius-sm)",
+        "md": "var(--wy-radius-md)",
+        "lg": "var(--wy-radius-lg)",
+        "xl": "var(--wy-radius-xl)",
+        "pill": "var(--wy-radius-pill)"
+      },
+      "motion": {
+        "easing": "var(--wy-easing-out)",
+        "ui": "var(--wy-duration-ui)"
+      }
+    },
+    "blocks": {
+      "core/button": {
+        "border": {
+          "radius": true
+        }
+      }
+    }
+  },
+  "styles": {
+    "color": {
+      "background": "var(--wy-color-base)",
+      "text": "var(--wy-color-contrast)"
+    },
+    "typography": {
+      "fontFamily": "var(--wy-font-sans)",
+      "fontSize": "var(--wy-font-size-body)",
+      "lineHeight": "1.6"
+    },
+    "spacing": {
+      "blockGap": "0"
+    },
+    "elements": {
+      "link": {
+        "color": {
+          "text": "var(--wy-color-accent-text)"
+        },
+        ":hover": {
+          "typography": {
+            "textDecoration": "underline"
+          }
+        }
+      },
+      "heading": {
+        "typography": {
+          "fontWeight": "700",
+          "lineHeight": "1.2"
+        }
+      },
+      "h1": {
+        "typography": {
+          "fontFamily": "var(--wy-font-display)",
+          "fontWeight": "400",
+          "fontSize": "var(--wy-font-size-display-m)",
+          "lineHeight": "1.08"
+        }
+      },
+      "h2": {
+        "typography": {
+          "fontFamily": "var(--wy-font-display)",
+          "fontWeight": "400",
+          "fontSize": "var(--wy-font-size-display-m)",
+          "lineHeight": "1.08"
+        }
+      },
+      "h3": {
+        "typography": {
+          "fontSize": "var(--wy-font-size-h3)",
+          "letterSpacing": "-0.01em"
+        }
+      },
+      "h4": {
+        "typography": {
+          "fontSize": "var(--wy-font-size-h4)"
+        }
+      },
+      "button": {
+        "color": {
+          "gradient": "var(--wy-gradient-sunset)",
+          "text": "var(--wy-color-accent-ink)"
+        },
+        "border": {
+          "radius": "var(--wy-radius-pill)"
+        },
+        "typography": {
+          "fontWeight": "700"
+        },
+        "spacing": {
+          "padding": {
+            "top": "0.75rem",
+            "bottom": "0.75rem",
+            "left": "1.5rem",
+            "right": "1.5rem"
+          }
+        }
+      }
+    },
+    "blocks": {
+      "core/separator": {
+        "color": {
+          "text": "var(--wy-color-border)"
+        }
+      },
+      "core/quote": {
+        "border": {
+          "width": "0 0 0 3px",
+          "color": "var(--wy-color-accent-graphic)"
+        }
+      }
+    }
+  },
+  "templateParts": [
+    {
+      "name": "header",
+      "title": "En-tete",
+      "area": "header"
+    },
+    {
+      "name": "footer",
+      "title": "Pied de page",
+      "area": "footer"
+    }
+  ],
+  "customTemplates": [
+    {
+      "name": "page-night",
+      "title": "Page nocturne (pleine largeur)",
+      "postTypes": [
+        "page"
+      ]
+    }
+  ],
+  "patterns": []
+}

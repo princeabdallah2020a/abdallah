@@ -33,7 +33,11 @@ function wotoyi_css_for_view( string $view ): array {
 		'vehicle' => array( 'chrome', 'cards', 'vehicle' ),
 		'dealer'  => array( 'chrome', 'cards', 'dealer' ),
 	);
-	return $map[ $view ] ?? array( 'chrome', 'content' );
+	$list = $map[ $view ] ?? array( 'chrome', 'content' );
+	if ( ! is_readable( WOTOYI_THEME_DIR . '/assets/dist/chrome.css' ) ) { // no build output: the chrome bundle is chrome + motion + blocks.
+		$list = array_merge( array( 'chrome', 'motion', 'blocks' ), array_slice( $list, 1 ) );
+	}
+	return $list;
 }
 
 add_action(
@@ -41,8 +45,17 @@ add_action(
 	static function (): void {
 		$view = wotoyi_view();
 		list( $file ) = wotoyi_bundle( 'home' === $view ? 'critical-home' : 'critical-default', 'css' );
+		$css = '';
 		if ( is_readable( $file ) ) {
 			$css = (string) file_get_contents( $file ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+		} else {
+			// No build output (assets/dist) shipped: assemble the critical CSS from the sources (slower, still correct).
+			foreach ( array_merge( array( 'tokens', 'fonts', 'base' ), 'home' === $view ? array( 'home-critical' ) : array() ) as $part ) {
+				$src = WOTOYI_THEME_DIR . '/assets/css/' . $part . '.css';
+				$css .= is_readable( $src ) ? (string) file_get_contents( $src ) . "\n" : ''; // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+			}
+		}
+		if ( '' !== $css ) {
 			$css = str_replace( '../fonts/', WOTOYI_THEME_URI . '/assets/fonts/', $css );
 			echo '<style id="wy-critical">' . $css . '</style>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- theme-authored CSS.
 		}

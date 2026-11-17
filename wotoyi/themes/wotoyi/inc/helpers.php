@@ -47,7 +47,7 @@ function wotoyi_urls(): array {
 	$urls    = array(
 		'home'       => home_url( '/' ),
 		'search'     => $search,
-		'rent'       => add_query_arg( 'offer', 'rental', $search ),
+		'rent'       => add_query_arg( 'offer_type', 'rental', $search ),
 		'services'   => home_url( '/#services' ),
 		'dealers'    => home_url( '/#dealers' ),
 		'inspection' => home_url( '/#inspection' ),

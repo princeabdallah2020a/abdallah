@@ -17,6 +17,8 @@ function wotoyi_block_registry(): array {
 		'logo'           => array( 'title' => __( 'Logo Wotoyi', 'wotoyi' ), 'attrs' => array( 'variant' => $str( 'f' ) ) ),
 		'footer-brand'   => array( 'title' => __( 'Pied de page - marque', 'wotoyi' ) ),
 		'footer-columns' => array( 'title' => __( 'Pied de page - liens', 'wotoyi' ) ),
+		'footer-legal'   => array( 'title' => __( 'Pied de page - mentions', 'wotoyi' ) ),
+		'not-found'      => array( 'title' => __( 'Page introuvable (404)', 'wotoyi' ) ),
 		'chrome'         => array( 'title' => __( 'Menu mobile, assistant et bascules', 'wotoyi' ) ),
 		'quicksearch'    => array( 'title' => __( 'Recherche rapide (hero)', 'wotoyi' ) ),
 		'shortcuts'      => array( 'title' => __( 'Raccourcis par carrosserie', 'wotoyi' ) ),
@@ -79,4 +81,10 @@ add_shortcode(
 /** Section wrapper used by home blocks. */
 function wotoyi_section_open( string $id, string $tone = '', string $label_id = '' ): string {
 	return '<section class="wy-section' . ( 'sand' === $tone ? ' wy-section--sand' : '' ) . '"' . ( '' !== $id ? ' id="' . esc_attr( $id ) . '"' : '' ) . ( '' !== $label_id ? ' aria-labelledby="' . esc_attr( $label_id ) . '"' : '' ) . '>';
+}
+
+/** Block comment string for pattern files: <!-- wp:wotoyi/name {"a":"b"} /--> (attribute values already translated by the caller). */
+function wotoyi_block_comment( string $name, array $attrs = array() ): string {
+	$json = $attrs ? ' ' . wp_json_encode( $attrs, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP ) : '';
+	return '<!-- wp:wotoyi/' . sanitize_key( $name ) . $json . ' /-->';
 }

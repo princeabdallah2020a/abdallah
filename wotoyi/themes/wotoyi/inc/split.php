@@ -1,7 +1,7 @@
 <?php
 /**
  * Server-side word splitting for headlines (DESIGN 3.2 #2): words only, never letters (keeps Arabic shaping).
- * Headings with the class `wy-split` get data-motion="split" and word spans; <em> becomes the gradient emphasis.
+ * Headings with the class `wy-split-heading` (not `wy-split`, which is the two-column layout) get data-motion="split" and word spans; <em> becomes the gradient emphasis.
  *
  * @package Wotoyi\Theme
  */
@@ -47,7 +47,7 @@ add_filter(
 	'render_block_core/heading',
 	static function ( string $html, array $block ): string {
 		$class = (string) ( $block['attrs']['className'] ?? '' );
-		if ( false === strpos( ' ' . $class . ' ', ' wy-split ' ) ) {
+		if ( false === strpos( ' ' . $class . ' ', ' wy-split-heading ' ) ) {
 			return $html;
 		}
 		if ( ! preg_match( '/^(\s*<h[1-6][^>]*>)(.*)(<\/h[1-6]>\s*)$/s', $html, $m ) ) {

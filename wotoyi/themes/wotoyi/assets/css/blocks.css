@@ -31,3 +31,6 @@ html[lang="ar"] :is(.is-style-wy-display-xl,.is-style-wy-display-l,.is-style-wy-
 /* split-text words (server-side wrap, inc/split.php) */
 .wy-night .wp-block-heading,.wy-night p{color:inherit}
 @media(max-width:767.98px){.wp-block-buttons .wp-block-button{inline-size:100%}.wp-block-button__link{inline-size:100%}}
+/* search/quicksearch helpers */
+.wy-field--wide{grid-column:span 2}
+.wy-field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
