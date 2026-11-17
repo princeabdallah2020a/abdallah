@@ -42,6 +42,7 @@ The founder wants the **same rhythm and efficiency even when usage or tokens are
 4. **Keep `docs/STATUS.md` current** (done / in progress / next / blockers, one line each) after every milestone slice. On resume, read CLAUDE.md, then STATUS.md, then only the brief section for the next slice.
 5. **No questions to the founder** while building: take the best-reasoned decision, record it in PROJECT.md §23, continue. Only founder-only decisions (payment, legal, native-language review, domain purchase) are escalated, once, with a recommendation.
 6. The Coach (Fable) reviews at each milestone gate, not on every commit.
+7. **Fable unavailable?** (HTTP 429 "requires usage credits" seen 2026-11-17) — relaunch the same task on `opus` immediately; do not wait. Record it in STATUS.md.
 
 ## 4. Organisation — 6 departments, 22 agents + independent Coach
 
