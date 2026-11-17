@@ -57,7 +57,7 @@
 
   /* ---- split text (word level only: never letters, keeps Arabic shaping) ---- */
   function splitWords(el) {
-    if (el.dataset.split) return; el.dataset.split = '1'; el.classList.add('wy-split');
+    if (el.dataset.split) return; el.dataset.split = '1'; el.classList.add('wy-words');
     var n = 0;
     (function walk(node, inEm) {
       Array.prototype.slice.call(node.childNodes).forEach(function (c) {

@@ -1,7 +1,8 @@
 <?php
 /**
  * Signed sync endpoints. The dealer comes ONLY from Authenticator (never from request data).
- * Handlers read the route and the raw JSON body (both covered by the signature) and never query parameters.
+ * Handlers read the route and the raw JSON body (both covered by the signature) and never query parameters
+ * (a non-empty query string is refused by Authenticator::permission()).
  *
  * @package Wotoyi\Marketplace
  */
@@ -108,7 +109,8 @@ final class SyncController {
 		if ( is_wp_error( $body ) ) {
 			return $body;
 		}
-		$source_id = (string) $request['source_id'];
+		// M1: ONLY the signed route segment. `$request['source_id']` would be shadowed by a JSON body or query value.
+		$source_id = (string) ( $request->get_url_params()['source_id'] ?? '' );
 		if ( isset( $body['source_id'] ) && (string) $body['source_id'] !== $source_id ) {
 			return new \WP_Error( 'wotoyi_invalid_request', 'source_id in body does not match the URL.', array( 'status' => 422 ) );
 		}
@@ -173,14 +175,18 @@ final class SyncController {
 	}
 
 	public function rotate_key( \WP_REST_Request $request ): \WP_REST_Response {
-		$creds = Plugin::dealers()->rotate_secret( $this->dealer( $request ), Settings::int( 'key_grace' ) );
+		$dealer = $this->dealer( $request );
+		$creds  = Plugin::dealers()->rotate_secret( $dealer, Settings::int( 'key_grace' ) );
+		Plugin::audit()->record( 'dealer', 0, 'key.rotate', (int) $dealer['id'], array( 'key_grace' => Settings::int( 'key_grace' ) ), $this->request_id( $request ) );
 		$r     = new \WP_REST_Response( $creds + array( 'previous_valid_for' => Settings::int( 'key_grace' ) ) );
 		$r->header( 'Cache-Control', 'no-store' );
 		return $r;
 	}
 
 	public function disconnect( \WP_REST_Request $request ): \WP_REST_Response {
-		Plugin::dealers()->disconnect( (int) $this->dealer( $request )['id'] );
+		$dealer = $this->dealer( $request );
+		Plugin::dealers()->disconnect( (int) $dealer['id'] );
+		Plugin::audit()->record( 'dealer', 0, 'dealer.disconnect', (int) $dealer['id'], array( 'status' => array( $dealer['status'], 'disconnected' ) ), $this->request_id( $request ) );
 		return new \WP_REST_Response( array( 'ok' => true, 'status' => 'disconnected' ) );
 	}
 }

@@ -13,6 +13,7 @@ use Wotoyi\Marketplace\Installer;
 use Wotoyi\Marketplace\Settings;
 use Wotoyi\Marketplace\Support\Ip;
 use Wotoyi\Marketplace\Support\RateLimiter;
+use Wotoyi\Marketplace\Support\Tls;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -36,6 +37,10 @@ final class Permissions {
 
 	/** Pairing endpoint gate (the code check and its failure limits live in Pairing). */
 	public static function pairing_gate(): bool|\WP_Error {
+		$secure = Tls::require_secure_request(); // M4: the response carries the clear secret.
+		if ( is_wp_error( $secure ) ) {
+			return $secure;
+		}
 		if ( ! RateLimiter::allow( 'pair:' . Ip::hash( Ip::client() ), 20, 60 ) ) {
 			return new \WP_Error( 'wotoyi_rate_limited', 'Too many requests.', array( 'status' => 429 ) );
 		}

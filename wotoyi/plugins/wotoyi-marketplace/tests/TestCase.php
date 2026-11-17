@@ -22,6 +22,10 @@ abstract class Wotoyi_Test_Case {
 		$GLOBALS['wotoyi_user']       = array( 'id' => 0, 'caps' => array() );
 		$GLOBALS['wotoyi_db_errors']  = array();
 		$GLOBALS['wotoyi_did']        = array();
+		$GLOBALS['wotoyi_actions']    = array();
+		$GLOBALS['wotoyi_is_ssl']     = true;
+		$GLOBALS['wotoyi_env']        = 'production';
+		$GLOBALS['wotoyi_users']      = array();
 		$GLOBALS['wotoyi_routes']     = array();
 		$_SERVER['REMOTE_ADDR']       = '203.0.113.7';
 		$GLOBALS['wpdb']              = new wpdb();

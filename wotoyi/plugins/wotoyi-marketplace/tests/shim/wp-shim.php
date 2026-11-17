@@ -11,7 +11,7 @@ define( 'HOUR_IN_SECONDS', 3600 );
 define( 'DAY_IN_SECONDS', 86400 );
 define( 'ARRAY_A', 'ARRAY_A' );
 define( 'WOTOYI_MP_VERSION', 'test' );
-define( 'WOTOYI_MP_DB_VERSION', '1' );
+define( 'WOTOYI_MP_DB_VERSION', '2' );
 define( 'WOTOYI_MP_DIR', dirname( __DIR__, 2 ) . '/' );
 define( 'WOTOYI_MP_FILE', WOTOYI_MP_DIR . 'wotoyi-marketplace.php' );
 define( 'WOTOYI_SECRET_KEY', 'test-master-key-0123456789abcdef0123456789abcdef' );
@@ -71,7 +71,22 @@ class WP_REST_Request implements ArrayAccess { // phpcs:ignore
 	public function set_query_params( array $q ): void { $this->query = $q; }
 	public function get_query_params(): array { return $this->query; }
 	public function set_url_params( array $p ): void { $this->url_params = $p; }
-	public function get_params(): array { return $this->params + $this->url_params + $this->query; }
+	public function get_url_params(): array { return $this->url_params; }
+	/** Decoded JSON body, only when the request says it is JSON (as WP_REST_Request::parse_json_params does). */
+	public function get_json_params(): array {
+		$ct = (string) ( $this->headers['content_type'] ?? '' );
+		if ( '' === $this->body || 'application/json' !== strtolower( trim( explode( ';', $ct )[0] ) ) ) {
+			return array();
+		}
+		$d = json_decode( $this->body, true );
+		return is_array( $d ) && ! array_is_list( $d ) ? $d : array();
+	}
+	/**
+	 * Same precedence as WordPress core (WP_REST_Request::get_parameter_order): JSON body, then POST/set params,
+	 * then the QUERY STRING, then URL (route) params. A signed route param can therefore be shadowed by an unsigned
+	 * query/body value: tests that rely on "URL wins" would be hiding a real bug (SECURITY-REVIEW M1).
+	 */
+	public function get_params(): array { return $this->get_json_params() + $this->params + $this->query + $this->url_params; }
 	public function get_param( string $k ) { return $this->get_params()[ $k ] ?? null; }
 	public function set_param( string $k, $v ): void { $this->params[ $k ] = $v; }
 	public function offsetExists( mixed $o ): bool { return null !== $this->get_param( (string) $o ); }
@@ -138,7 +153,12 @@ function apply_filters( string $tag, $value, ...$rest ) {
 	return $value;
 }
 function add_action( string $tag, $cb, int $prio = 10, int $args = 1 ): void { $GLOBALS['wotoyi_actions'][ $tag ][] = $cb; }
-function do_action( string $tag, ...$args ): void {}
+function do_action( string $tag, ...$args ): void {
+	$GLOBALS['wotoyi_did'][ $tag ] = ( $GLOBALS['wotoyi_did'][ $tag ] ?? 0 ) + 1;
+	foreach ( $GLOBALS['wotoyi_actions'][ $tag ] ?? array() as $cb ) {
+		$cb( ...$args );
+	}
+}
 function did_action( string $tag ): int { return $GLOBALS['wotoyi_did'][ $tag ] ?? 0; }
 
 /* ------------------------------ users / caps ------------------------------ */
@@ -156,6 +176,17 @@ function register_deactivation_hook( $f, $cb ): void {}
 function plugin_dir_path( string $f ): string { return dirname( $f ) . '/'; }
 function plugin_basename( string $f ): string { return basename( dirname( $f ) ) . '/' . basename( $f ); }
 function load_plugin_textdomain(): bool { return true; }
+/** TLS state of the current request (tests flip $GLOBALS['wotoyi_is_ssl']; default: HTTPS). */
+function is_ssl(): bool { return $GLOBALS['wotoyi_is_ssl'] ?? true; }
+function wp_get_environment_type(): string { return $GLOBALS['wotoyi_env'] ?? 'production'; }
+function get_user_by( string $field, $value ) {
+	foreach ( $GLOBALS['wotoyi_users'] ?? array() as $u ) {
+		if ( ( $u[ $field ] ?? null ) === $value ) {
+			return (object) $u;
+		}
+	}
+	return false;
+}
 
 /* ------------------------------ sanitising / escaping ------------------------------ */
 

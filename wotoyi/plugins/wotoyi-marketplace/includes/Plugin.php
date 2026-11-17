@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace Wotoyi\Marketplace;
 
+use Wotoyi\Marketplace\Privacy\Privacy;
+use Wotoyi\Marketplace\Repository\AuditRepository;
 use Wotoyi\Marketplace\Repository\DealerRepository;
 use Wotoyi\Marketplace\Repository\FavouriteRepository;
 use Wotoyi\Marketplace\Repository\LeadRepository;
@@ -35,6 +37,7 @@ final class Plugin {
 		add_action( 'plugins_loaded', array( Installer::class, 'maybe_upgrade' ) );
 		add_action( 'rest_api_init', array( Routes::class, 'register' ) );
 		add_action( Installer::CRON_HOOK, array( self::class, 'prune' ) );
+		Privacy::register_hooks();
 		add_action(
 			'init',
 			static function (): void {
@@ -43,10 +46,19 @@ final class Plugin {
 		);
 	}
 
-	/** Daily housekeeping: expired nonces and old sync log rows. */
+	/** Daily housekeeping: expired nonces, old sync log / audit rows, and the buyer-data retention rules (H2). */
 	public static function prune(): void {
 		self::nonces()->prune();
 		self::sync_log()->prune( Settings::int( 'log_retention_days' ) );
+		self::audit()->prune( Settings::int( 'audit_retention_days' ) );
+		$res = self::leads()->apply_retention(
+			Settings::int( 'lead_retention_delivered_days' ),
+			Settings::int( 'lead_retention_undelivered_days' ),
+			Settings::int( 'lead_retention_disconnected_days' )
+		);
+		if ( $res['anonymized'] || $res['deleted'] ) {
+			self::audit()->record( 'system', 0, 'leads.retention', null, array( 'leads_anonymized' => $res['anonymized'], 'leads_deleted' => $res['deleted'] ) );
+		}
 	}
 
 	/** Drop cached service objects (tests). */
@@ -68,6 +80,10 @@ final class Plugin {
 
 	public static function services(): ServiceRepository {
 		return self::get( 'services', static fn() => new ServiceRepository() );
+	}
+
+	public static function audit(): AuditRepository {
+		return self::get( 'audit', static fn() => new AuditRepository() );
 	}
 
 	public static function leads(): LeadRepository {

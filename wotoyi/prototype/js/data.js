@@ -11,7 +11,7 @@ window.WY = window.WY || {};
   ];
   /* body: suv|berline|pickup|4x4|citadine|monospace|utilitaire. fuel: essence|diesel|hybride|phev|electrique|gpl */
   var V = [
-    { id: 1, mk: 'Toyota', md: 'Land Cruiser Prado', ver: '2.8 D-4D VX', yr: 2021, body: '4x4', fuel: 'diesel', tr: 'auto', drive: '4x4', km: 68000, city: 'dakar', price: 38500000, cond: 'occasion', customs: 'cleared', origin: 'Émirats arabes unis', owners: 2, seats: 7, doors: 5, col: 'bleunuit', img: 'hero-suv', insp: true, dealer: 'almadies', spons: true, neg: true, posted: 3,
+    { id: 1, mk: 'Toyota', md: 'Land Cruiser Prado', ver: '2.8 D-4D VX', yr: 2021, body: '4x4', fuel: 'diesel', tr: 'auto', drive: '4x4', km: 68000, city: 'dakar', price: 38500000, cond: 'occasion', customs: 'cleared', origin: 'Émirats arabes unis', owners: 2, seats: 7, doors: 5, col: 'gris', img: 'hero-suv', insp: true, dealer: 'almadies', spons: true, neg: true, posted: 3,
       eq: ['ac', 'heated', 'sunroof', 'cruise', 'keyless', 'airbags', 'abs', 'esp', 'camera', 'sensors', 'screen', 'carplay', 'bt', 'gps', 'alloy', 'led', 'leather', 'seats7'],
       s: { cc: 2755, cyl: 4, hp: 177, torque: 450, gears: 6, length: 4780, width: 1885, height: 1845, wheelbase: 2790, tank: 87 },
       hist: { service: true, accident: true, warranty: true }, com: { fin: true, trade: true, deliv: true },
@@ -56,6 +56,6 @@ window.WY = window.WY || {};
     fuels: ['essence', 'diesel', 'hybride', 'phev', 'electrique', 'gpl'],
     cities: ['dakar', 'thies', 'saintlouis', 'mbour'],
     bodyIcon: { suv: 'suv', berline: 'sedan', citadine: 'hatch', '4x4': 'offroad', pickup: 'pickup', monospace: 'van', utilitaire: 'van' },
-    colors: { bleunuit: '#1B2540', bleuatl: '#2E5E8C', blancnacre: '#ECE9E2', ambre: '#D88A2B', vertsauge: '#7F9378', noirobs: '#14161C', rougerubis: '#A8242D' }
+    colors: { gris: '#B9BDC6', bleuatl: '#2E5E8C', blancnacre: '#ECE9E2', ambre: '#D88A2B', vertsauge: '#7F9378', noirobs: '#14161C', rougerubis: '#A8242D' }
   };
 })(window.WY);

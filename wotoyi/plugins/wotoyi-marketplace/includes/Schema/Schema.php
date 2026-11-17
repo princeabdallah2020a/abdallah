@@ -19,7 +19,7 @@ final class Schema {
 
 	/** @return list<string> Logical table names. */
 	public static function names(): array {
-		return array( 'vehicles', 'vehicle_equipment', 'dealers', 'services', 'leads', 'favourites', 'saved_searches', 'sync_log', 'sync_nonces' );
+		return array( 'vehicles', 'vehicle_equipment', 'dealers', 'services', 'leads', 'favourites', 'saved_searches', 'sync_log', 'sync_nonces', 'audit_log' );
 	}
 
 	/** @return array<string,string> logical name => CREATE TABLE SQL. */
@@ -64,6 +64,7 @@ final class Schema {
   pairing_expires_at DATETIME DEFAULT NULL,
   paired_at DATETIME DEFAULT NULL,
   last_seen_at DATETIME DEFAULT NULL,
+  disconnected_at DATETIME DEFAULT NULL,
   created_at DATETIME NOT NULL,
   updated_at DATETIME NOT NULL,
   PRIMARY KEY  (id),
@@ -170,17 +171,23 @@ $service_cols  published_at DATETIME DEFAULT NULL,
   channel VARCHAR(16) NOT NULL DEFAULT 'web',
   locale VARCHAR(8) DEFAULT NULL,
   consent TINYINT(1) NOT NULL DEFAULT 0,
+  consent_at DATETIME DEFAULT NULL,
+  consent_version VARCHAR(32) DEFAULT NULL,
+  consent_purpose VARCHAR(32) DEFAULT NULL,
   status VARCHAR(16) NOT NULL DEFAULT 'new',
   delivery_status VARCHAR(16) NOT NULL DEFAULT 'pending',
   delivery_attempts SMALLINT(5) UNSIGNED NOT NULL DEFAULT 0,
   delivered_at DATETIME DEFAULT NULL,
   ip_hash CHAR(64) DEFAULT NULL,
+  anonymized_at DATETIME DEFAULT NULL,
   created_at DATETIME NOT NULL,
   PRIMARY KEY  (id),
   UNIQUE KEY uuid (uuid),
   KEY dealer_delivery (dealer_id,delivery_status,id),
+  KEY retention (delivery_status,created_at),
   KEY vehicle_id (vehicle_id),
-  KEY user_id (user_id)
+  KEY user_id (user_id),
+  KEY email (email)
 ) $charset;";
 
 		$sql['favourites'] = "CREATE TABLE {$t('favourites')} (
@@ -239,6 +246,21 @@ $service_cols  published_at DATETIME DEFAULT NULL,
   expires_at DATETIME NOT NULL,
   PRIMARY KEY  (dealer_id,nonce),
   KEY expires_at (expires_at)
+) $charset;";
+
+		$sql['audit_log'] = "CREATE TABLE {$t('audit_log')} (
+  id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  created_at DATETIME NOT NULL,
+  actor_type VARCHAR(8) NOT NULL,
+  actor_user_id BIGINT(20) UNSIGNED DEFAULT NULL,
+  action VARCHAR(40) NOT NULL,
+  dealer_id BIGINT(20) UNSIGNED DEFAULT NULL,
+  details LONGTEXT DEFAULT NULL,
+  ip_hash CHAR(64) DEFAULT NULL,
+  correlation_id VARCHAR(64) DEFAULT NULL,
+  PRIMARY KEY  (id),
+  KEY dealer_id_id (dealer_id,id),
+  KEY created_at (created_at)
 ) $charset;";
 
 		return $sql;

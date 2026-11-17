@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Wotoyi Marketplace
  * Description:       Marketplace core: vehicle and service catalogue, maximum search, dealers, and the signed receiver for dealer content.
- * Version:           0.1.0
+ * Version:           0.2.0
  * Requires at least: 6.4
  * Requires PHP:      8.1
  * Author:            Wotoyi
@@ -14,8 +14,8 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'WOTOYI_MP_VERSION', '0.1.0' );
-define( 'WOTOYI_MP_DB_VERSION', '1' );
+define( 'WOTOYI_MP_VERSION', '0.2.0' );
+define( 'WOTOYI_MP_DB_VERSION', '2' );
 define( 'WOTOYI_MP_FILE', __FILE__ );
 define( 'WOTOYI_MP_DIR', plugin_dir_path( __FILE__ ) );
 

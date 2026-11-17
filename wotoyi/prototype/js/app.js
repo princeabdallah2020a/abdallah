@@ -62,7 +62,9 @@
       '<div class="wy-vcard__prices">' + (o.rent ? U.rentPrice(v) : U.priceHTML(v)) + '</div>' +
       '<p class="wy-vcard__loc">' + WY.icon('pin') + '<span>' + t('city.' + v.city) + ' · ' + WY.esc(dl.name) + '</span></p></div></article>';
   };
-  U.cardsInto = function (el, list, o) { el.innerHTML = list.map(function (v) { return U.card(v, o); }).join(''); paintFavs(); };
+  U.cardsInto = function (el, list, o) { el.innerHTML = list.map(function (v) { return U.card(v, o); }).join(''); paintFavs(); U.dedupeVT(); };
+  /* view-transition-name must be unique per page: keep only the first card of a given vehicle */
+  U.dedupeVT = function () { var seen = {}; $$('.wy-vcard__media[style*="--vt"]').forEach(function (m) { var n = m.style.getPropertyValue('--vt'); if (seen[n]) m.style.removeProperty('--vt'); else seen[n] = 1; }); };
 
   /* ---- toast ---- */
   U.toast = function (msg) {
@@ -118,7 +120,7 @@
   /* ---- natural-language parser (rule-based: honest fallback of the AI gateway) ---- */
   U.parseNL = function (q) {
     var raw = q.toLowerCase(), s = raw.normalize('NFD').replace(/[̀-ͯ]/g, ''), p = {}, has = function (re) { return re.test(s) || re.test(raw); };
-    if (has(/\bsuv\b|suv/)) p.body = 'suv'; else if (has(/berline|sedan|saloon|سيدان/)) p.body = 'berline'; else if (has(/pick-?up|بيك/)) p.body = 'pickup'; else if (has(/\b4x4\b/)) p.body = '4x4'; else if (has(/citadine|hatchback|city car/)) p.body = 'citadine';
+    if (has(/\bsuv\b|suv/)) p.body = 'suv'; else if (has(/berline|sedan|saloon|سيدان/)) p.body = 'berline'; else if (has(/pick-?up|بيك/)) p.body = 'pickup'; else if (has(/\b4x4\b|دفع رباعي/)) p.body = '4x4'; else if (has(/citadine|hatchback|city car/)) p.body = 'citadine';
     if (has(/diesel|gasoil|ديزل/)) p.fuel = 'diesel'; else if (has(/hybride|hybrid|هجين/)) p.fuel = 'hybride'; else if (has(/electrique|electric|كهربائي/)) p.fuel = 'electrique'; else if (has(/essence|petrol|gasoline|بنزين/)) p.fuel = 'essence';
     if (has(/automatique|automatic|\bauto\b|اوتوماتيك|أوتوماتيك/)) p.tr = 'auto'; else if (has(/manuelle|manual|يدوي/)) p.tr = 'manuelle';
     if (has(/dakar|داكار/)) p.city = 'dakar'; else if (has(/thies|تييس/)) p.city = 'thies'; else if (has(/saint[- ]louis|سان لوي/)) p.city = 'saintlouis'; else if (has(/mbour|مبور/)) p.city = 'mbour';

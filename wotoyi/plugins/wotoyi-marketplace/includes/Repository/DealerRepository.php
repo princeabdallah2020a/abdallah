@@ -202,6 +202,7 @@ final class DealerRepository {
 			'secret_rotated_at' => $now,
 			'status'            => 'active',
 			'paired_at'         => $now,
+			'disconnected_at'   => null,
 			'updated_at'        => $now,
 		);
 		if ( null !== $source_dealer_uuid ) {
@@ -235,18 +236,33 @@ final class DealerRepository {
 	 * @return list<string>
 	 */
 	public function accepted_secrets( array $dealer ): array {
+		return array_values( $this->accepted_secrets_by_slot( $dealer ) );
+	}
+
+	/**
+	 * Same as accepted_secrets() but keyed by slot ('current' first, then 'previous' during the grace period),
+	 * so the Authenticator knows which one matched (H1).
+	 *
+	 * @return array<string,string>
+	 */
+	public function accepted_secrets_by_slot( array $dealer ): array {
 		$out     = array();
 		$current = Crypto::decrypt( $dealer['secret_enc'] ?? null );
 		if ( null !== $current ) {
-			$out[] = $current;
+			$out['current'] = $current;
 		}
 		if ( ! empty( $dealer['prev_secret_enc'] ) && ! empty( $dealer['prev_valid_until'] ) && strtotime( $dealer['prev_valid_until'] . ' UTC' ) >= Clock::now() ) {
 			$prev = Crypto::decrypt( $dealer['prev_secret_enc'] );
 			if ( null !== $prev ) {
-				$out[] = $prev;
+				$out['previous'] = $prev;
 			}
 		}
 		return $out;
+	}
+
+	/** Incident response: kill the grace-period secret immediately. */
+	public function revoke_previous_secret( int $dealer_id ): void {
+		Db::wpdb()->update( $this->table(), array( 'prev_secret_enc' => null, 'prev_valid_until' => null, 'updated_at' => Clock::mysql() ), array( 'id' => $dealer_id ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 	}
 
 	/** Revoke credentials; listings disappear from public views (dealer no longer active) but stay stored. */
@@ -261,6 +277,7 @@ final class DealerRepository {
 				'prev_valid_until'   => null,
 				'pairing_hash'       => null,
 				'pairing_expires_at' => null,
+				'disconnected_at'    => Clock::mysql(),
 				'updated_at'         => Clock::mysql(),
 			),
 			array( 'id' => $dealer_id )

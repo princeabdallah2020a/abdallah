@@ -64,6 +64,8 @@ final class Routes {
 		self::route( '/admin/dealers/(?P<dealer>[0-9a-f\-]{36})/status', \WP_REST_Server::CREATABLE, array( $admin, 'dealer_status' ), $adm_write );
 		self::route( '/admin/dealers/(?P<dealer>[0-9a-f\-]{36})/sync-log', \WP_REST_Server::READABLE, array( $admin, 'sync_log' ), $adm_read );
 
+		self::route( '/admin/audit-log', \WP_REST_Server::READABLE, array( $admin, 'audit_log' ), $adm_read );
+
 		// ---- Sync receiver (signed by the dealer's HMAC key) ----
 		self::route( '/sync/pair', \WP_REST_Server::CREATABLE, array( $sync, 'pair' ), array( Permissions::class, 'pairing_gate' ) );
 		self::route( '/sync/health', \WP_REST_Server::READABLE, array( $sync, 'health' ), $auth );

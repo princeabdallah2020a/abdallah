@@ -145,9 +145,6 @@ final class Schema {
 
 		foreach ( Entities::all() as $name => $e ) {
 			$fields = $e['fields'];
-			if ( 'deals' === $name || 'rentals' === $name || 'employees' === $name || 'tasks' === $name || 'leads' === $name ) {
-				// Entities with their own `status`/`stage` field already declare it in fields; defaults are applied by services.
-			}
 			$cols  = self::head();
 			$cols .= self::field_columns( $fields );
 			$cols .= "  created_by BIGINT(20) UNSIGNED DEFAULT NULL,\n  created_at DATETIME NOT NULL,\n  updated_at DATETIME NOT NULL,\n";

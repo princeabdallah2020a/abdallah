@@ -57,4 +57,15 @@ final class FavouriteRepository {
 		);
 		return (array) Db::wpdb()->get_results( $sql, ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery
 	}
+
+	/** Erase every favourite of a user (account deletion / erasure request). */
+	public function delete_all_for_user( int $user_id ): int {
+		Db::wpdb()->query( Db::prepare( "DELETE FROM {$this->table()} WHERE user_id = %d", array( $user_id ) ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery
+		return (int) Db::wpdb()->rows_affected;
+	}
+
+	/** @return list<array<string,mixed>> Raw rows for the privacy exporter (max MAX_PER_USER). */
+	public function export_for_user( int $user_id ): array {
+		return (array) Db::wpdb()->get_results( Db::prepare( "SELECT item_type, item_id, created_at FROM {$this->table()} WHERE user_id = %d ORDER BY id ASC LIMIT %d", array( $user_id, self::MAX_PER_USER ) ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery
+	}
 }

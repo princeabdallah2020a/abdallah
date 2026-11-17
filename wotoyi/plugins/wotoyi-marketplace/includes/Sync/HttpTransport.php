@@ -9,11 +9,18 @@ declare(strict_types=1);
 
 namespace Wotoyi\Marketplace\Sync;
 
+use Wotoyi\Marketplace\Support\Tls;
+
 defined( 'ABSPATH' ) || exit;
 
 final class HttpTransport implements Transport {
 
-	public function __construct( private string $base_url, private string $key_id, private string $secret ) {}
+	/** @throws \InvalidArgumentException When base_url is not https (M4); http is only possible outside production via Tls. */
+	public function __construct( private string $base_url, private string $key_id, private string $secret ) {
+		if ( ! Tls::url_allowed( $base_url ) ) {
+			throw new \InvalidArgumentException( 'HttpTransport requires an https:// base URL.' );
+		}
+	}
 
 	/**
 	 * Build the signed request (no I/O).

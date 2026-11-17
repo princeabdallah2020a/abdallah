@@ -81,19 +81,19 @@ A('ai.notice', 'Recherche simple activée : l’assistant IA complet n’est pas
 A('ai.examples', 'Exemples', 'Examples', 'أمثلة')
 A('ai.placeholder', 'Décrivez le véhicule recherché…', 'Describe the vehicle you want…', 'صف المركبة التي تبحث عنها…')
 A('ai.send', 'Envoyer', 'Send', 'إرسال')
-A('ai.p.fr', 'Un SUV diesel automatique moins de 20 millions à Dakar', 'Un SUV diesel automatique moins de 20 millions à Dakar', 'Un SUV diesel automatique moins de 20 millions à Dakar')
+A('ai.p.fr', 'Un SUV automatique moins de 15 millions à Dakar', 'Un SUV automatique moins de 15 millions à Dakar', 'Un SUV automatique moins de 15 millions à Dakar')
 A('ai.p.en', 'A hybrid sedan under 18 million in Dakar', 'A hybrid sedan under 18 million in Dakar', 'A hybrid sedan under 18 million in Dakar')
 A('ai.p.ar', 'سيارة دفع رباعي ديزل أوتوماتيك في داكار', 'سيارة دفع رباعي ديزل أوتوماتيك في داكار', 'سيارة دفع رباعي ديزل أوتوماتيك في داكار')
 A('ai.p.wo', 'Wolof : en attente de relecture native', 'Wolof: awaiting native review', 'الولوف: بانتظار المراجعة')
 A('ai.understood', 'Voici les critères compris :', 'Here are the criteria I understood:', 'هذه هي المعايير التي فهمتها:')
-A('ai.nomatch', 'Je n’ai pas reconnu de critère. Essayez par exemple : « SUV diesel automatique moins de 20 millions à Dakar ».', 'I did not recognise any criteria. Try for example: "automatic diesel SUV under 20 million in Dakar".', 'لم أتعرف على أي معيار. جرّب مثلًا: «سيارة دفع رباعي ديزل أوتوماتيك في داكار».')
+A('ai.nomatch', 'Je n’ai pas reconnu de critère. Essayez par exemple : « SUV automatique moins de 15 millions à Dakar ».', 'I did not recognise any criteria. Try for example: "automatic SUV under 15 million in Dakar".', 'لم أتعرف على أي معيار. جرّب مثلًا: «سيارة دفع رباعي ديزل أوتوماتيك في داكار».')
 A('ai.see', 'Voir les résultats', 'See results', 'عرض النتائج')
 
 # ---- hero + quick search
 A('hero.overline', 'Marketplace automobile · Sénégal', 'Car marketplace · Senegal', 'سوق السيارات · السنغال')
 A('hero.h1', 'Le showroom automobile du Sénégal, <em class="wy-em">en ligne</em>.', 'Senegal’s car showroom, <em class="wy-em">online</em>.', 'معرض السيارات في السنغال، <em class="wy-em">على الإنترنت</em>.')
 A('hero.sub', 'Achetez ou louez un véhicule auprès de concessionnaires vérifiés, faites-le inspecter par un tiers indépendant, puis contactez le vendeur directement sur WhatsApp.', 'Buy or rent a vehicle from verified dealers, have it inspected by an independent third party, then contact the seller directly on WhatsApp.', 'اشترِ أو استأجر مركبة من وكلاء موثقين، واطلب فحصها من طرف مستقل، ثم تواصل مع البائع مباشرة عبر واتساب.')
-A('hero.car.alt', 'Illustration d’un SUV bleu nuit, visuel provisoire', 'Illustration of a midnight-blue SUV, placeholder visual', 'رسم توضيحي لسيارة دفع رباعي أزرق ليلي، صورة مؤقتة')
+A('hero.car.alt', 'Illustration provisoire d\u2019un véhicule gris argent', 'Placeholder illustration of a silver-grey vehicle', 'رسم مؤقت لمركبة رمادية فضية')
 A('qs.title', 'Recherche rapide', 'Quick search', 'بحث سريع')
 A('qs.offer', 'Type d’offre', 'Offer type', 'نوع العرض')
 A('qs.buy', 'Acheter', 'Buy', 'شراء')
@@ -128,7 +128,7 @@ for k, fr, en, ar in [
  ('g.state', 'État et historique', 'Condition & history', 'الحالة والسجل'), ('g.trust', 'Confiance et vendeur', 'Trust & seller', 'الثقة والبائع'), ('g.commercial', 'Conditions commerciales', 'Commercial terms', 'الشروط التجارية'),
  ('g.equip', 'Équipements', 'Equipment', 'التجهيزات'), ('g.media', 'Médias et date', 'Media & date', 'الوسائط والتاريخ')]:
     A(k, fr, en, ar)
-for k, fr, en, ar in [('offer.both','Les deux','Both','الاثنان'),('offer.sale','Achat','Buy','شراء'),('offer.rent','Location','Rent','إيجار'),
+for k, fr, en, ar in [('offer.both','Tous','All','الكل'),('offer.sale','Achat','Buy','شراء'),('offer.rent','Location','Rent','إيجار'),
  ('since.1','24 heures','24 hours','24 ساعة'),('since.7','7 jours','7 days','7 أيام'),('since.30','30 jours','30 days','30 يومًا')]: A(k, fr, en, ar)
 
 # ---- vocab
@@ -141,7 +141,7 @@ for k, fr, en, ar in [
  ('cond.neuf','Neuf','New','جديد'),('cond.occasion','Occasion','Used','مستعمل'),('cond.venant','Venant','Imported (venant)','مستورد (venant)'),
  ('customs.cleared','Dédouané','Customs cleared','مُخلّص جمركيًا'),('customs.transit','En transit','In transit','قيد العبور'),
  ('city.dakar','Dakar','Dakar','داكار'),('city.thies','Thiès','Thiès','تييس'),('city.saintlouis','Saint-Louis','Saint-Louis','سان لويس'),('city.mbour','Mbour','Mbour','مبور'),
- ('col.bleunuit','Bleu nuit','Midnight blue','أزرق ليلي'),('col.bleuatl','Bleu atlantique','Atlantic blue','أزرق أطلسي'),('col.blancnacre','Blanc nacré','Pearl white','أبيض لؤلؤي'),('col.ambre','Ambre','Amber','عنبري'),('col.vertsauge','Vert sauge','Sage green','أخضر ميرمية'),('col.noirobs','Noir obsidienne','Obsidian black','أسود سبجي'),('col.rougerubis','Rouge rubis','Ruby red','أحمر ياقوتي'),
+ ('col.gris','Gris argent','Silver grey','رمادي فضي'),('col.bleuatl','Bleu atlantique','Atlantic blue','أزرق أطلسي'),('col.blancnacre','Blanc nacré','Pearl white','أبيض لؤلؤي'),('col.ambre','Ambre','Amber','عنبري'),('col.vertsauge','Vert sauge','Sage green','أخضر ميرمية'),('col.noirobs','Noir obsidienne','Obsidian black','أسود سبجي'),('col.rougerubis','Rouge rubis','Ruby red','أحمر ياقوتي'),
  ('eqcat.comfort','Confort','Comfort','الراحة'),('eqcat.safety','Sécurité','Safety','الأمان'),('eqcat.media','Multimédia','Multimedia','الوسائط'),('eqcat.exterior','Extérieur','Exterior','الخارج'),('eqcat.interior','Intérieur','Interior','الداخل'),
  ('eq.ac','Climatisation automatique','Automatic air conditioning','تكييف أوتوماتيك'),('eq.heated','Sièges chauffants','Heated seats','مقاعد مدفأة'),('eq.sunroof','Toit ouvrant','Sunroof','سقف مفتوح'),('eq.cruise','Régulateur de vitesse','Cruise control','مثبت السرعة'),('eq.keyless','Démarrage sans clé','Keyless start','تشغيل بدون مفتاح'),
  ('eq.airbags','Airbags','Airbags','وسائد هوائية'),('eq.abs','ABS','ABS','نظام ABS'),('eq.esp','Contrôle de stabilité (ESP)','Stability control (ESP)','نظام الثبات (ESP)'),('eq.camera','Caméra de recul','Rear camera','كاميرا خلفية'),('eq.sensors','Capteurs de stationnement','Parking sensors','حساسات ركن'),('eq.lane','Aide au maintien de voie','Lane-keeping assist','مساعد البقاء في المسار'),

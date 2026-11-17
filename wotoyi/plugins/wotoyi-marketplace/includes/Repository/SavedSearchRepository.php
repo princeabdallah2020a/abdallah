@@ -72,4 +72,10 @@ final class SavedSearchRepository {
 		Db::wpdb()->delete( $this->table(), array( 'id' => $id, 'user_id' => $user_id ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 		return 1 === (int) Db::wpdb()->rows_affected;
 	}
+
+	/** Erase every saved search of a user (account deletion / erasure request). */
+	public function delete_all_for_user( int $user_id ): int {
+		Db::wpdb()->query( Db::prepare( "DELETE FROM {$this->table()} WHERE user_id = %d", array( $user_id ) ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery
+		return (int) Db::wpdb()->rows_affected;
+	}
 }

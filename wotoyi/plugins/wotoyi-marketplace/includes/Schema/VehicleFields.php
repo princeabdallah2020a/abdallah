@@ -137,7 +137,8 @@ final class VehicleFields {
 			'gallery'                  => array( 'group' => 'media', 'type' => 'json_list', 'item' => 'url', 'max_items' => 40 ),
 			'video_url'                => $u( 'media' ),
 			'view360_url'              => $u( 'media' ),
-			'documents'                => array( 'group' => 'media', 'type' => 'json_list', 'item' => 'url', 'max_items' => 10 ),
+			// M5: registration cards, customs papers and invoices carry the previous owner's identity: dealer-side only, never public.
+			'documents'                => array( 'group' => 'media', 'type' => 'json_list', 'item' => 'url', 'max_items' => 10, 'private' => true ),
 
 			// Trust: managed by the marketplace, never accepted from dealer payloads.
 			'wotoyi_inspected'         => $b( 'trust', array( 'managed' => true ) ),
