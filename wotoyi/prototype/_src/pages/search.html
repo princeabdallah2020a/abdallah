@@ -1,0 +1,56 @@
+<main id="main">
+<div data-wy-sentinel aria-hidden="true"></div>
+<div class="wy-container-wide wy-search-head">
+  <nav class="wy-breadcrumb" aria-label="{{=bc.label}}" data-i18n-attr="aria-label:bc.label"><ol><li><a href="index.html">{{bc.home}}</a></li><li aria-current="page">{{search.title}}</li></ol></nav>
+  <h1 class="wy-display-m">{{search.title}}</h1>
+</div>
+
+<div class="wy-searchbar" data-wy-searchbar>
+  <div class="wy-container-wide wy-searchbar__in">
+    <form class="wy-search wy-search--nl wy-searchbar__q" role="search" data-wy-kw-form>
+      <svg class="wy-i"><use href="#i-search"/></svg>
+      <input class="wy-input" type="search" name="q" data-wy-kw placeholder="{{=search.kw}}" aria-label="{{=search.kw}}" data-i18n-attr="placeholder:search.kw;aria-label:search.kw" autocomplete="off">
+      <button class="wy-btn wy-btn--icon wy-btn--ghost wy-btn--sm" type="button" data-wy-ai-open aria-label="{{=ai.open}}" data-i18n-attr="aria-label:ai.open"><svg class="wy-i"><use href="#i-sparkle"/></svg></button>
+    </form>
+    <button class="wy-btn wy-btn--ghost wy-not-lg" type="button" data-wy-filters-open aria-controls="filters" aria-expanded="false"><svg class="wy-i"><use href="#i-sliders"/></svg><span>{{search.filters}} <span data-wy-filter-count>(0)</span></span></button>
+    <label class="wy-sort"><span class="wy-visually-hidden">{{search.sort}}</span>
+      <select class="wy-select" data-wy-sort aria-label="{{=search.sort}}" data-i18n-attr="aria-label:search.sort">
+        <option value="relevance">{{sort.relevance}}</option><option value="price-asc">{{sort.priceAsc}}</option><option value="price-desc">{{sort.priceDesc}}</option><option value="year-desc">{{sort.year}}</option><option value="km-asc">{{sort.km}}</option><option value="new">{{sort.new}}</option>
+      </select></label>
+    <div class="wy-viewtoggle wy-only-lg-up" role="group" aria-label="{{=search.view}}" data-i18n-attr="aria-label:search.view">
+      <button class="wy-btn wy-btn--icon wy-btn--ghost" type="button" data-wy-view="grid" aria-pressed="true" aria-label="{{=search.grid}}" data-i18n-attr="aria-label:search.grid"><svg class="wy-i"><use href="#i-grid"/></svg></button>
+      <button class="wy-btn wy-btn--icon wy-btn--ghost" type="button" data-wy-view="list" aria-pressed="false" aria-label="{{=search.list}}" data-i18n-attr="aria-label:search.list"><svg class="wy-i"><use href="#i-list"/></svg></button>
+    </div>
+    <button class="wy-btn wy-btn--ghost wy-only-md-up" type="button" data-wy-save aria-pressed="false"><svg class="wy-i"><use href="#i-bell"/></svg><span data-wy-save-label>{{search.save}}</span></button>
+  </div>
+</div>
+
+<div class="wy-container-wide wy-search-meta">
+  <div class="wy-active-filters" data-wy-active aria-label="{{=search.active}}" data-i18n-attr="aria-label:search.active"></div>
+  <div class="wy-result-bar"><p aria-live="polite"><strong data-wy-count>0</strong> <span data-wy-count-label>{{search.results}}</span></p><span class="wy-badge wy-badge--demo">{{demo.badge}}</span></div>
+</div>
+
+<div class="wy-container-wide wy-search-layout">
+  <aside class="wy-filter-panel" id="filters" data-wy-filters aria-label="{{=search.filters}}" data-i18n-attr="aria-label:search.filters">
+    <div class="wy-sheet__grip" data-wy-grip aria-hidden="true"><i></i></div>
+    <header class="wy-filter-panel__head" data-wy-sheet-head>
+      <h2 class="wy-h4">{{search.filters}}</h2>
+      <div class="wy-row"><button class="wy-link" type="button" data-wy-clear>{{search.clear}}</button><button class="wy-btn wy-btn--icon wy-not-lg" type="button" data-wy-close aria-label="{{=a11y.close}}" data-i18n-attr="aria-label:a11y.close"><svg class="wy-i"><use href="#i-close"/></svg></button></div>
+    </header>
+    <div class="wy-filter-panel__body" data-lenis-prevent data-wy-filter-groups></div>
+    <footer class="wy-filter-panel__foot"><button class="wy-btn wy-btn--ghost" type="button" data-wy-clear>{{search.clear}}</button><button class="wy-btn wy-btn--primary wy-not-lg" type="button" data-wy-close><span class="wy-btn__label">{{search.see}} <strong data-wy-count>0</strong> <span data-wy-count-label>{{search.results}}</span></span></button></footer>
+  </aside>
+
+  <section class="wy-search-results" aria-label="{{=search.results}}" data-i18n-attr="aria-label:search.results">
+    <div class="wy-results wy-grid" data-wy-results data-view="grid"></div>
+    <div class="wy-empty" data-wy-empty hidden>
+      <svg class="wy-empty__art" viewBox="0 0 120 80" aria-hidden="true"><circle cx="60" cy="40" r="26" class="wy-empty__sun"/><path d="M8 52h104" /><path d="M26 62h68M40 72h40"/></svg>
+      <h2 class="wy-h3">{{empty.title}}</h2>
+      <p>{{empty.p}}</p>
+      <div class="wy-chips" data-wy-empty-chips></div>
+      <div class="wy-row wy-row--center"><button class="wy-btn wy-btn--ghost" type="button" data-wy-save><svg class="wy-i"><use href="#i-bell"/></svg>{{empty.save}}</button><button class="wy-btn wy-btn--secondary" type="button" data-wy-ai-open><svg class="wy-i"><use href="#i-sparkle"/></svg>{{empty.ai}}</button></div>
+    </div>
+    <nav class="wy-pagination" data-wy-pagination aria-label="{{=search.pages}}" data-i18n-attr="aria-label:search.pages"></nav>
+  </section>
+</div>
+</main>

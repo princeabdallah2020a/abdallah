@@ -1,0 +1,106 @@
+<main id="main">
+<div data-wy-sentinel aria-hidden="true"></div>
+<div class="wy-container-wide wy-vehicle" data-wy-vehicle>
+  <nav class="wy-breadcrumb" aria-label="{{=bc.label}}" data-i18n-attr="aria-label:bc.label"><ol data-wy-bc></ol></nav>
+  <div class="wy-vehicle__grid">
+    <div class="wy-vehicle__main">
+      <!-- Media stage -->
+      <section class="wy-gallery" aria-label="{{=v.media}}" data-i18n-attr="aria-label:v.media" data-wy-gallery>
+        <div class="wy-gallery__tabs" role="tablist" aria-label="{{=v.media}}" data-i18n-attr="aria-label:v.media">
+          <button class="wy-chip" role="tab" id="gt-photos" aria-controls="gp-photos" aria-selected="true" type="button" data-wy-gtab="photos"><svg class="wy-i"><use href="#i-camera"/></svg>{{v.photos}}</button>
+          <button class="wy-chip" role="tab" id="gt-360" aria-controls="gp-360" aria-selected="false" type="button" data-wy-gtab="360"><svg class="wy-i"><use href="#i-rotate"/></svg>360&deg;</button>
+        </div>
+        <div class="wy-gallery__panel" role="tabpanel" id="gp-photos" aria-labelledby="gt-photos">
+          <div class="wy-gallery__stage" data-wy-stage>
+            <div class="wy-gallery__badges" data-wy-media-badges></div>
+            <div class="wy-gallery__img" data-wy-main-img></div>
+            <span class="wy-gallery__count" data-wy-gcount aria-live="polite">1 / 4</span>
+            <button class="wy-btn wy-btn--icon wy-gallery__fs" type="button" data-wy-lightbox-open aria-label="{{=v.fullscreen}}" data-i18n-attr="aria-label:v.fullscreen"><svg class="wy-i"><use href="#i-fullscreen"/></svg></button>
+          </div>
+          <div class="wy-gallery__thumbs" data-wy-thumbs role="list"></div>
+          <p class="wy-caption wy-muted">{{v.placeholdernote}}</p>
+        </div>
+        <div class="wy-gallery__panel" role="tabpanel" id="gp-360" aria-labelledby="gt-360" hidden>
+          <div class="wy-viewer360" data-wy-viewer360 tabindex="0" role="application" aria-label="{{=v.v360}}" data-i18n-attr="aria-label:v.v360">
+            <div class="wy-viewer360__scene">
+              <div class="wy-viewer360__disc" data-wy-v360-disc></div>
+              <div class="wy-viewer360__car" data-wy-v360-car></div>
+            </div>
+            <svg class="wy-viewer360__ring" viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="19"/><circle cx="22" cy="22" r="19" class="wy-viewer360__prog" data-wy-v360-prog/></svg>
+            <span class="wy-viewer360__deg" data-wy-v360-deg aria-live="off">0&deg;</span>
+            <div class="wy-viewer360__ctl">
+              <button class="wy-btn wy-btn--ghost wy-btn--sm" type="button" data-wy-v360-spin><svg class="wy-i"><use href="#i-rotate"/></svg>{{v.rotate}}</button>
+              <button class="wy-btn wy-btn--ghost wy-btn--sm" type="button" data-wy-v360-fs><svg class="wy-i"><use href="#i-fullscreen"/></svg>{{v.fullscreen}}</button>
+            </div>
+            <p class="wy-viewer360__hint">{{v.v360hint}}</p>
+          </div>
+          <p class="wy-notice"><svg class="wy-i"><use href="#i-info"/></svg><span>{{v.v360note}}</span></p>
+        </div>
+      </section>
+
+      <!-- Title block -->
+      <section class="wy-titleblock" data-wy-titleblock aria-labelledby="v-title">
+        <div class="wy-badges" data-wy-badges></div>
+        <h1 id="v-title" class="wy-display-m" data-wy-title></h1>
+        <div class="wy-price-row" data-wy-prices></div>
+        <ul class="wy-keyfacts" data-wy-keyfacts></ul>
+      </section>
+
+      <!-- Mobile/tablet contact (inline) -->
+      <div class="wy-contact-inline wy-not-xl" data-wy-contact-slot></div>
+
+      <!-- Spec tabs -->
+      <section class="wy-specs" aria-label="{{=v.specs}}" data-i18n-attr="aria-label:v.specs">
+        <div class="wy-tabs" data-wy-tabs>
+          <div class="wy-tabs__bar" role="tablist" data-wy-tablist aria-label="{{=v.specs}}" data-i18n-attr="aria-label:v.specs"></div>
+          <div class="wy-tabs__panels" data-wy-tabpanels></div>
+        </div>
+        <p class="wy-caption wy-muted"><span class="wy-badge wy-badge--demo">{{demo.badge}}</span> {{v.specnote}}</p>
+      </section>
+
+      <section class="wy-block" aria-labelledby="v-desc"><h2 id="v-desc" class="wy-h3">{{v.desc}}</h2><div class="wy-prose" data-wy-desc></div><p class="wy-caption wy-muted" data-wy-desc-note></p></section>
+      <section class="wy-block" aria-labelledby="v-insp" data-wy-inspblock><h2 id="v-insp" class="wy-h3">{{v.insp}}</h2><div data-wy-insp></div></section>
+      <section class="wy-block" aria-labelledby="v-dealer"><h2 id="v-dealer" class="wy-h3">{{v.dealer}}</h2><div data-wy-dealer></div></section>
+    </div>
+
+    <aside class="wy-vehicle__side" aria-label="{{=v.contact}}" data-i18n-attr="aria-label:v.contact">
+      <div class="wy-contact" data-wy-contact></div>
+    </aside>
+  </div>
+
+  <section class="wy-block wy-block--wide" aria-labelledby="v-sim" data-wy-similar-wrap hidden>
+    <h2 id="v-sim" class="wy-h3">{{v.similar}}</h2>
+    <div class="wy-hscroll"><div class="wy-hscroll__track" data-wy-similar tabindex="0" role="region" aria-label="{{=v.similar}}" data-i18n-attr="aria-label:v.similar"></div></div>
+  </section>
+
+  <section class="wy-block wy-safety" id="securite" aria-labelledby="v-safe">
+    <h2 id="v-safe" class="wy-h3"><svg class="wy-i"><use href="#i-shield"/></svg> {{v.safety}}</h2>
+    <ul class="wy-checks"><li><svg class="wy-i"><use href="#i-check"/></svg>{{v.safe1}}</li><li><svg class="wy-i"><use href="#i-check"/></svg>{{v.safe2}}</li><li><svg class="wy-i"><use href="#i-check"/></svg>{{v.safe3}}</li></ul>
+    <button class="wy-link" type="button" data-wy-toast="v.reporttoast"><svg class="wy-i"><use href="#i-flag"/></svg> {{v.report}}</button>
+  </section>
+</div>
+
+<!-- Sticky bar (phone) -->
+<div class="wy-cta-bar" data-wy-ctabar hidden>
+  <a class="wy-btn wy-btn--whatsapp" href="#" data-wy-wa><svg class="wy-i"><use href="#i-whatsapp"/></svg><span>WhatsApp</span></a>
+  <button class="wy-btn wy-btn--icon wy-btn--ghost" type="button" data-wy-call aria-label="{{=v.call}}" data-i18n-attr="aria-label:v.call"><svg class="wy-i"><use href="#i-phone"/></svg></button>
+  <button class="wy-btn wy-btn--icon wy-btn--ghost" type="button" data-wy-ai-open aria-label="{{=v.askai}}" data-i18n-attr="aria-label:v.askai"><svg class="wy-i"><use href="#i-sparkle"/></svg></button>
+</div>
+
+<!-- Lightbox -->
+<dialog class="wy-lightbox" data-wy-lightbox aria-label="{{=v.photos}}" data-i18n-attr="aria-label:v.photos">
+  <button class="wy-btn wy-btn--icon wy-lightbox__x" type="button" data-wy-lightbox-close aria-label="{{=a11y.close}}" data-i18n-attr="aria-label:a11y.close"><svg class="wy-i"><use href="#i-close"/></svg></button>
+  <div class="wy-lightbox__img" data-wy-lightbox-img></div>
+</dialog>
+<!-- Lead modal -->
+<dialog class="wy-modal" data-wy-lead aria-labelledby="lead-t">
+  <form method="dialog" class="wy-lead-form" data-wy-lead-form>
+    <header><h2 id="lead-t" class="wy-h3">{{lead.title}}</h2><button class="wy-btn wy-btn--icon" type="button" data-wy-lead-close aria-label="{{=a11y.close}}" data-i18n-attr="aria-label:a11y.close"><svg class="wy-i"><use href="#i-close"/></svg></button></header>
+    <label class="wy-field"><span class="wy-field__l">{{lead.name}}</span><input class="wy-input" name="name" required autocomplete="name"></label>
+    <label class="wy-field"><span class="wy-field__l">{{lead.phone}}</span><input class="wy-input" name="phone" type="tel" required autocomplete="tel" inputmode="tel" dir="ltr"></label>
+    <label class="wy-field"><span class="wy-field__l">{{lead.msg}}</span><textarea class="wy-input" name="msg" rows="4" data-wy-lead-msg></textarea></label>
+    <p class="wy-caption wy-muted">{{lead.note}}</p>
+    <div class="wy-row"><button class="wy-btn wy-btn--ghost" type="button" data-wy-lead-close>{{lead.cancel}}</button><button class="wy-btn wy-btn--primary" type="submit"><span class="wy-btn__label">{{lead.send}}</span></button></div>
+  </form>
+</dialog>
+</main>

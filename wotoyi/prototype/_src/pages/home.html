@@ -1,0 +1,208 @@
+<main id="main">
+<div data-wy-sentinel aria-hidden="true"></div>
+
+<!-- 1. Hero (night + aurora) -->
+<section class="wy-hero wy-night" aria-labelledby="h1">
+  <div class="wy-aurora" aria-hidden="true" data-wy-aurora><i class="wy-aurora__l wy-aurora__l--1"></i><i class="wy-aurora__l wy-aurora__l--2"></i><i class="wy-aurora__l wy-aurora__l--3"></i></div>
+  <div class="wy-container wy-hero__in">
+    <div class="wy-hero__copy">
+      <p class="wy-overline">{{hero.overline}}</p>
+      <h1 id="h1" class="wy-display-xl wy-hero__h1" data-wy-sheen>{{hero.h1}}</h1>
+      <p class="wy-lead">{{hero.sub}}</p>
+    </div>
+    <div class="wy-hero__car" aria-hidden="false">
+      <div class="wy-hero__layer wy-hero__layer--back" data-wy-parallax="-1"><div class="wy-hero__sun"></div></div>
+      <div class="wy-hero__layer wy-hero__layer--car" data-wy-parallax="1"><img src="../images/cars/hero-suv.svg" width="660" height="260" alt="{{=hero.car.alt}}" data-i18n-attr="alt:hero.car.alt" fetchpriority="high" decoding="async"></div>
+      <div class="wy-hero__floor" data-wy-parallax="2"></div>
+    </div>
+    <form class="wy-quicksearch wy-glass" action="search.html" method="get" data-wy-quicksearch aria-label="{{=qs.title}}" data-i18n-attr="aria-label:qs.title">
+      <div class="wy-quicksearch__top">
+        <div class="wy-segmented" role="radiogroup" aria-label="{{=qs.offer}}" data-i18n-attr="aria-label:qs.offer">
+          <label><input type="radio" name="offer" value="sale" checked><span>{{qs.buy}}</span></label>
+          <label><input type="radio" name="offer" value="rent"><span>{{qs.rent}}</span></label>
+        </div>
+        <p class="wy-quicksearch__count" aria-live="polite"><strong data-wy-count>0</strong> <span data-wy-count-label>{{qs.vehicles}}</span> <span class="wy-badge wy-badge--demo">{{demo.badge}}</span></p>
+      </div>
+      <div class="wy-quicksearch__grid">
+        <label class="wy-field"><span class="wy-field__l">{{f.make}}</span><select class="wy-select" name="make" data-wy-make><option value="">{{f.allmakes}}</option></select></label>
+        <label class="wy-field"><span class="wy-field__l">{{f.model}}</span><select class="wy-select" name="model" data-wy-model disabled><option value="">{{f.allmodels}}</option></select></label>
+        <label class="wy-field"><span class="wy-field__l" data-wy-budget-label>{{f.budgetmax}}</span><select class="wy-select" name="max" data-wy-budget><option value="">{{f.nolimit}}</option></select></label>
+        <label class="wy-field"><span class="wy-field__l">{{f.city}}</span><select class="wy-select" name="city" data-wy-city><option value="">{{f.allcities}}</option></select></label>
+        <button class="wy-btn wy-btn--primary wy-btn--lg" type="submit" data-motion="magnetic"><span class="wy-btn__label">{{qs.go}}</span><svg class="wy-i wy-flip"><use href="#i-arrow-right"/></svg></button>
+      </div>
+      <label class="wy-search wy-search--nl"><svg class="wy-i"><use href="#i-sparkle"/></svg><input class="wy-input" type="text" data-wy-nl placeholder="{{=qs.nl}}" data-i18n-attr="placeholder:qs.nl" aria-label="{{=qs.nl}}"><span class="wy-search__hint">{{qs.nlhint}}</span></label>
+    </form>
+  </div>
+</section>
+
+<!-- 2. Body-type shortcuts -->
+<section class="wy-section wy-section--tight" aria-labelledby="h-types">
+  <div class="wy-container">
+    <h2 id="h-types" class="wy-visually-hidden">{{types.title}}</h2>
+    <ul class="wy-shortcuts" data-wy-shortcuts data-motion="reveal"></ul>
+  </div>
+</section>
+
+<!-- 3. Featured -->
+<section class="wy-section" id="featured" aria-labelledby="h-feat" data-wy-section="featured">
+  <div class="wy-container">
+    <header class="wy-sec-head">
+      <div><p class="wy-overline">{{feat.over}}</p><h2 id="h-feat" class="wy-display-l" data-motion="split">{{feat.title}}</h2></div>
+      <a class="wy-link wy-link--arrow" href="search.html">{{common.seeall}} <svg class="wy-i wy-flip"><use href="#i-arrow-right"/></svg></a>
+    </header>
+  </div>
+  <div class="wy-container-wide wy-hscroll" data-wy-hscroll>
+    <div class="wy-hscroll__track" data-wy-featured tabindex="0" role="region" aria-label="{{=feat.title}}" data-i18n-attr="aria-label:feat.title"></div>
+    <div class="wy-hscroll__nav"><button class="wy-btn wy-btn--icon wy-btn--ghost" type="button" data-wy-prev aria-label="{{=common.prev}}" data-i18n-attr="aria-label:common.prev"><svg class="wy-i wy-flip wy-rev"><use href="#i-arrow-right"/></svg></button><button class="wy-btn wy-btn--icon wy-btn--ghost" type="button" data-wy-next aria-label="{{=common.next}}" data-i18n-attr="aria-label:common.next"><svg class="wy-i wy-flip"><use href="#i-arrow-right"/></svg></button></div>
+  </div>
+</section>
+
+<!-- 4. Make marquee -->
+<section class="wy-marquee" aria-label="{{=marq.title}}" data-i18n-attr="aria-label:marq.title" data-wy-marquee>
+  <p class="wy-overline wy-marquee__cap">{{marq.title}}</p>
+  <div class="wy-marquee__viewport"><ul class="wy-marquee__track" data-wy-marquee-list></ul></div>
+</section>
+
+<!-- 5. Trust story (pinned) -->
+<section class="wy-story wy-night" id="trust" aria-labelledby="h-trust" data-wy-story>
+  <div class="wy-story__sentinels" aria-hidden="true"><i></i><i></i><i></i></div>
+  <div class="wy-story__stage">
+    <div class="wy-aurora wy-aurora--soft" aria-hidden="true"><i class="wy-aurora__l wy-aurora__l--1"></i><i class="wy-aurora__l wy-aurora__l--3"></i></div>
+    <div class="wy-container wy-story__grid">
+      <div class="wy-story__copy">
+        <p class="wy-overline">{{trust.over}}</p>
+        <h2 id="h-trust" class="wy-display-l" data-motion="split">{{trust.title}}</h2>
+        <ol class="wy-story__steps">
+          <li data-step="1" class="is-active"><span class="wy-step__n">1</span><div><h3 class="wy-h3">{{trust.s1.t}}</h3><p>{{trust.s1.p}}</p></div></li>
+          <li data-step="2"><span class="wy-step__n">2</span><div><h3 class="wy-h3">{{trust.s2.t}}</h3><p>{{trust.s2.p}}</p></div></li>
+          <li data-step="3"><span class="wy-step__n">3</span><div><h3 class="wy-h3">{{trust.s3.t}}</h3><p>{{trust.s3.p}}</p></div></li>
+        </ol>
+      </div>
+      <div class="wy-story__visual" aria-hidden="true">
+        <div class="wy-story__ring"></div>
+        <img src="../images/cars/suv-pearl.svg" width="660" height="260" alt="" loading="lazy" decoding="async" data-wy-parallax="1">
+        <span class="wy-story__tag" data-min="1"><svg class="wy-i"><use href="#i-store"/></svg>{{badge.verified}}</span>
+        <span class="wy-story__tag" data-min="2"><svg class="wy-i"><use href="#i-clipboard"/></svg>{{badge.inspected}}</span>
+        <span class="wy-story__tag wy-story__tag--wa" data-min="3"><svg class="wy-i"><use href="#i-whatsapp"/></svg>WhatsApp</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. Rentals -->
+<section class="wy-section" id="rental" aria-labelledby="h-rent" data-wy-section="rental">
+  <div class="wy-container">
+    <header class="wy-sec-head"><div><p class="wy-overline">{{rent.over}}</p><h2 id="h-rent" class="wy-display-l" data-motion="split">{{rent.title}}</h2></div>
+    <a class="wy-link wy-link--arrow" href="search.html?offer=rent">{{rent.all}} <svg class="wy-i wy-flip"><use href="#i-arrow-right"/></svg></a></header>
+    <div class="wy-grid wy-grid--3" data-wy-rentals data-motion="reveal"></div>
+  </div>
+</section>
+
+<!-- 7. Services -->
+<section class="wy-section wy-section--sand" id="services" aria-labelledby="h-serv" data-wy-section="services">
+  <div class="wy-container">
+    <header class="wy-sec-head"><div><p class="wy-overline">{{serv.over}}</p><h2 id="h-serv" class="wy-display-l" data-motion="split">{{serv.title}}</h2></div><span class="wy-badge wy-badge--demo">{{demo.badge}}</span></header>
+    <div class="wy-grid wy-grid--4" data-wy-services data-motion="reveal"></div>
+  </div>
+</section>
+
+<!-- 8. Inspection -->
+<section class="wy-section" id="inspection" aria-labelledby="h-insp">
+  <div class="wy-container wy-split">
+    <div class="wy-split__copy" data-motion="reveal">
+      <p class="wy-overline">{{insp.over}}</p>
+      <h2 id="h-insp" class="wy-display-l" data-motion="split">{{insp.title}}</h2>
+      <p class="wy-lead">{{insp.lead}}</p>
+      <ul class="wy-checks">
+        <li><svg class="wy-i"><use href="#i-check"/></svg>{{insp.m1}}</li><li><svg class="wy-i"><use href="#i-check"/></svg>{{insp.m2}}</li><li><svg class="wy-i"><use href="#i-check"/></svg>{{insp.m3}}</li><li><svg class="wy-i"><use href="#i-check"/></svg>{{insp.m4}}</li><li><svg class="wy-i"><use href="#i-check"/></svg>{{insp.m5}}</li><li><svg class="wy-i"><use href="#i-check"/></svg>{{insp.m6}}</li>
+      </ul>
+      <p class="wy-notice"><svg class="wy-i"><use href="#i-info"/></svg><span>{{insp.disclaimer}}</span></p>
+      <div class="wy-row"><button class="wy-btn wy-btn--primary" type="button" data-wy-toast="insp.toast" data-motion="magnetic"><span class="wy-btn__label">{{insp.cta}}</span></button><span class="wy-caption wy-muted">{{insp.pricenote}}</span></div>
+    </div>
+    <figure class="wy-report" data-motion="reveal" aria-label="{{=insp.sample}}" data-i18n-attr="aria-label:insp.sample">
+      <figcaption class="wy-report__cap"><span class="wy-badge wy-badge--demo">{{insp.sample}}</span></figcaption>
+      <div class="wy-report__head"><svg class="wy-i"><use href="#i-clipboard"/></svg><div><strong>{{insp.r.title}}</strong><span class="wy-caption wy-muted">{{insp.r.meta}}</span></div></div>
+      <ul class="wy-report__list">
+        <li><span>{{insp.r.i1}}</span><span class="wy-pill wy-pill--ok">{{insp.r.ok}}</span></li>
+        <li><span>{{insp.r.i2}}</span><span class="wy-pill wy-pill--ok">{{insp.r.ok}}</span></li>
+        <li><span>{{insp.r.i3}}</span><span class="wy-pill wy-pill--warn">{{insp.r.warn}}</span></li>
+        <li><span>{{insp.r.i4}}</span><span class="wy-pill wy-pill--ok">{{insp.r.ok}}</span></li>
+        <li><span>{{insp.r.i5}}</span><span class="wy-pill wy-pill--info">{{insp.r.info}}</span></li>
+      </ul>
+      <p class="wy-caption wy-muted">{{insp.r.foot}}</p>
+    </figure>
+  </div>
+</section>
+
+<!-- 9. Dealers -->
+<section class="wy-section wy-section--sand" id="dealers" aria-labelledby="h-deal" data-wy-section="dealers">
+  <div class="wy-container">
+    <header class="wy-sec-head"><div><p class="wy-overline">{{deal.over}}</p><h2 id="h-deal" class="wy-display-l" data-motion="split">{{deal.title}}</h2></div><span class="wy-badge wy-badge--demo">{{demo.badge}}</span></header>
+  </div>
+  <div class="wy-container-wide wy-hscroll"><div class="wy-hscroll__track" data-wy-dealers tabindex="0" role="region" aria-label="{{=deal.title}}" data-i18n-attr="aria-label:deal.title"></div></div>
+</section>
+
+<!-- 10. AI showcase (night) -->
+<section class="wy-section wy-night wy-ai-show" id="ai" aria-labelledby="h-ai">
+  <div class="wy-aurora wy-aurora--soft" aria-hidden="true"><i class="wy-aurora__l wy-aurora__l--2"></i><i class="wy-aurora__l wy-aurora__l--1"></i></div>
+  <div class="wy-container wy-split wy-split--ai">
+    <div data-motion="reveal">
+      <p class="wy-overline">{{aiS.over}}</p>
+      <h2 id="h-ai" class="wy-display-l" data-motion="split">{{aiS.title}}</h2>
+      <p class="wy-lead">{{aiS.lead}}</p>
+      <ul class="wy-checks"><li><svg class="wy-i"><use href="#i-check"/></svg>{{aiS.c1}}</li><li><svg class="wy-i"><use href="#i-check"/></svg>{{aiS.c2}}</li><li><svg class="wy-i"><use href="#i-check"/></svg>{{aiS.c3}}</li><li><svg class="wy-i"><use href="#i-check"/></svg>{{aiS.c4}}</li></ul>
+      <p class="wy-caption wy-muted">{{ai.notice}}</p>
+    </div>
+    <div class="wy-ai-prompts wy-glass" data-motion="reveal">
+      <p class="wy-overline">{{ai.examples}}</p>
+      <div class="wy-chips wy-chips--col" data-wy-ai-showprompts></div>
+    </div>
+  </div>
+</section>
+
+<!-- 11. Figures -->
+<section class="wy-section" aria-labelledby="h-fig" data-wy-section="figures">
+  <div class="wy-container">
+    <h2 id="h-fig" class="wy-display-m" data-motion="split">{{fig.title}}</h2>
+    <dl class="wy-figures" data-motion="reveal">
+      <div><dt>{{fig.v}}</dt><dd><span class="wy-counter" data-wy-figure="vehicles"></span></dd></div>
+      <div><dt>{{fig.d}}</dt><dd><span class="wy-counter" data-wy-figure="dealers"></span></dd></div>
+      <div><dt>{{fig.c}}</dt><dd><span class="wy-counter" data-wy-figure="cities"></span></dd></div>
+    </dl>
+    <p class="wy-caption wy-muted"><span class="wy-badge wy-badge--demo">{{demo.badge}}</span> {{fig.note}}</p>
+  </div>
+</section>
+
+<!-- 12. Dealer CTA -->
+<section class="wy-section wy-section--sand" id="dealer-cta" aria-labelledby="h-dcta">
+  <div class="wy-container wy-split">
+    <div data-motion="reveal">
+      <p class="wy-overline">{{dcta.over}}</p>
+      <h2 id="h-dcta" class="wy-display-l" data-motion="split">{{dcta.title}}</h2>
+      <ul class="wy-benefits">
+        <li><svg class="wy-i"><use href="#i-globe"/></svg><div><strong>{{dcta.b1.t}}</strong><span>{{dcta.b1.p}}</span></div></li>
+        <li><svg class="wy-i"><use href="#i-send"/></svg><div><strong>{{dcta.b2.t}}</strong><span>{{dcta.b2.p}}</span></div></li>
+        <li><svg class="wy-i"><use href="#i-sparkle"/></svg><div><strong>{{dcta.b3.t}}</strong><span>{{dcta.b3.p}}</span></div></li>
+      </ul>
+      <a class="wy-btn wy-btn--primary wy-btn--lg" href="#" data-demo-link data-motion="magnetic"><span class="wy-btn__label">{{dcta.cta}}</span></a>
+    </div>
+    <figure class="wy-mock" data-motion="reveal" aria-label="{{=dcta.mock}}" data-i18n-attr="aria-label:dcta.mock">
+      <div class="wy-mock__bar"><i></i><i></i><i></i><span class="wy-caption">Wotoyi Pro</span></div>
+      <div class="wy-mock__body">
+        <div class="wy-mock__rail"><i></i><i class="is-on"></i><i></i><i></i><i></i></div>
+        <div class="wy-mock__main">
+          <div class="wy-mock__kpis"><div><span class="wy-caption">{{dcta.k1}}</span><b></b></div><div><span class="wy-caption">{{dcta.k2}}</span><b></b></div><div><span class="wy-caption">{{dcta.k3}}</span><b></b></div></div>
+          <div class="wy-mock__list"><div><i></i><span></span><em></em></div><div><i></i><span></span><em></em></div><div><i></i><span></span><em></em></div></div>
+        </div>
+      </div>
+      <figcaption class="wy-caption wy-muted">{{dcta.mock}}</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- 13. Recently viewed -->
+<section class="wy-section" id="recent" aria-labelledby="h-rec" data-wy-section="recent" hidden>
+  <div class="wy-container"><header class="wy-sec-head"><h2 id="h-rec" class="wy-display-m">{{recent.title}}</h2></header></div>
+  <div class="wy-container-wide wy-hscroll"><div class="wy-hscroll__track" data-wy-recent tabindex="0" role="region" aria-label="{{=recent.title}}" data-i18n-attr="aria-label:recent.title"></div></div>
+</section>
+</main>

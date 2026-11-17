@@ -1,0 +1,44 @@
+<body data-page="%%PAGE%%">
+%%SPRITE%%
+<a class="wy-skip" href="#main">{{a11y.skip}}</a>
+<div class="wy-demo-strip" role="note"><span class="wy-badge wy-badge--demo">{{demo.badge}}</span> <span>{{demo.strip}}</span></div>
+<header class="wy-header" data-wy-header%%HEADERATTR%%>
+  <div class="wy-header__in wy-container-wide">
+    <a class="wy-logo" href="index.html" aria-label="{{=nav.home}}">%%LOGO_H%%</a>
+    <nav class="wy-nav" aria-label="{{=nav.main}}" data-i18n-attr="aria-label:nav.main">
+      <a href="search.html">{{nav.buy}}</a>
+      <a href="search.html?offer=rent">{{nav.rent}}</a>
+      <a href="index.html#services">{{nav.services}}</a>
+      <a href="index.html#dealers">{{nav.dealers}}</a>
+      <a href="index.html#inspection">{{nav.inspection}}</a>
+    </nav>
+    <div class="wy-header__tools">
+      <div class="wy-lang wy-only-desktop" role="group" aria-label="{{=lang.label}}" data-i18n-attr="aria-label:lang.label">
+        <button type="button" data-wy-lang="fr" aria-pressed="true" lang="fr">FR</button>
+        <button type="button" data-wy-lang="en" aria-pressed="false" lang="en">EN</button>
+        <button type="button" data-wy-lang="ar" aria-pressed="false" lang="ar">AR</button>
+        <button type="button" disabled title="{{=lang.wolof}}" data-i18n-attr="title:lang.wolof" lang="wo">WO</button>
+      </div>
+      <a class="wy-btn wy-btn--icon wy-only-phone" href="search.html" aria-label="{{=nav.search}}" data-i18n-attr="aria-label:nav.search"><svg class="wy-i"><use href="#i-search"/></svg></a>
+      <button class="wy-btn wy-btn--icon" type="button" data-wy-theme-toggle aria-label="{{=theme.toggle}}" data-i18n-attr="aria-label:theme.toggle">
+        <svg class="wy-i wy-i--sun"><use href="#i-sun"/></svg><svg class="wy-i wy-i--moon"><use href="#i-moon"/></svg>
+      </button>
+      <button class="wy-btn wy-btn--icon wy-only-desktop" type="button" data-wy-favs-open aria-label="{{=nav.favs}}" data-i18n-attr="aria-label:nav.favs"><svg class="wy-i"><use href="#i-heart"/></svg><span class="wy-count-dot" data-wy-favs-count hidden>0</span></button>
+      <button class="wy-btn wy-btn--icon wy-only-desktop" type="button" data-demo-link aria-label="{{=nav.account}}" data-i18n-attr="aria-label:nav.account"><svg class="wy-i"><use href="#i-user"/></svg></button>
+      <a class="wy-btn wy-btn--primary wy-btn--sm wy-only-desktop" href="#" data-demo-link data-motion="magnetic"><span class="wy-btn__label">{{nav.pro}}</span></a>
+      <button class="wy-btn wy-btn--icon wy-not-desktop" type="button" data-wy-menu-open aria-label="{{=nav.menu}}" aria-expanded="false" aria-controls="wy-menu" data-i18n-attr="aria-label:nav.menu"><svg class="wy-i"><use href="#i-menu"/></svg></button>
+    </div>
+  </div>
+</header>
+<div class="wy-scrim" data-wy-scrim hidden></div>
+<aside class="wy-drawer wy-drawer--menu" id="wy-menu" data-wy-menu aria-label="{{=nav.menu}}" data-i18n-attr="aria-label:nav.menu" hidden>
+  <div class="wy-drawer__head"><span class="wy-h4">{{nav.menu}}</span><button class="wy-btn wy-btn--icon" type="button" data-wy-close aria-label="{{=a11y.close}}" data-i18n-attr="aria-label:a11y.close"><svg class="wy-i"><use href="#i-close"/></svg></button></div>
+  <nav class="wy-drawer__nav" aria-label="{{=nav.main}}" data-i18n-attr="aria-label:nav.main">
+    <a href="search.html">{{nav.buy}}</a><a href="search.html?offer=rent">{{nav.rent}}</a><a href="index.html#services">{{nav.services}}</a><a href="index.html#dealers">{{nav.dealers}}</a><a href="index.html#inspection">{{nav.inspection}}</a>
+  </nav>
+  <div class="wy-drawer__block"><p class="wy-overline">{{lang.label}}</p>
+    <div class="wy-lang" role="group" aria-label="{{=lang.label}}" data-i18n-attr="aria-label:lang.label"><button type="button" data-wy-lang="fr" aria-pressed="true" lang="fr">FR</button><button type="button" data-wy-lang="en" aria-pressed="false" lang="en">EN</button><button type="button" data-wy-lang="ar" aria-pressed="false" lang="ar">AR</button><button type="button" disabled title="{{=lang.wolof}}" data-i18n-attr="title:lang.wolof" lang="wo">WO</button></div>
+    <p class="wy-caption wy-muted">{{lang.wolof}}</p></div>
+  <div class="wy-drawer__block"><p class="wy-overline">{{theme.label}}</p>%%THEMESEG%%</div>
+  <a class="wy-btn wy-btn--primary" href="#" data-demo-link><span class="wy-btn__label">{{nav.pro}}</span></a>
+</aside>

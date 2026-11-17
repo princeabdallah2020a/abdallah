@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="fr" dir="ltr" data-theme="light" data-motion="full">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fiche véhicule · Wotoyi (prototype)</title>
+<meta name="description" content="Prototype de la fiche véhicule Wotoyi. Données de démonstration.">
+<meta name="color-scheme" content="light dark">
+<meta name="robots" content="noindex">
+<script>
+/* wy-head: theme + motion tier + language, before CSS (no flash). DESIGN 1.6 */
+(function(){try{var d=document.documentElement,s=localStorage,m=matchMedia,q=location.search,p=s.getItem('wy-theme')||'auto',
+t=p==='auto'?(m('(prefers-color-scheme: dark)').matches?'dark':'light'):p,c=navigator.connection||{},
+lite=(navigator.hardwareConcurrency||8)<=4||(navigator.deviceMemory||8)<=2||c.saveData||/2g/.test(c.effectiveType||''),
+mo=(q.match(/[?&]motion=(full|lite|reduced)/)||[])[1]||s.getItem('wy-motion')||'auto',
+l=(q.match(/[?&]lang=(fr|en|ar)/)||[])[1]||s.getItem('wy-lang')||'fr';
+if(mo==='auto')mo=m('(prefers-reduced-motion: reduce)').matches?'reduced':lite?'lite':'full';
+var th=(q.match(/[?&]theme=(light|dark)/)||[])[1];if(th){t=th;p=th}
+d.dataset.theme=t;d.dataset.themePref=p;d.dataset.motion=mo;d.lang=l;d.dir=l==='ar'?'rtl':'ltr';d.classList.add('wy-js')}catch(e){}})();
+</script>
+<link rel="preload" href="../fonts/manrope-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body data-page="vehicle">
+<svg class="wy-sprite" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute"><defs>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+<symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 6h8M18 6h2M4 12h2M12 12h8M4 18h10M20 18h0"/><circle cx="15" cy="6" r="2.5"/><circle cx="9" cy="12" r="2.5"/><circle cx="17" cy="18" r="2.5"/></symbol>
+<symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7.500-4.600-9.300-9.800C1.600 7 3.500 4 6.800 4c2 0 3.500 1.100 5.200 3 1.700-1.900 3.200-3 5.200-3 3.300 0 5.200 3 4.100 6.200C19.500 15.400 12 20 12 20z"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.600-6 8-6s8 2 8 6"/></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+<symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+<symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+<symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
+<symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+<symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.900 4.900l1.400 1.400M17.700 17.700l1.400 1.400M2 12h2M20 12h2M4.900 19.100l1.400-1.400M17.700 6.300l1.400-1.400"/></symbol>
+<symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.500A8 8 0 0 1 9.500 4 8 8 0 1 0 20 14.500z"/></symbol>
+<symbol id="i-auto" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></symbol>
+<symbol id="i-whatsapp" viewBox="0 0 24 24"><path d="M20 11.500A8 8 0 0 1 8.200 18.600L4 20l1.400-4A8 8 0 1 1 20 11.500z"/><path d="M9.200 8.500c0 3 2.300 5.300 5.300 5.300l1.100-1.400-2-1-1 .8c-.8-.4-1.500-1.100-1.900-1.900l.8-1-1.100-1.800z"/></symbol>
+<symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.500 1.500a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></symbol>
+<symbol id="i-message" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></symbol>
+<symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M11 3l1.900 5.100L18 10l-5.100 1.900L11 17l-1.900-5.100L4 10l5.100-1.900z"/><path d="M19 15l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.500 4.500 4.500L19 7.500"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3 8.500-7 10-4-1.500-7-5-7-10V6z"/><path d="m9 12 2 2 4-4"/></symbol>
+<symbol id="i-clipboard" viewBox="0 0 24 24"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4V3h6v1M9 13l2 2 4-4"/></symbol>
+<symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6.200 7-11a7 7 0 0 0-14 0c0 4.800 7 11 7 11z"/><circle cx="12" cy="10" r="2.500"/></symbol>
+<symbol id="i-gauge" viewBox="0 0 24 24"><path d="M4 17a8 8 0 1 1 16 0"/><path d="m12 17 4-6"/></symbol>
+<symbol id="i-fuel" viewBox="0 0 24 24"><path d="M5 21V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v16M4 21h12M15 10h2a2 2 0 0 1 2 2v4a1.500 1.500 0 0 0 3 0V9l-3-3"/><path d="M8 8h4"/></symbol>
+<symbol id="i-shifter" viewBox="0 0 24 24"><circle cx="6" cy="5" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="18" cy="5" r="2"/><circle cx="12" cy="19" r="2"/><path d="M6 7v5h12V7M12 12v5"/></symbol>
+<symbol id="i-calendar" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 10h16M8 3v4M16 3v4"/></symbol>
+<symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="6.500" height="6.500" rx="1.500"/><rect x="13.500" y="4" width="6.500" height="6.500" rx="1.500"/><rect x="4" y="13.500" width="6.500" height="6.500" rx="1.500"/><rect x="13.500" y="13.500" width="6.500" height="6.500" rx="1.500"/></symbol>
+<symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4.500 6h.01M4.500 12h.01M4.500 18h.01"/></symbol>
+<symbol id="i-share" viewBox="0 0 24 24"><circle cx="6" cy="12" r="2.500"/><circle cx="18" cy="6" r="2.500"/><circle cx="18" cy="18" r="2.500"/><path d="m8.200 10.800 7.600-3.600M8.200 13.200l7.600 3.600"/></symbol>
+<symbol id="i-compare" viewBox="0 0 24 24"><path d="M7 20V4M7 4 4 7M7 4l3 3M17 4v16M17 20l-3-3M17 20l3-3"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 17V11a6 6 0 0 1 12 0v6l2 2H4zM10 21h4"/></symbol>
+<symbol id="i-sedan" viewBox="0 0 24 24"><path d="M3 16v-3.200c0-.8.400-1.500 1.200-1.800L7 10l2.500-3.500h5L17.500 10l2.800.9c.4.200.7.600.7 1.100V16"/><path d="M3 16.500h2.500M9.500 16.500h5M18.500 16.500H21"/><circle cx="7.500" cy="16.500" r="2"/><circle cx="16.500" cy="16.500" r="2"/></symbol>
+<symbol id="i-suv" viewBox="0 0 24 24"><path d="M3 16v-4c0-.7.400-1.200 1-1.400L6.500 10l1.500-3.500h8l2.800 3.800 1.700.8c.3.200.5.500.5.900V16"/><path d="M3 16.500h2.500M9.500 16.500h5M18.500 16.500H21"/><circle cx="7.500" cy="16.500" r="2"/><circle cx="16.500" cy="16.500" r="2"/></symbol>
+<symbol id="i-pickup" viewBox="0 0 24 24"><path d="M2.500 16v-3.500c0-.5.300-1 .8-1.100L7 10.500l2-3.500h4.500v3.500H21V16"/><path d="M2.500 16.500H5M9.500 16.500h5M18.500 16.500H21"/><circle cx="7.500" cy="16.500" r="2"/><circle cx="16.500" cy="16.500" r="2"/></symbol>
+<symbol id="i-hatch" viewBox="0 0 24 24"><path d="M3 16v-3.500c0-.6.300-1.100.9-1.300L7 10l2-3h5.500l3 4 2 1c.3.200.5.500.5.900V16"/><path d="M3 16.500h2.500M9.500 16.500h5M18.500 16.500H21"/><circle cx="7.500" cy="16.500" r="2"/><circle cx="16.500" cy="16.500" r="2"/></symbol>
+<symbol id="i-van" viewBox="0 0 24 24"><path d="M2.500 16V7.500a1 1 0 0 1 1-1H15v4h3.500l3 3V16"/><path d="M2.500 16.500H5M9.500 16.500h5M18.500 16.500H21"/><circle cx="7.500" cy="16.500" r="2"/><circle cx="16.500" cy="16.500" r="2"/></symbol>
+<symbol id="i-offroad" viewBox="0 0 24 24"><path d="M3 15v-3.500c0-.6.400-1.100 1-1.300L6.500 9.500 8 6.500h8l2.800 3.200 1.700.8c.3.200.5.500.5.900V15"/><path d="M3 15.500h2M10 15.500h4M19 15.500h2"/><circle cx="7.500" cy="16" r="2.500"/><circle cx="16.500" cy="16" r="2.500"/></symbol>
+<symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 3 5 14h6l-1 7 8-11h-6z"/></symbol>
+<symbol id="i-wrench" viewBox="0 0 24 24"><path d="M14.500 6.500a4 4 0 0 0 5 5L11 20a2.100 2.100 0 0 1-3-3z"/><path d="M14.500 6.500 17 4l3 3-2.500 2.500"/></symbol>
+<symbol id="i-steering" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2"/><path d="M3 12h7M14 12h7M12 14v7"/></symbol>
+<symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></symbol>
+<symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 3s6 6.500 6 11a6 6 0 0 1-12 0c0-4.500 6-11 6-11z"/></symbol>
+<symbol id="i-store" viewBox="0 0 24 24"><path d="M4 9l1-5h14l1 5M4 9v11h16V9M4 9a2.700 2.700 0 0 0 5.300 0M9.300 9a2.700 2.700 0 0 0 5.400 0M14.700 9A2.700 2.700 0 0 0 20 9"/></symbol>
+<symbol id="i-rotate" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.300-5.600M20 4v4h-4"/></symbol>
+<symbol id="i-fullscreen" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></symbol>
+<symbol id="i-tag" viewBox="0 0 24 24"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.500" cy="8.500" r="1"/></symbol>
+<symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+<symbol id="i-send" viewBox="0 0 24 24"><path d="M4 12 20 4l-4 16-4-6z"/></symbol>
+<symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.500"/></symbol>
+<symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></symbol>
+</defs></svg>
+
+<a class="wy-skip" href="#main"><span data-i18n="a11y.skip">Aller au contenu</span></a>
+<div class="wy-demo-strip" role="note"><span class="wy-badge wy-badge--demo"><span data-i18n="demo.badge">Démo</span></span> <span><span data-i18n="demo.strip">Prototype de conception : toutes les annonces, prix, concessionnaires et chiffres sont des données de démonstration, non contractuelles.</span></span></div>
+<header class="wy-header" data-wy-header>
+  <div class="wy-header__in wy-container-wide">
+    <a class="wy-logo" href="index.html" aria-label="Wotoyi, accueil"><svg class="wy-logo__svg" viewBox="0 -1500 6423 2020" role="img" focusable="false"><title>Wotoyi</title><defs><linearGradient id="wy-sun-h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--wy-logo-a)"/><stop offset="1" style="stop-color:var(--wy-logo-b)"/></linearGradient><clipPath id="wy-sunt-h"><rect x="3630" y="-1115" width="1150" height="712"/></clipPath><clipPath id="wy-sunb-h"><rect x="3630" y="-318" width="1150" height="353"/></clipPath></defs><g fill="currentColor"><path d="M370 0 40.0 -1081.6666259765625 276.3297119140625 -1080.0 487.33154296875 -387.327392578125 700.8333129882812 -1080.0H903.8305053710938L1117.332275390625 -387.327392578125L1328.66748046875 -1080.0H1564.663818359375L1234.663818359375 0.0H1046.666259765625L802.3319091796875 -743.0047607421875L557.99755859375 0.0Z"/><path d="M2182.332275390625 30.0Q2019.8323364257812 30.0 1898.999267578125 -43.0Q1778.1661987304688 -116.0 1711.5830993652344 -244.58334350585938Q1645.0 -373.16668701171875 1645.0 -540.3333740234375Q1645.0 -709.5000610351562 1712.999755859375 -837.9167175292969Q1780.99951171875 -966.3333740234375 1901.9159240722656 -1038.1666870117188Q2022.8323364257812 -1110.0 2182.332275390625 -1110.0Q2344.9989013671875 -1110.0 2466.2486267089844 -1037.0833435058594Q2587.4983520507812 -964.1666870117188 2654.414764404297 -835.7500305175781Q2721.3311767578125 -707.3333740234375 2721.3311767578125 -540.3333740234375Q2721.3311767578125 -371.83331298828125 2653.914764404297 -243.33331298828125Q2586.4983520507812 -114.83331298828125 2465.165283203125 -42.416656494140625Q2343.8322143554688 30.0 2182.332275390625 30.0ZM2182.332275390625 -195.6632080078125Q2325.5004272460938 -195.6632080078125 2395.9178161621094 -291.99749755859375Q2466.335205078125 -388.331787109375 2466.335205078125 -540.3333740234375Q2466.335205078125 -697.1682739257812 2395.0011596679688 -790.7525329589844Q2323.6671142578125 -884.3367919921875 2182.332275390625 -884.3367919921875Q2085.331298828125 -884.3367919921875 2022.9139709472656 -840.669677734375Q1960.4966430664062 -797.0025634765625 1930.2463073730469 -719.66845703125Q1899.9959716796875 -642.3343505859375 1899.9959716796875 -540.3333740234375Q1899.9959716796875 -382.83184814453125 1971.6633911132812 -289.2475280761719Q2043.330810546875 -195.6632080078125 2182.332275390625 -195.6632080078125Z"/><path d="M3533.9981689453125 0.0Q3427.1654663085938 20.49993896484375 3324.416046142578 17.66656494140625Q3221.6666259765625 14.83319091796875 3140.9170837402344 -20.33343505859375Q3060.1675415039062 -55.50006103515625 3018.33447265625 -132.66650390625Q2981.00146484375 -203.16607666015625 2978.8347778320312 -275.99896240234375Q2976.6680908203125 -348.83184814453125 2976.6680908203125 -441.331298828125V-1380.0H3217.3309326171875V-454.664306640625Q3217.3309326171875 -390.49749755859375 3218.8309326171875 -341.2476501464844Q3220.3309326171875 -291.997802734375 3239.3309326171875 -260.664306640625Q3275.3309326171875 -201.16400146484375 3354.1642456054688 -194.24710083007812Q3432.99755859375 -187.3302001953125 3533.9981689453125 -201.6636962890625ZM2781.0 -891.0025634765625V-1080H3533.9981689453125V-891.0025634765625Z"/><path d="M5065.00048828125 480.0 5273.3338623046875 -90.66650390625 5277.00048828125 77.33349609375 4806.333740234375 -1080.0H5056.6632080078125L5390.6654052734375 -223.6619873046875H5326.6654052734375L5651.666748046875 -1080.0H5893.3297119140625L5290.6639404296875 480.0Z"/><path d="M6022.0 -1243.6683349609375V-1464.9993896484375H6262.662841796875V-1243.6683349609375ZM6022.0 0V-1080H6262.662841796875V0.0Z"/></g><circle cx="4205" cy="-540" r="570" fill="url(#wy-sun-h)" clip-path="url(#wy-sunt-h)"/><circle cx="4205" cy="-540" r="570" fill="url(#wy-sun-h)" opacity=".7" clip-path="url(#wy-sunb-h)"/></svg></a>
+    <nav class="wy-nav" aria-label="Navigation principale" data-i18n-attr="aria-label:nav.main">
+      <a href="search.html"><span data-i18n="nav.buy">Acheter</span></a>
+      <a href="search.html?offer=rent"><span data-i18n="nav.rent">Louer</span></a>
+      <a href="index.html#services"><span data-i18n="nav.services">Services</span></a>
+      <a href="index.html#dealers"><span data-i18n="nav.dealers">Concessionnaires</span></a>
+      <a href="index.html#inspection"><span data-i18n="nav.inspection">Inspection</span></a>
+    </nav>
+    <div class="wy-header__tools">
+      <div class="wy-lang wy-only-desktop" role="group" aria-label="Langue" data-i18n-attr="aria-label:lang.label">
+        <button type="button" data-wy-lang="fr" aria-pressed="true" lang="fr">FR</button>
+        <button type="button" data-wy-lang="en" aria-pressed="false" lang="en">EN</button>
+        <button type="button" data-wy-lang="ar" aria-pressed="false" lang="ar">AR</button>
+        <button type="button" disabled title="Wolof : en attente de relecture par un locuteur natif" data-i18n-attr="title:lang.wolof" lang="wo">WO</button>
+      </div>
+      <a class="wy-btn wy-btn--icon wy-only-phone" href="search.html" aria-label="Rechercher" data-i18n-attr="aria-label:nav.search"><svg class="wy-i"><use href="#i-search"/></svg></a>
+      <button class="wy-btn wy-btn--icon" type="button" data-wy-theme-toggle aria-label="Basculer entre thème clair et sombre" data-i18n-attr="aria-label:theme.toggle">
+        <svg class="wy-i wy-i--sun"><use href="#i-sun"/></svg><svg class="wy-i wy-i--moon"><use href="#i-moon"/></svg>
+      </button>
+      <button class="wy-btn wy-btn--icon wy-only-desktop" type="button" data-wy-favs-open aria-label="Favoris" data-i18n-attr="aria-label:nav.favs"><svg class="wy-i"><use href="#i-heart"/></svg><span class="wy-count-dot" data-wy-favs-count hidden>0</span></button>
+      <button class="wy-btn wy-btn--icon wy-only-desktop" type="button" data-demo-link aria-label="Mon compte" data-i18n-attr="aria-label:nav.account"><svg class="wy-i"><use href="#i-user"/></svg></button>
+      <a class="wy-btn wy-btn--primary wy-btn--sm wy-only-desktop" href="#" data-demo-link data-motion="magnetic"><span class="wy-btn__label"><span data-i18n="nav.pro">Espace pro</span></span></a>
+      <button class="wy-btn wy-btn--icon wy-not-desktop" type="button" data-wy-menu-open aria-label="Menu" aria-expanded="false" aria-controls="wy-menu" data-i18n-attr="aria-label:nav.menu"><svg class="wy-i"><use href="#i-menu"/></svg></button>
+    </div>
+  </div>
+</header>
+<div class="wy-scrim" data-wy-scrim hidden></div>
+<aside class="wy-drawer wy-drawer--menu" id="wy-menu" data-wy-menu aria-label="Menu" data-i18n-attr="aria-label:nav.menu" hidden>
+  <div class="wy-drawer__head"><span class="wy-h4"><span data-i18n="nav.menu">Menu</span></span><button class="wy-btn wy-btn--icon" type="button" data-wy-close aria-label="Fermer" data-i18n-attr="aria-label:a11y.close"><svg class="wy-i"><use href="#i-close"/></svg></button></div>
+  <nav class="wy-drawer__nav" aria-label="Navigation principale" data-i18n-attr="aria-label:nav.main">
+    <a href="search.html"><span data-i18n="nav.buy">Acheter</span></a><a href="search.html?offer=rent"><span data-i18n="nav.rent">Louer</span></a><a href="index.html#services"><span data-i18n="nav.services">Services</span></a><a href="index.html#dealers"><span data-i18n="nav.dealers">Concessionnaires</span></a><a href="index.html#inspection"><span data-i18n="nav.inspection">Inspection</span></a>
+  </nav>
+  <div class="wy-drawer__block"><p class="wy-overline"><span data-i18n="lang.label">Langue</span></p>
+    <div class="wy-lang" role="group" aria-label="Langue" data-i18n-attr="aria-label:lang.label"><button type="button" data-wy-lang="fr" aria-pressed="true" lang="fr">FR</button><button type="button" data-wy-lang="en" aria-pressed="false" lang="en">EN</button><button type="button" data-wy-lang="ar" aria-pressed="false" lang="ar">AR</button><button type="button" disabled title="Wolof : en attente de relecture par un locuteur natif" data-i18n-attr="title:lang.wolof" lang="wo">WO</button></div>
+    <p class="wy-caption wy-muted"><span data-i18n="lang.wolof">Wolof : en attente de relecture par un locuteur natif</span></p></div>
+  <div class="wy-drawer__block"><p class="wy-overline"><span data-i18n="theme.label">Thème</span></p><div class="wy-segmented wy-segmented--sm" role="radiogroup" aria-label="Thème" data-i18n-attr="aria-label:theme.label"><label><input type="radio" name="wy-theme-5" value="auto" data-wy-theme-radio><span><span data-i18n="theme.auto">Auto</span></span></label><label><input type="radio" name="wy-theme-5" value="light" data-wy-theme-radio><span><span data-i18n="theme.light">Clair</span></span></label><label><input type="radio" name="wy-theme-5" value="dark" data-wy-theme-radio><span><span data-i18n="theme.dark">Sombre</span></span></label></div></div>
+  <a class="wy-btn wy-btn--primary" href="#" data-demo-link><span class="wy-btn__label"><span data-i18n="nav.pro">Espace pro</span></span></a>
+</aside>
+<main id="main">
+<div data-wy-sentinel aria-hidden="true"></div>
+<div class="wy-container-wide wy-vehicle" data-wy-vehicle>
+  <nav class="wy-breadcrumb" aria-label="Fil d’Ariane" data-i18n-attr="aria-label:bc.label"><ol data-wy-bc></ol></nav>
+  <div class="wy-vehicle__grid">
+    <div class="wy-vehicle__main">
+      <!-- Media stage -->
+      <section class="wy-gallery" aria-label="Médias du véhicule" data-i18n-attr="aria-label:v.media" data-wy-gallery>
+        <div class="wy-gallery__tabs" role="tablist" aria-label="Médias du véhicule" data-i18n-attr="aria-label:v.media">
+          <button class="wy-chip" role="tab" id="gt-photos" aria-controls="gp-photos" aria-selected="true" type="button" data-wy-gtab="photos"><svg class="wy-i"><use href="#i-camera"/></svg><span data-i18n="v.photos">Photos</span></button>
+          <button class="wy-chip" role="tab" id="gt-360" aria-controls="gp-360" aria-selected="false" type="button" data-wy-gtab="360"><svg class="wy-i"><use href="#i-rotate"/></svg>360&deg;</button>
+        </div>
+        <div class="wy-gallery__panel" role="tabpanel" id="gp-photos" aria-labelledby="gt-photos">
+          <div class="wy-gallery__stage" data-wy-stage>
+            <div class="wy-gallery__badges" data-wy-media-badges></div>
+            <div class="wy-gallery__img" data-wy-main-img></div>
+            <span class="wy-gallery__count" data-wy-gcount aria-live="polite">1 / 4</span>
+            <button class="wy-btn wy-btn--icon wy-gallery__fs" type="button" data-wy-lightbox-open aria-label="Plein écran" data-i18n-attr="aria-label:v.fullscreen"><svg class="wy-i"><use href="#i-fullscreen"/></svg></button>
+          </div>
+          <div class="wy-gallery__thumbs" data-wy-thumbs role="list"></div>
+          <p class="wy-caption wy-muted"><span data-i18n="v.placeholdernote">Les images sont des illustrations provisoires : les rendus studio et les photos réelles remplaceront ces visuels.</span></p>
+        </div>
+        <div class="wy-gallery__panel" role="tabpanel" id="gp-360" aria-labelledby="gt-360" hidden>
+          <div class="wy-viewer360" data-wy-viewer360 tabindex="0" role="application" aria-label="Visionneuse 360 degrés" data-i18n-attr="aria-label:v.v360">
+            <div class="wy-viewer360__scene">
+              <div class="wy-viewer360__disc" data-wy-v360-disc></div>
+              <div class="wy-viewer360__car" data-wy-v360-car></div>
+            </div>
+            <svg class="wy-viewer360__ring" viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="19"/><circle cx="22" cy="22" r="19" class="wy-viewer360__prog" data-wy-v360-prog/></svg>
+            <span class="wy-viewer360__deg" data-wy-v360-deg aria-live="off">0&deg;</span>
+            <div class="wy-viewer360__ctl">
+              <button class="wy-btn wy-btn--ghost wy-btn--sm" type="button" data-wy-v360-spin><svg class="wy-i"><use href="#i-rotate"/></svg><span data-i18n="v.rotate">Tourner</span></button>
+              <button class="wy-btn wy-btn--ghost wy-btn--sm" type="button" data-wy-v360-fs><svg class="wy-i"><use href="#i-fullscreen"/></svg><span data-i18n="v.fullscreen">Plein écran</span></button>
+            </div>
+            <p class="wy-viewer360__hint"><span data-i18n="v.v360hint">Faites glisser, ou utilisez les flèches du clavier</span></p>
+          </div>
+          <p class="wy-notice"><svg class="wy-i"><use href="#i-info"/></svg><span><span data-i18n="v.v360note">Maquette : la vraie visionneuse affiche une séquence de 24 à 36 images téléversées par le concessionnaire. Ici, la rotation est simulée avec une seule illustration.</span></span></p>
+        </div>
+      </section>
+
+      <!-- Title block -->
+      <section class="wy-titleblock" data-wy-titleblock aria-labelledby="v-title">
+        <div class="wy-badges" data-wy-badges></div>
+        <h1 id="v-title" class="wy-display-m" data-wy-title></h1>
+        <div class="wy-price-row" data-wy-prices></div>
+        <ul class="wy-keyfacts" data-wy-keyfacts></ul>
+      </section>
+
+      <!-- Mobile/tablet contact (inline) -->
+      <div class="wy-contact-inline wy-not-xl" data-wy-contact-slot></div>
+
+      <!-- Spec tabs -->
+      <section class="wy-specs" aria-label="Caractéristiques" data-i18n-attr="aria-label:v.specs">
+        <div class="wy-tabs" data-wy-tabs>
+          <div class="wy-tabs__bar" role="tablist" data-wy-tablist aria-label="Caractéristiques" data-i18n-attr="aria-label:v.specs"></div>
+          <div class="wy-tabs__panels" data-wy-tabpanels></div>
+        </div>
+        <p class="wy-caption wy-muted"><span class="wy-badge wy-badge--demo"><span data-i18n="demo.badge">Démo</span></span> <span data-i18n="v.specnote">Données de démonstration non contractuelles : les groupes sans donnée sont masqués.</span></p>
+      </section>
+
+      <section class="wy-block" aria-labelledby="v-desc"><h2 id="v-desc" class="wy-h3"><span data-i18n="v.desc">Description</span></h2><div class="wy-prose" data-wy-desc></div><p class="wy-caption wy-muted" data-wy-desc-note></p></section>
+      <section class="wy-block" aria-labelledby="v-insp" data-wy-inspblock><h2 id="v-insp" class="wy-h3"><span data-i18n="v.insp">Inspection</span></h2><div data-wy-insp></div></section>
+      <section class="wy-block" aria-labelledby="v-dealer"><h2 id="v-dealer" class="wy-h3"><span data-i18n="v.dealer">Concessionnaire</span></h2><div data-wy-dealer></div></section>
+    </div>
+
+    <aside class="wy-vehicle__side" aria-label="Contacter le vendeur" data-i18n-attr="aria-label:v.contact">
+      <div class="wy-contact" data-wy-contact></div>
+    </aside>
+  </div>
+
+  <section class="wy-block wy-block--wide" aria-labelledby="v-sim" data-wy-similar-wrap hidden>
+    <h2 id="v-sim" class="wy-h3"><span data-i18n="v.similar">Véhicules similaires</span></h2>
+    <div class="wy-hscroll"><div class="wy-hscroll__track" data-wy-similar tabindex="0" role="region" aria-label="Véhicules similaires" data-i18n-attr="aria-label:v.similar"></div></div>
+  </section>
+
+  <section class="wy-block wy-safety" id="securite" aria-labelledby="v-safe">
+    <h2 id="v-safe" class="wy-h3"><svg class="wy-i"><use href="#i-shield"/></svg> <span data-i18n="v.safety">Conseils de sécurité</span></h2>
+    <ul class="wy-checks"><li><svg class="wy-i"><use href="#i-check"/></svg><span data-i18n="v.safe1">Ne payez jamais avant d’avoir vu le véhicule et ses papiers.</span></li><li><svg class="wy-i"><use href="#i-check"/></svg><span data-i18n="v.safe2">Faites inspecter le véhicule par un tiers indépendant.</span></li><li><svg class="wy-i"><use href="#i-check"/></svg><span data-i18n="v.safe3">Retrouvez le vendeur chez le concessionnaire, dans un lieu public.</span></li></ul>
+    <button class="wy-link" type="button" data-wy-toast="v.reporttoast"><svg class="wy-i"><use href="#i-flag"/></svg> <span data-i18n="v.report">Signaler l’annonce</span></button>
+  </section>
+</div>
+
+<!-- Sticky bar (phone) -->
+<div class="wy-cta-bar" data-wy-ctabar hidden>
+  <a class="wy-btn wy-btn--whatsapp" href="#" data-wy-wa><svg class="wy-i"><use href="#i-whatsapp"/></svg><span>WhatsApp</span></a>
+  <button class="wy-btn wy-btn--icon wy-btn--ghost" type="button" data-wy-call aria-label="Appeler" data-i18n-attr="aria-label:v.call"><svg class="wy-i"><use href="#i-phone"/></svg></button>
+  <button class="wy-btn wy-btn--icon wy-btn--ghost" type="button" data-wy-ai-open aria-label="Demander à l’IA" data-i18n-attr="aria-label:v.askai"><svg class="wy-i"><use href="#i-sparkle"/></svg></button>
+</div>
+
+<!-- Lightbox -->
+<dialog class="wy-lightbox" data-wy-lightbox aria-label="Photos" data-i18n-attr="aria-label:v.photos">
+  <button class="wy-btn wy-btn--icon wy-lightbox__x" type="button" data-wy-lightbox-close aria-label="Fermer" data-i18n-attr="aria-label:a11y.close"><svg class="wy-i"><use href="#i-close"/></svg></button>
+  <div class="wy-lightbox__img" data-wy-lightbox-img></div>
+</dialog>
+<!-- Lead modal -->
+<dialog class="wy-modal" data-wy-lead aria-labelledby="lead-t">
+  <form method="dialog" class="wy-lead-form" data-wy-lead-form>
+    <header><h2 id="lead-t" class="wy-h3"><span data-i18n="lead.title">Envoyer un message au concessionnaire</span></h2><button class="wy-btn wy-btn--icon" type="button" data-wy-lead-close aria-label="Fermer" data-i18n-attr="aria-label:a11y.close"><svg class="wy-i"><use href="#i-close"/></svg></button></header>
+    <label class="wy-field"><span class="wy-field__l"><span data-i18n="lead.name">Nom</span></span><input class="wy-input" name="name" required autocomplete="name"></label>
+    <label class="wy-field"><span class="wy-field__l"><span data-i18n="lead.phone">Téléphone</span></span><input class="wy-input" name="phone" type="tel" required autocomplete="tel" inputmode="tel" dir="ltr"></label>
+    <label class="wy-field"><span class="wy-field__l"><span data-i18n="lead.msg">Message</span></span><textarea class="wy-input" name="msg" rows="4" data-wy-lead-msg></textarea></label>
+    <p class="wy-caption wy-muted"><span data-i18n="lead.note">Votre message est transmis au concessionnaire. Aucun envoi réel dans ce prototype.</span></p>
+    <div class="wy-row"><button class="wy-btn wy-btn--ghost" type="button" data-wy-lead-close><span data-i18n="lead.cancel">Annuler</span></button><button class="wy-btn wy-btn--primary" type="submit"><span class="wy-btn__label"><span data-i18n="lead.send">Envoyer</span></span></button></div>
+  </form>
+</dialog>
+</main>
+<footer class="wy-footer wy-night" id="footer">
+  <div class="wy-container">
+    <div class="wy-footer__top">
+      <div class="wy-footer__brand">
+        <a class="wy-logo" href="index.html" aria-label="Wotoyi, accueil" data-i18n-attr="aria-label:nav.home"><svg class="wy-logo__svg" viewBox="0 -1500 6423 2020" role="img" focusable="false"><title>Wotoyi</title><defs><linearGradient id="wy-sun-f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--wy-logo-a)"/><stop offset="1" style="stop-color:var(--wy-logo-b)"/></linearGradient><clipPath id="wy-sunt-f"><rect x="3630" y="-1115" width="1150" height="712"/></clipPath><clipPath id="wy-sunb-f"><rect x="3630" y="-318" width="1150" height="353"/></clipPath></defs><g fill="currentColor"><path d="M370 0 40.0 -1081.6666259765625 276.3297119140625 -1080.0 487.33154296875 -387.327392578125 700.8333129882812 -1080.0H903.8305053710938L1117.332275390625 -387.327392578125L1328.66748046875 -1080.0H1564.663818359375L1234.663818359375 0.0H1046.666259765625L802.3319091796875 -743.0047607421875L557.99755859375 0.0Z"/><path d="M2182.332275390625 30.0Q2019.8323364257812 30.0 1898.999267578125 -43.0Q1778.1661987304688 -116.0 1711.5830993652344 -244.58334350585938Q1645.0 -373.16668701171875 1645.0 -540.3333740234375Q1645.0 -709.5000610351562 1712.999755859375 -837.9167175292969Q1780.99951171875 -966.3333740234375 1901.9159240722656 -1038.1666870117188Q2022.8323364257812 -1110.0 2182.332275390625 -1110.0Q2344.9989013671875 -1110.0 2466.2486267089844 -1037.0833435058594Q2587.4983520507812 -964.1666870117188 2654.414764404297 -835.7500305175781Q2721.3311767578125 -707.3333740234375 2721.3311767578125 -540.3333740234375Q2721.3311767578125 -371.83331298828125 2653.914764404297 -243.33331298828125Q2586.4983520507812 -114.83331298828125 2465.165283203125 -42.416656494140625Q2343.8322143554688 30.0 2182.332275390625 30.0ZM2182.332275390625 -195.6632080078125Q2325.5004272460938 -195.6632080078125 2395.9178161621094 -291.99749755859375Q2466.335205078125 -388.331787109375 2466.335205078125 -540.3333740234375Q2466.335205078125 -697.1682739257812 2395.0011596679688 -790.7525329589844Q2323.6671142578125 -884.3367919921875 2182.332275390625 -884.3367919921875Q2085.331298828125 -884.3367919921875 2022.9139709472656 -840.669677734375Q1960.4966430664062 -797.0025634765625 1930.2463073730469 -719.66845703125Q1899.9959716796875 -642.3343505859375 1899.9959716796875 -540.3333740234375Q1899.9959716796875 -382.83184814453125 1971.6633911132812 -289.2475280761719Q2043.330810546875 -195.6632080078125 2182.332275390625 -195.6632080078125Z"/><path d="M3533.9981689453125 0.0Q3427.1654663085938 20.49993896484375 3324.416046142578 17.66656494140625Q3221.6666259765625 14.83319091796875 3140.9170837402344 -20.33343505859375Q3060.1675415039062 -55.50006103515625 3018.33447265625 -132.66650390625Q2981.00146484375 -203.16607666015625 2978.8347778320312 -275.99896240234375Q2976.6680908203125 -348.83184814453125 2976.6680908203125 -441.331298828125V-1380.0H3217.3309326171875V-454.664306640625Q3217.3309326171875 -390.49749755859375 3218.8309326171875 -341.2476501464844Q3220.3309326171875 -291.997802734375 3239.3309326171875 -260.664306640625Q3275.3309326171875 -201.16400146484375 3354.1642456054688 -194.24710083007812Q3432.99755859375 -187.3302001953125 3533.9981689453125 -201.6636962890625ZM2781.0 -891.0025634765625V-1080H3533.9981689453125V-891.0025634765625Z"/><path d="M5065.00048828125 480.0 5273.3338623046875 -90.66650390625 5277.00048828125 77.33349609375 4806.333740234375 -1080.0H5056.6632080078125L5390.6654052734375 -223.6619873046875H5326.6654052734375L5651.666748046875 -1080.0H5893.3297119140625L5290.6639404296875 480.0Z"/><path d="M6022.0 -1243.6683349609375V-1464.9993896484375H6262.662841796875V-1243.6683349609375ZM6022.0 0V-1080H6262.662841796875V0.0Z"/></g><circle cx="4205" cy="-540" r="570" fill="url(#wy-sun-f)" clip-path="url(#wy-sunt-f)"/><circle cx="4205" cy="-540" r="570" fill="url(#wy-sun-f)" opacity=".7" clip-path="url(#wy-sunb-f)"/></svg></a>
+        <p class="wy-muted"><span data-i18n="footer.mission">Wotoyi réunit véhicules, concessionnaires vérifiés, inspection indépendante et contact direct par WhatsApp pour acheter et louer en confiance.</span></p>
+        <div class="wy-footer__ctl">
+          <div><p class="wy-overline"><span data-i18n="lang.label">Langue</span></p><div class="wy-lang" role="group" aria-label="Langue" data-i18n-attr="aria-label:lang.label"><button type="button" data-wy-lang="fr" aria-pressed="true" lang="fr">FR</button><button type="button" data-wy-lang="en" aria-pressed="false" lang="en">EN</button><button type="button" data-wy-lang="ar" aria-pressed="false" lang="ar">AR</button><button type="button" disabled title="Wolof : en attente de relecture par un locuteur natif" data-i18n-attr="title:lang.wolof" lang="wo">WO</button></div></div>
+          <div><p class="wy-overline"><span data-i18n="theme.label">Thème</span></p><div class="wy-segmented wy-segmented--sm" role="radiogroup" aria-label="Thème" data-i18n-attr="aria-label:theme.label"><label><input type="radio" name="wy-theme-6" value="auto" data-wy-theme-radio><span><span data-i18n="theme.auto">Auto</span></span></label><label><input type="radio" name="wy-theme-6" value="light" data-wy-theme-radio><span><span data-i18n="theme.light">Clair</span></span></label><label><input type="radio" name="wy-theme-6" value="dark" data-wy-theme-radio><span><span data-i18n="theme.dark">Sombre</span></span></label></div></div>
+        </div>
+      </div>
+      <nav class="wy-footer__cols" aria-label="Pied de page" data-i18n-attr="aria-label:footer.nav">
+        <div><h2 class="wy-h5"><span data-i18n="footer.buy">Acheter</span></h2><ul>
+          <li><a href="search.html?body=suv"><span data-i18n="body.suv">SUV</span></a></li><li><a href="search.html?body=berline"><span data-i18n="body.berline">Berline</span></a></li><li><a href="search.html?body=pickup"><span data-i18n="body.pickup">Pick-up</span></a></li><li><a href="search.html?city=dakar"><span data-i18n="footer.incity">Véhicules à</span> Dakar</a></li></ul></div>
+        <div><h2 class="wy-h5"><span data-i18n="footer.rent">Louer</span></h2><ul><li><a href="search.html?offer=rent"><span data-i18n="footer.allrent">Toutes les locations</span></a></li><li><a href="index.html#services"><span data-i18n="nav.services">Services</span></a></li></ul></div>
+        <div><h2 class="wy-h5"><span data-i18n="nav.dealers">Concessionnaires</span></h2><ul><li><a href="index.html#dealers"><span data-i18n="footer.verified">Concessionnaires vérifiés</span></a></li><li><a href="index.html#dealer-cta"><span data-i18n="footer.join">Devenir partenaire</span></a></li><li><a href="#" data-demo-link>Wotoyi Pro</a></li></ul></div>
+        <div><h2 class="wy-h5"><span data-i18n="footer.help">Aide</span></h2><ul><li><a href="index.html#inspection"><span data-i18n="nav.inspection">Inspection</span></a></li><li><a href="vehicle.html#securite"><span data-i18n="footer.safety">Conseils de sécurité</span></a></li><li><a href="#" data-demo-link><span data-i18n="footer.contact">Contact</span></a></li></ul></div>
+        <div><h2 class="wy-h5"><span data-i18n="footer.legal">Légal</span></h2><ul><li><a href="#" data-demo-link><span data-i18n="footer.terms">Conditions d’utilisation</span></a></li><li><a href="#" data-demo-link><span data-i18n="footer.privacy">Confidentialité</span></a></li><li><a href="#" data-demo-link><span data-i18n="footer.notices">Mentions légales</span></a></li></ul></div>
+      </nav>
+    </div>
+    <div class="wy-footer__proto" data-wy-proto>
+      <p class="wy-overline"><span data-i18n="proto.title">Contrôles du prototype</span></p>
+      <p class="wy-caption wy-muted"><span data-i18n="proto.note">Testez les trois niveaux de mouvement. Le niveau « Auto » suit votre appareil et la préférence « réduire les animations ».</span></p>
+      <div class="wy-chips" role="group" aria-label="Mouvement" data-i18n-attr="aria-label:proto.motion">
+        <span class="wy-caption"><span data-i18n="proto.motion">Mouvement</span></span>
+        <button class="wy-chip" type="button" data-wy-motion="auto" aria-pressed="false"><span data-i18n="proto.auto">Auto</span></button>
+        <button class="wy-chip" type="button" data-wy-motion="full" aria-pressed="false">Full</button>
+        <button class="wy-chip" type="button" data-wy-motion="lite" aria-pressed="false">Lite</button>
+        <button class="wy-chip" type="button" data-wy-motion="reduced" aria-pressed="false">Reduced</button>
+        <span class="wy-caption wy-muted" data-wy-motion-now></span>
+      </div>
+    </div>
+    <p class="wy-footer__legal wy-caption wy-muted">&copy; 2026 Wotoyi · <span data-i18n="footer.proto">Prototype de conception, données de démonstration.</span></p>
+  </div>
+</footer>
+<nav class="wy-bottom-nav" aria-label="Navigation principale" data-i18n-attr="aria-label:nav.main" data-wy-bottom-nav>
+  <a href="index.html" data-nav="home"><svg class="wy-i"><use href="#i-store"/></svg><span><span data-i18n="bn.home">Accueil</span></span></a>
+  <a href="search.html" data-nav="search"><svg class="wy-i"><use href="#i-search"/></svg><span><span data-i18n="bn.search">Rechercher</span></span></a>
+  <button type="button" data-wy-favs-open><svg class="wy-i"><use href="#i-heart"/></svg><span><span data-i18n="bn.favs">Favoris</span></span><span class="wy-count-dot" data-wy-favs-count hidden>0</span></button>
+  <button type="button" data-demo-link><svg class="wy-i"><use href="#i-user"/></svg><span><span data-i18n="bn.account">Compte</span></span></button>
+</nav>
+<button class="wy-ai-fab" type="button" data-wy-ai-open aria-label="Ouvrir l’assistant" data-i18n-attr="aria-label:ai.open"><svg class="wy-i"><use href="#i-sparkle"/></svg><span class="wy-ai-fab__t"><span data-i18n="ai.fab">Assistant</span></span></button>
+<aside class="wy-drawer wy-drawer--ai" id="wy-ai" data-wy-ai role="dialog" aria-modal="false" aria-label="Assistant Wotoyi" data-i18n-attr="aria-label:ai.title" hidden>
+  <div class="wy-drawer__head"><span class="wy-h4"><svg class="wy-i"><use href="#i-sparkle"/></svg> <span data-i18n="ai.title">Assistant Wotoyi</span></span><button class="wy-btn wy-btn--icon" type="button" data-wy-close aria-label="Fermer" data-i18n-attr="aria-label:a11y.close"><svg class="wy-i"><use href="#i-close"/></svg></button></div>
+  <div class="wy-drawer__scroll">
+    <p class="wy-notice"><svg class="wy-i"><use href="#i-info"/></svg><span><span data-i18n="ai.notice">Recherche simple activée : l’assistant IA complet n’est pas configuré. Il comprend des critères (type, énergie, boîte, budget, ville) et ouvre la recherche filtrée.</span></span></p>
+    <p class="wy-overline"><span data-i18n="ai.examples">Exemples</span></p>
+    <div class="wy-chips wy-chips--col" data-wy-ai-prompts></div>
+    <div class="wy-ai-log" data-wy-ai-log aria-live="polite"></div>
+  </div>
+  <form class="wy-ai-form" data-wy-ai-form>
+    <label class="wy-visually-hidden" for="ai-input"><span data-i18n="ai.placeholder">Décrivez le véhicule recherché…</span></label>
+    <input id="ai-input" class="wy-input" name="q" autocomplete="off" placeholder="Décrivez le véhicule recherché…" data-i18n-attr="placeholder:ai.placeholder">
+    <button class="wy-btn wy-btn--primary wy-btn--icon" type="submit" aria-label="Envoyer" data-i18n-attr="aria-label:ai.send"><svg class="wy-i wy-flip"><use href="#i-send"/></svg></button>
+  </form>
+</aside>
+<div class="wy-toasts" data-wy-toasts role="status" aria-live="polite"></div>
+<script src="js/i18n.js"></script>
+<script src="js/data.js"></script>
+<script src="js/motion.js"></script>
+<script src="js/app.js"></script>
+<script src="js/vehicle.js"></script>
+</body>
+</html>

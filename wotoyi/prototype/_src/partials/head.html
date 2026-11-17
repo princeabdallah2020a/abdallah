@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="fr" dir="ltr" data-theme="light" data-motion="full">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>%%TITLE%%</title>
+<meta name="description" content="%%DESC%%">
+<meta name="color-scheme" content="light dark">
+<meta name="robots" content="noindex">
+<script>
+/* wy-head: theme + motion tier + language, before CSS (no flash). DESIGN 1.6 */
+(function(){try{var d=document.documentElement,s=localStorage,m=matchMedia,q=location.search,p=s.getItem('wy-theme')||'auto',
+t=p==='auto'?(m('(prefers-color-scheme: dark)').matches?'dark':'light'):p,c=navigator.connection||{},
+lite=(navigator.hardwareConcurrency||8)<=4||(navigator.deviceMemory||8)<=2||c.saveData||/2g/.test(c.effectiveType||''),
+mo=(q.match(/[?&]motion=(full|lite|reduced)/)||[])[1]||s.getItem('wy-motion')||'auto',
+l=(q.match(/[?&]lang=(fr|en|ar)/)||[])[1]||s.getItem('wy-lang')||'fr';
+if(mo==='auto')mo=m('(prefers-reduced-motion: reduce)').matches?'reduced':lite?'lite':'full';
+var th=(q.match(/[?&]theme=(light|dark)/)||[])[1];if(th){t=th;p=th}
+d.dataset.theme=t;d.dataset.themePref=p;d.dataset.motion=mo;d.lang=l;d.dir=l==='ar'?'rtl':'ltr';d.classList.add('wy-js')}catch(e){}})();
+</script>
+<link rel="preload" href="../fonts/manrope-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/app.css">
+</head>

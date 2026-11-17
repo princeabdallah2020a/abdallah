@@ -1,0 +1,57 @@
+<footer class="wy-footer wy-night" id="footer">
+  <div class="wy-container">
+    <div class="wy-footer__top">
+      <div class="wy-footer__brand">
+        <a class="wy-logo" href="index.html" aria-label="{{=nav.home}}" data-i18n-attr="aria-label:nav.home">%%LOGO_F%%</a>
+        <p class="wy-muted">{{footer.mission}}</p>
+        <div class="wy-footer__ctl">
+          <div><p class="wy-overline">{{lang.label}}</p><div class="wy-lang" role="group" aria-label="{{=lang.label}}" data-i18n-attr="aria-label:lang.label"><button type="button" data-wy-lang="fr" aria-pressed="true" lang="fr">FR</button><button type="button" data-wy-lang="en" aria-pressed="false" lang="en">EN</button><button type="button" data-wy-lang="ar" aria-pressed="false" lang="ar">AR</button><button type="button" disabled title="{{=lang.wolof}}" data-i18n-attr="title:lang.wolof" lang="wo">WO</button></div></div>
+          <div><p class="wy-overline">{{theme.label}}</p>%%THEMESEG%%</div>
+        </div>
+      </div>
+      <nav class="wy-footer__cols" aria-label="{{=footer.nav}}" data-i18n-attr="aria-label:footer.nav">
+        <div><h2 class="wy-h5">{{footer.buy}}</h2><ul>
+          <li><a href="search.html?body=suv">{{body.suv}}</a></li><li><a href="search.html?body=berline">{{body.berline}}</a></li><li><a href="search.html?body=pickup">{{body.pickup}}</a></li><li><a href="search.html?city=dakar">{{footer.incity}} Dakar</a></li></ul></div>
+        <div><h2 class="wy-h5">{{footer.rent}}</h2><ul><li><a href="search.html?offer=rent">{{footer.allrent}}</a></li><li><a href="index.html#services">{{nav.services}}</a></li></ul></div>
+        <div><h2 class="wy-h5">{{nav.dealers}}</h2><ul><li><a href="index.html#dealers">{{footer.verified}}</a></li><li><a href="index.html#dealer-cta">{{footer.join}}</a></li><li><a href="#" data-demo-link>Wotoyi Pro</a></li></ul></div>
+        <div><h2 class="wy-h5">{{footer.help}}</h2><ul><li><a href="index.html#inspection">{{nav.inspection}}</a></li><li><a href="vehicle.html#securite">{{footer.safety}}</a></li><li><a href="#" data-demo-link>{{footer.contact}}</a></li></ul></div>
+        <div><h2 class="wy-h5">{{footer.legal}}</h2><ul><li><a href="#" data-demo-link>{{footer.terms}}</a></li><li><a href="#" data-demo-link>{{footer.privacy}}</a></li><li><a href="#" data-demo-link>{{footer.notices}}</a></li></ul></div>
+      </nav>
+    </div>
+    <div class="wy-footer__proto" data-wy-proto>
+      <p class="wy-overline">{{proto.title}}</p>
+      <p class="wy-caption wy-muted">{{proto.note}}</p>
+      <div class="wy-chips" role="group" aria-label="{{=proto.motion}}" data-i18n-attr="aria-label:proto.motion">
+        <span class="wy-caption">{{proto.motion}}</span>
+        <button class="wy-chip" type="button" data-wy-motion="auto" aria-pressed="false">{{proto.auto}}</button>
+        <button class="wy-chip" type="button" data-wy-motion="full" aria-pressed="false">Full</button>
+        <button class="wy-chip" type="button" data-wy-motion="lite" aria-pressed="false">Lite</button>
+        <button class="wy-chip" type="button" data-wy-motion="reduced" aria-pressed="false">Reduced</button>
+        <span class="wy-caption wy-muted" data-wy-motion-now></span>
+      </div>
+    </div>
+    <p class="wy-footer__legal wy-caption wy-muted">&copy; 2026 Wotoyi · {{footer.proto}}</p>
+  </div>
+</footer>
+<nav class="wy-bottom-nav" aria-label="{{=nav.main}}" data-i18n-attr="aria-label:nav.main" data-wy-bottom-nav>
+  <a href="index.html" data-nav="home"><svg class="wy-i"><use href="#i-store"/></svg><span>{{bn.home}}</span></a>
+  <a href="search.html" data-nav="search"><svg class="wy-i"><use href="#i-search"/></svg><span>{{bn.search}}</span></a>
+  <button type="button" data-wy-favs-open><svg class="wy-i"><use href="#i-heart"/></svg><span>{{bn.favs}}</span><span class="wy-count-dot" data-wy-favs-count hidden>0</span></button>
+  <button type="button" data-demo-link><svg class="wy-i"><use href="#i-user"/></svg><span>{{bn.account}}</span></button>
+</nav>
+<button class="wy-ai-fab" type="button" data-wy-ai-open aria-label="{{=ai.open}}" data-i18n-attr="aria-label:ai.open"><svg class="wy-i"><use href="#i-sparkle"/></svg><span class="wy-ai-fab__t">{{ai.fab}}</span></button>
+<aside class="wy-drawer wy-drawer--ai" id="wy-ai" data-wy-ai role="dialog" aria-modal="false" aria-label="{{=ai.title}}" data-i18n-attr="aria-label:ai.title" hidden>
+  <div class="wy-drawer__head"><span class="wy-h4"><svg class="wy-i"><use href="#i-sparkle"/></svg> {{ai.title}}</span><button class="wy-btn wy-btn--icon" type="button" data-wy-close aria-label="{{=a11y.close}}" data-i18n-attr="aria-label:a11y.close"><svg class="wy-i"><use href="#i-close"/></svg></button></div>
+  <div class="wy-drawer__scroll">
+    <p class="wy-notice"><svg class="wy-i"><use href="#i-info"/></svg><span>{{ai.notice}}</span></p>
+    <p class="wy-overline">{{ai.examples}}</p>
+    <div class="wy-chips wy-chips--col" data-wy-ai-prompts></div>
+    <div class="wy-ai-log" data-wy-ai-log aria-live="polite"></div>
+  </div>
+  <form class="wy-ai-form" data-wy-ai-form>
+    <label class="wy-visually-hidden" for="ai-input">{{ai.placeholder}}</label>
+    <input id="ai-input" class="wy-input" name="q" autocomplete="off" placeholder="{{=ai.placeholder}}" data-i18n-attr="placeholder:ai.placeholder">
+    <button class="wy-btn wy-btn--primary wy-btn--icon" type="submit" aria-label="{{=ai.send}}" data-i18n-attr="aria-label:ai.send"><svg class="wy-i wy-flip"><use href="#i-send"/></svg></button>
+  </form>
+</aside>
+<div class="wy-toasts" data-wy-toasts role="status" aria-live="polite"></div>

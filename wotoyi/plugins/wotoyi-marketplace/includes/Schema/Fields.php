@@ -131,7 +131,7 @@ final class Fields {
 
 			case 'int':
 				$n = self::to_number( $value );
-				if ( null === $n || floor( $n ) !== $n ) {
+				if ( null === $n || ( is_float( $n ) && floor( $n ) !== $n ) ) {
 					return null;
 				}
 				return self::in_range( $n, $def ) ? (int) $n : null;
