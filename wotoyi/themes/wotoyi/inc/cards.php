@@ -10,12 +10,12 @@ defined( 'ABSPATH' ) || exit;
 
 function wotoyi_badge( string $kind, string $label = '' ): string {
 	$map = array(
-		'demo'      => array( __( 'Demo', 'wotoyi' ), '' ),
-		'sponsored' => array( __( 'Sponsorise', 'wotoyi' ), '' ),
-		'inspected' => array( __( 'Inspecte par Wotoyi', 'wotoyi' ), 'clipboard' ),
-		'verified'  => array( __( 'Concessionnaire verifie', 'wotoyi' ), 'shield' ),
+		'demo'      => array( __( 'Démo', 'wotoyi' ), '' ),
+		'sponsored' => array( __( 'Sponsorisé', 'wotoyi' ), '' ),
+		'inspected' => array( __( 'Inspecté par Wotoyi', 'wotoyi' ), 'clipboard' ),
+		'verified'  => array( __( 'Concessionnaire vérifié', 'wotoyi' ), 'shield' ),
 		'venant'    => array( __( 'Venant', 'wotoyi' ), '' ),
-		'cleared'   => array( __( 'Dedouane', 'wotoyi' ), 'check' ),
+		'cleared'   => array( __( 'Dédouané', 'wotoyi' ), 'check' ),
 		'new'       => array( __( 'Neuf', 'wotoyi' ), '' ),
 	);
 	if ( ! isset( $map[ $kind ] ) ) {
@@ -100,7 +100,7 @@ function wotoyi_vehicle_card( array $v, array $o = array() ): string {
 	if ( ! empty( $v['cover_image'] ) ) {
 		$img = '<img src="' . esc_url( (string) $v['cover_image'] ) . '" width="660" height="400" alt="' . esc_attr( $title ) . '" loading="' . ( ! empty( $o['eager'] ) ? 'eager' : 'lazy' ) . '" decoding="async">';
 	} else {
-		$img = '<span class="wy-vcard__ph" role="img" aria-label="' . esc_attr__( 'Photo bientot disponible', 'wotoyi' ) . '">' . wotoyi_icon( 'camera' ) . '</span>';
+		$img = '<span class="wy-vcard__ph" role="img" aria-label="' . esc_attr__( 'Photo bientôt disponible', 'wotoyi' ) . '">' . wotoyi_icon( 'camera' ) . '</span>';
 	}
 
 	$meta = array();
@@ -126,10 +126,10 @@ function wotoyi_vehicle_card( array $v, array $o = array() ): string {
 	$h .= '<button class="wy-fav" type="button" data-wy-fav="' . esc_attr( $id ) . '" aria-pressed="false" aria-label="' . esc_attr__( 'Ajouter aux favoris', 'wotoyi' ) . '">' . wotoyi_icon( 'heart' ) . '<span class="wy-fav__p" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span></button>';
 	$h .= '<div class="wy-vcard__body"><h3 class="wy-vcard__title"><a href="' . esc_url( $href ) . '">' . esc_html( $title ) . '</a></h3>';
 	if ( ! empty( $v['trim_level'] ) ) {
-		$h .= '<p class="wy-vcard__ver">' . esc_html( (string) $v['trim_level'] ) . '</p>';
+		$h .= '<p class="wy-vcard__ver"><bdi>' . esc_html( (string) $v['trim_level'] ) . '</bdi></p>';
 	}
 	if ( $meta ) {
-		$h .= '<ul class="wy-vcard__meta"><li>' . implode( '</li><li>', array_map( 'esc_html', $meta ) ) . '</li></ul>';
+		$h .= '<ul class="wy-vcard__meta"><li>' . implode( '</li><li>', array_map( static fn( $m ) => '<bdi>' . esc_html( $m ) . '</bdi>', $meta ) ) . '</li></ul>';
 	}
 	$h .= '<div class="wy-vcard__prices">' . wotoyi_vehicle_prices( $v ) . '</div>';
 	if ( '' !== $loc ) {
@@ -174,7 +174,7 @@ function wotoyi_dealer_card( array $d ): string {
 	}
 	if ( isset( $d['count'] ) && (int) $d['count'] > 0 ) {
 		/* translators: %s: number of vehicles */
-		$h .= '<p class="wy-caption"><strong>' . esc_html( wotoyi_number( $d['count'] ) ) . '</strong> ' . esc_html( _n( 'vehicule', 'vehicules', (int) $d['count'], 'wotoyi' ) ) . '</p>';
+		$h .= '<p class="wy-caption"><strong>' . esc_html( wotoyi_number( $d['count'] ) ) . '</strong> ' . esc_html( _n( 'véhicule', 'véhicules', (int) $d['count'], 'wotoyi' ) ) . '</p>';
 	}
 	return $h . '</article>';
 }

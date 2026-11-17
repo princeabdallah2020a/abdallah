@@ -93,9 +93,9 @@ final class SyncTest extends Wotoyi_Test_Case {
 		$this->assertSame( 0, Fixtures::count( 'sync_state' ) );
 		// Malformed marketplace answers are refused, nothing stored.
 		$this->mp->respond_with( 201, array( 'key_id' => 'bad', 'secret' => 'short' ) );
-		$this->assertThrows( fn() => $this->in( fn() => Pairing::pair_http( 'WTY-ABCD-EFGH-JKLM', 'https://mp.example.com' ) ), 'Unexpected response' );
+		$this->assertThrows( fn() => $this->in( fn() => Pairing::pair_http( 'WTY-ABCD-EFGH-JKLM', 'https://mp.example.com' ) ), 'Pairing failed' ); // M1: one generic answer for every remote failure.
 		$this->mp->script[] = new WP_Error( 'http_request_failed', 'cURL error 6' );
-		$this->assertThrows( fn() => $this->in( fn() => Pairing::pair_http( 'WTY-ABCD-EFGH-JKLM', 'https://mp.example.com' ) ), 'could not be reached' );
+		$this->assertThrows( fn() => $this->in( fn() => Pairing::pair_http( 'WTY-ABCD-EFGH-JKLM', 'https://mp.example.com' ) ), 'Pairing failed' );
 		$this->assertSame( 0, Fixtures::count( 'sync_state' ) );
 	}
 

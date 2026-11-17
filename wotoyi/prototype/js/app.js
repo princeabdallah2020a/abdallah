@@ -57,7 +57,7 @@
       '<div class="wy-vcard__sheen" aria-hidden="true"></div>' +
       '<div class="wy-vcard__media" style="--vt:wy-v-' + v.id + '"><img src="' + D.img + v.img + '.svg" width="660" height="260" alt="' + WY.esc(t('img.alt', { name: name })) + '" loading="' + (o.eager ? 'eager' : 'lazy') + '" decoding="async"><div class="wy-vcard__badges">' + U.badges(v) + '</div></div>' +
       '<button class="wy-fav" type="button" data-wy-fav="' + v.id + '" aria-pressed="false" aria-label="' + t('fav.add') + '">' + WY.icon('heart') + '<span class="wy-fav__p" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span></button>' +
-      '<div class="wy-vcard__body"><h3 class="wy-vcard__title"><a href="' + href + '">' + WY.esc(name) + '</a></h3><p class="wy-vcard__ver">' + WY.esc(v.ver) + '</p>' +
+      '<div class="wy-vcard__body"><h3 class="wy-vcard__title"><a href="' + href + '">' + WY.esc(name) + '</a></h3><p class="wy-vcard__ver"><bdi>' + WY.esc(v.ver) + '</bdi></p>' +
       '<ul class="wy-vcard__meta"><li>' + v.yr + '</li><li>' + (v.cond === 'neuf' ? t('cond.neuf') : WY.km(v.km)) + '</li><li>' + t('fuel.' + v.fuel) + '</li><li>' + t('trans.' + v.tr) + '</li></ul>' +
       '<div class="wy-vcard__prices">' + (o.rent ? U.rentPrice(v) : U.priceHTML(v)) + '</div>' +
       '<p class="wy-vcard__loc">' + WY.icon('pin') + '<span>' + t('city.' + v.city) + ' · ' + WY.esc(dl.name) + '</span></p></div></article>';
@@ -167,4 +167,27 @@
   $$('[data-wy-bottom-nav] a').forEach(function (a) { if (a.getAttribute('href') === path) a.setAttribute('aria-current', 'page'); });
   U.recent = function (id) { var r = []; try { r = JSON.parse(localStorage.getItem('wy-recent') || '[]'); } catch (e) {} if (id) { r = [+id].concat(r.filter(function (x) { return x !== +id; })).slice(0, 8); try { localStorage.setItem('wy-recent', JSON.stringify(r)); } catch (e) {} } return r; };
   U.dealerOpen = function (d) { var h = new Date().getUTCHours(), day = new Date().getUTCDay(); return day !== 0 && h >= d.hours[0] && h < d.hours[1]; }; /* Dakar = UTC+0 */
+
+  /* ---- AI-fab avoidance: the fab fades out whenever it would sit on top of an input, the contact card or a [data-wy-fab-avoid] element.
+     Implementation: an IntersectionObserver whose root box is shrunk (rootMargin) to the fab's own rectangle. ---- */
+  (function () {
+    var f = $('.wy-ai-fab'); if (!f || !('IntersectionObserver' in window)) return;
+    var sel = '[data-wy-fab-avoid],.wy-quicksearch,.wy-search--nl,.wy-contact,.wy-lead-form,.wy-filter-panel__foot,.wy-pagination,.wy-field,.wy-searchbar__in,.wy-segmented,[role="radiogroup"],.wy-btn,main button,input,textarea,select';
+    var io, hits, timer;
+    function mount() {
+      if (io) io.disconnect(); hits = new Set();
+      var wasAway = f.classList.contains('is-away'); f.classList.remove('is-away');
+      var r = f.getBoundingClientRect(), W = innerWidth, H = innerHeight, m = 10;
+      if (!r.width) { f.classList.toggle('is-away', wasAway); return; }
+      var mt = Math.max(0, Math.round(r.top - m)), ml = Math.max(0, Math.round(r.left - m)), mr = Math.max(0, Math.round(W - r.right - m)), mb = Math.max(0, Math.round(H - r.bottom - m));
+      io = new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting) hits.add(e.target); else hits.delete(e.target); });
+        f.classList.toggle('is-away', hits.size > 0);
+      }, { rootMargin: '-' + mt + 'px -' + mr + 'px -' + mb + 'px -' + ml + 'px' });
+      $$(sel).forEach(function (t) { if (!f.contains(t) && !t.closest('[data-wy-ai],[data-wy-menu],dialog,.wy-drawer')) io.observe(t); });
+    }
+    mount(); addEventListener('resize', function () { clearTimeout(timer); timer = setTimeout(mount, 150); });
+    WY.fabRemount = mount;
+    if (window.MutationObserver) { var mt; new MutationObserver(function () { clearTimeout(mt); mt = setTimeout(mount, 250); }).observe(document.body, { childList: true, subtree: true }); } /* late-rendered controls */
+  })();
 })();

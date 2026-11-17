@@ -6,4 +6,4 @@ if ( '' === $notice ) {
 	return;
 }
 ?>
-<div class="wy-demo-strip" role="note"><span class="wy-badge wy-badge--demo"><?php esc_html_e( 'Demo', 'wotoyi' ); ?></span> <span><?php echo esc_html( $notice ); ?></span></div>
+<div class="wy-demo-strip" role="note"><span class="wy-badge wy-badge--demo"><?php esc_html_e( 'Démo', 'wotoyi' ); ?></span> <span><?php echo esc_html( $notice ); ?></span></div>

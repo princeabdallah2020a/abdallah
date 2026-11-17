@@ -66,6 +66,7 @@ final class Plugin {
 
 	/** Daily housekeeping: delivered outbox events older than the retention window, for every tenant. */
 	public static function prune(): void {
+		\Wotoyi\DealerPlatform\Data\Invitations::prune();
 		foreach ( \Wotoyi\DealerPlatform\Data\Directory::list_tenants( 500 ) as $tenant ) {
 			\Wotoyi\DealerPlatform\Data\TenantContext::run( $tenant, static fn() => Outbox::prune( Settings::int( 'outbox_retention_days' ) ) );
 		}

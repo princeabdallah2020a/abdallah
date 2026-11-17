@@ -6,9 +6,9 @@ $d   = wotoyi_mp_dealer( $ref );
 if ( ! $d ) {
 	$active = wotoyi_marketplace_active();
 	echo '<div class="wy-container">' . wotoyi_empty_state( // phpcs:ignore WordPress.Security.EscapeOutput
-		$active ? __( 'Concessionnaire introuvable', 'wotoyi' ) : __( 'Le catalogue arrive bientot', 'wotoyi' ),
-		$active ? __( 'Ce profil n\'existe pas ou n\'est plus actif.', 'wotoyi' ) : __( 'La place de marche n\'est pas encore activee sur ce site.', 'wotoyi' ),
-		array( array( 'url' => wotoyi_url( 'home' ), 'label' => __( 'Retour a l\'accueil', 'wotoyi' ), 'class' => 'wy-btn--primary' ) )
+		$active ? __( 'Concessionnaire introuvable', 'wotoyi' ) : __( 'Le catalogue arrive bientôt', 'wotoyi' ),
+		$active ? __( 'Ce profil n\'existe pas ou n\'est plus actif.', 'wotoyi' ) : __( 'La place de marché n\'est pas encore activée sur ce site.', 'wotoyi' ),
+		array( array( 'url' => wotoyi_url( 'home' ), 'label' => __( 'Retour à l\'accueil', 'wotoyi' ), 'class' => 'wy-btn--primary' ) )
 	) . '</div>';
 	return;
 }
@@ -39,14 +39,14 @@ $loc   = trim( implode( ', ', array_filter( array( (string) ( $d['area'] ?? '' )
 </section>
 <div class="wy-container wy-dealer-body">
 	<dl class="wy-dealer-figures">
-		<div><dt><?php esc_html_e( 'Vehicules en ligne', 'wotoyi' ); ?></dt><dd><?php echo esc_html( wotoyi_number( $res['total'] ) ); ?></dd></div>
+		<div><dt><?php esc_html_e( 'Véhicules en ligne', 'wotoyi' ); ?></dt><dd><?php echo esc_html( wotoyi_number( $res['total'] ) ); ?></dd></div>
 		<?php if ( ! empty( $d['languages'] ) ) : ?><div><dt><?php esc_html_e( 'Langues', 'wotoyi' ); ?></dt><dd><?php echo esc_html( strtoupper( implode( ' / ', array_map( 'sanitize_key', (array) $d['languages'] ) ) ) ); ?></dd></div><?php endif; ?>
 	</dl>
-	<?php if ( ! empty( $d['description'] ) ) : ?><section aria-labelledby="h-about"><h2 id="h-about" class="wy-h3"><?php esc_html_e( 'A propos', 'wotoyi' ); ?></h2><div class="wy-prose"><?php echo wp_kses_post( wpautop( esc_html( (string) $d['description'] ) ) ); ?></div></section><?php endif; ?>
+	<?php if ( ! empty( $d['description'] ) ) : ?><section aria-labelledby="h-about"><h2 id="h-about" class="wy-h3"><?php esc_html_e( 'À propos', 'wotoyi' ); ?></h2><div class="wy-prose"><?php echo wp_kses_post( wpautop( esc_html( (string) $d['description'] ) ) ); ?></div></section><?php endif; ?>
 	<section aria-labelledby="h-stock">
-		<h2 id="h-stock" class="wy-h3"><?php esc_html_e( 'Vehicules disponibles', 'wotoyi' ); ?></h2>
+		<h2 id="h-stock" class="wy-h3"><?php esc_html_e( 'Véhicules disponibles', 'wotoyi' ); ?></h2>
 		<?php if ( $items ) : ?>
 			<div class="wy-grid wy-grid--3"><?php foreach ( $items as $i => $v ) { echo wotoyi_vehicle_card( (array) $v, array( 'eager' => $i < 2 ) ); } // phpcs:ignore WordPress.Security.EscapeOutput ?></div>
-		<?php else : echo wotoyi_empty_state( __( 'Aucun vehicule en ligne', 'wotoyi' ), __( 'Ce concessionnaire n\'a pas encore publie d\'annonce.', 'wotoyi' ) ); endif; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+		<?php else : echo wotoyi_empty_state( __( 'Aucun véhicule en ligne', 'wotoyi' ), __( 'Ce concessionnaire n\'a pas encore publié d\'annonce.', 'wotoyi' ) ); endif; // phpcs:ignore WordPress.Security.EscapeOutput ?>
 	</section>
 </div>

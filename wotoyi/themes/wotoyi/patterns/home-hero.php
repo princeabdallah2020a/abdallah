@@ -16,8 +16,8 @@
 <div class="wp-block-group wy-hero__copy"><!-- wp:paragraph {"className":"wy-overline"} -->
 <p class="wy-overline"><?php echo wp_kses_post( __( 'Marketplace automobile · Sénégal', 'wotoyi' ) ); ?></p>
 <!-- /wp:paragraph -->
-<!-- wp:heading {"level":1,"anchor":"h1","className":"wy-display-xl wy-hero__h1 wy-split-heading"} -->
-<h1 class="wp-block-heading wy-display-xl wy-hero__h1 wy-split-heading" id="h1"><?php echo wp_kses_post( __( 'Le showroom automobile du Sénégal, <em>en ligne</em>.', 'wotoyi' ) ); ?></h1>
+<!-- wp:heading {"level":1,"anchor":"h1","className":"wy-display-xl wy-hero__h1"} -->
+<h1 class="wp-block-heading wy-display-xl wy-hero__h1" id="h1" data-wy-sheen><?php echo wp_kses_post( __( 'Le showroom automobile du Sénégal, <em>en ligne</em>.', 'wotoyi' ) ); ?></h1>
 <!-- /wp:heading -->
 <!-- wp:paragraph {"className":"wy-lead"} -->
 <p class="wy-lead"><?php echo wp_kses_post( __( 'Achetez ou louez un véhicule auprès de concessionnaires vérifiés, faites-le inspecter par un tiers indépendant, puis contactez le vendeur directement sur WhatsApp.', 'wotoyi' ) ); ?></p>

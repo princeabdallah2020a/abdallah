@@ -102,7 +102,7 @@ add_filter(
 		$ref  = (string) get_query_var( 'wotoyi_ref' );
 		$site = get_bloginfo( 'name' );
 		if ( 'search' === $view ) {
-			return __( 'Vehicules a vendre et a louer', 'wotoyi' ) . ' - ' . $site;
+			return __( 'Véhicules à vendre et à louer', 'wotoyi' ) . ' - ' . $site;
 		}
 		if ( 'vehicle' === $view && ( $v = wotoyi_mp_vehicle( $ref ) ) ) {
 			return (string) $v['title'] . ' - ' . $site;

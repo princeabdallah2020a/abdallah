@@ -107,7 +107,7 @@
      Implementation: an IntersectionObserver whose root box is shrunk (rootMargin) to the fab's own rectangle. ---- */
   (function () {
     var f = $('.wy-ai-fab'); if (!f || !('IntersectionObserver' in window)) return;
-    var sel = '[data-wy-fab-avoid],.wy-search--nl,.wy-contact,.wy-lead-form,.wy-filter-panel__foot,.wy-pagination,.wy-field,.wy-searchbar__in,input,textarea,select';
+    var sel = '[data-wy-fab-avoid],.wy-quicksearch,.wy-search--nl,.wy-contact,.wy-lead-form,.wy-filter-panel__foot,.wy-pagination,.wy-field,.wy-searchbar__in,.wy-segmented,[role="radiogroup"],.wy-btn,main button,input,textarea,select';
     var io, hits, timer;
     function mount() {
       if (io) io.disconnect(); hits = new Set();
@@ -123,6 +123,7 @@
     }
     mount(); addEventListener('resize', function () { clearTimeout(timer); timer = setTimeout(mount, 150); });
     WY.fabRemount = mount;
+    if (window.MutationObserver) { var mt; new MutationObserver(function () { clearTimeout(mt); mt = setTimeout(mount, 250); }).observe(document.body, { childList: true, subtree: true }); } /* late-rendered controls */
   })();
 
   /* ---- init ---- */

@@ -29,7 +29,7 @@ final class AuditLog {
 	/**
 	 * @param array<string,mixed> $meta
 	 * @param int|null            $actor      WordPress user id; null = the acting member of the tenant context (0 = system).
-	 * @param string|null         $actor_type user | platform | system (derived when null).
+	 * @param string|null         $actor_type one of user, platform, system; derived when null.
 	 */
 	public static function record( string $action, ?string $entity_type = null, ?string $entity_uuid = null, array $meta = array(), ?int $actor = null, ?string $actor_type = null ): void {
 		$meta  = self::scrub( $meta );

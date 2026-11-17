@@ -108,7 +108,7 @@ final class Pairing {
 		if ( '' === $url && null !== $pinned ) {
 			$url = $pinned;
 		}
-		if ( '' === $url || 1 === preg_match( '/[\x00-\x20\x7f\\]/', $url ) ) {
+		if ( '' === $url || 1 === preg_match( '/[\x00-\x20\x7f\\\\]/', $url ) ) {
 			throw $bad();
 		}
 		$parts = wp_parse_url( $url );

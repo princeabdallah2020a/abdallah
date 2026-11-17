@@ -79,3 +79,5 @@ html[data-motion="reduced"] .wy-cta-bar{transition:none}
 @media(prefers-reduced-motion:reduce){html:not([data-motion]) *{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 @media(max-width:767.98px){.wy-page-vehicle .wy-ai-fab{display:none}}
 
+
+.wy-btn[hidden]{display:none}.wy-error{color:var(--wy-color-danger)}

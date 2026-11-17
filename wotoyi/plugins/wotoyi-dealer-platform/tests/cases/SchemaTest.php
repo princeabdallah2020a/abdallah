@@ -10,7 +10,7 @@ final class SchemaTest extends Wotoyi_Test_Case {
 			$this->assertContains( 'id', $cols, $name );
 			if ( Schema::is_scoped( $name ) ) {
 				$this->assertContains( 'tenant_id', $cols, "{$name} must carry tenant_id" );
-			} else {
+			} elseif ( 'invitations' !== $name ) { // Global gateway table (Data\Invitations): references a tenant but is not tenant-scoped.
 				$this->assertNotContains( 'tenant_id', $cols );
 			}
 			$rows = Fixtures::raw( 'SELECT COUNT(*) AS n FROM ' . $GLOBALS['wpdb']->prefix . 'wotoyi_dp_' . $name );

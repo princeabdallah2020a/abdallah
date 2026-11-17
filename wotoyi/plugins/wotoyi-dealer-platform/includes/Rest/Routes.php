@@ -48,13 +48,39 @@ final class Routes {
 			true,
 			static function ( $r ) {
 				$b = Handler::body( $r );
-				return new \WP_REST_Response( Plugin::tenants()->create( $b, (int) ( $b['owner_user_id'] ?? 0 ) ), 201 );
+				return new \WP_REST_Response( Plugin::tenants()->create( $b, (int) ( $b['owner_user_id'] ?? 0 ), get_current_user_id() ), 201 );
+			}
+		);
+		// Direct attachment of a WordPress user to a tenant exists ONLY here (platform operator). Dealer owners invite by email (H1).
+		self::platform(
+			'/platform/members',
+			'POST',
+			true,
+			static function ( $r ) {
+				$b      = Handler::body( $r );
+				$tenant = Directory::find_by_uuid( (string) ( $b['tenant_id'] ?? '' ) );
+				if ( ! $tenant ) {
+					throw ApiException::not_found( 'Tenant' );
+				}
+				$actor = get_current_user_id();
+				return new \WP_REST_Response( TenantContext::run( $tenant, static fn() => Plugin::members()->add_direct( (int) ( $b['user_id'] ?? 0 ), (string) ( $b['role'] ?? '' ), isset( $b['display_name'] ) ? (string) $b['display_name'] : null, $actor ) ), 201 );
 			}
 		);
 
 		// ---- Members ----
 		self::route( '/members', 'GET', 'members.read', false, static fn( $r ) => Plugin::members()->list() );
-		self::route( '/members', 'POST', 'members.manage', true, static fn( $r ) => new \WP_REST_Response( Plugin::members()->add( Handler::body( $r ) ), 201 ) );
+		// H1: invitation, never direct attachment. Same 202 reply whether or not the address exists or is already a member.
+		self::route( '/members', 'POST', 'members.manage', true, static fn( $r ) => new \WP_REST_Response( Plugin::members()->invite( Handler::body( $r ) ), 202 ) );
+		self::route( '/members/invitations', 'GET', 'members.manage', false, static fn( $r ) => Plugin::members()->invitations() );
+		self::route( '/members/invitations/' . self::ID, 'DELETE', 'members.manage', true, static fn( $r ) => Plugin::members()->revoke_invitation( (string) $r['id'] ) );
+		self::user_route(
+			'/members/accept',
+			'POST',
+			static function ( $r ) {
+				$b = Handler::body( $r );
+				return Plugin::members()->accept( (string) ( $b['token'] ?? '' ), get_current_user_id() );
+			}
+		);
 		self::route( '/members/' . self::ID, 'PUT, PATCH', 'members.manage', true, static fn( $r ) => Plugin::members()->update( (string) $r['id'], Handler::body( $r ) ) );
 		self::route( '/members/' . self::ID, 'DELETE', 'members.manage', true, static fn( $r ) => Plugin::members()->remove( (string) $r['id'] ) );
 
@@ -71,6 +97,20 @@ final class Routes {
 		self::crud( '/customers', 'customers', static fn() => Plugin::customers(), true );
 		self::route( '/customers/' . self::ID . '/timeline', 'GET', 'activities.read', false, static fn( $r ) => Plugin::activities()->list( array( 'entity_type' => 'customer', 'entity_uuid' => (string) $r['id'] ) + $r->get_query_params() ) );
 		self::route( '/customers/' . self::ID . '/erase', 'POST', 'customers.erase', true, static fn( $r ) => Plugin::customers()->erase( (string) $r['id'] ) );
+		self::route(
+			'/customers/' . self::ID . '/export',
+			'GET',
+			'customers.export',
+			false,
+			static function ( $r ) {
+				self::pii_guard( 'customers' );
+				$out = Plugin::customers()->export( (string) $r['id'] );
+				self::pii_consume( 1 + count( $out['leads'] ) + count( $out['deals'] ) + count( $out['rentals'] ) + count( $out['tasks'] ) + count( $out['activities'] ) );
+				$resp = new \WP_REST_Response( $out, 200 );
+				$resp->header( 'Cache-Control', 'no-store' );
+				return $resp;
+			}
+		);
 
 		self::route( '/leads/pipeline', 'GET', 'leads.read', false, static fn( $r ) => Plugin::leads()->pipeline() );
 		self::crud( '/leads', 'leads', static fn() => Plugin::leads(), true );
@@ -96,7 +136,7 @@ final class Routes {
 		// ---- Sync ----
 		self::route( '/sync/status', 'GET', 'sync.read', false, static fn( $r ) => SyncState::present() );
 		self::route( '/sync/outbox', 'GET', 'sync.read', false, static fn( $r ) => Outbox::list( $r->get_query_params() ) );
-		self::route( '/sync/pair', 'POST', 'sync.manage', true, static function ( $r ) {
+		self::route( '/sync/pair', 'POST', 'settings.manage', true, static function ( $r ) {
 			self::throttle( 'pair', 5, 900 );
 			$b = Handler::body( $r );
 			$state = Pairing::pair_http( (string) ( $b['code'] ?? '' ), (string) ( $b['base_url'] ?? '' ) );
@@ -104,7 +144,7 @@ final class Routes {
 			$resp->header( 'Cache-Control', 'no-store' );
 			return $resp;
 		} );
-		self::route( '/sync/pair-local', 'POST', 'sync.manage', true, static function ( $r ) {
+		self::route( '/sync/pair-local', 'POST', 'settings.manage', true, static function ( $r ) {
 			self::throttle( 'pair', 5, 900 );
 			$state = Pairing::pair_local();
 			return new \WP_REST_Response( $state + array( 'initial_sync' => self::safe( static fn() => Reconciler::run_for_current() ) ), 201 );
@@ -122,10 +162,58 @@ final class Routes {
 			AuditLog::record( 'sync.requeue' );
 			return array( 'requeued' => Outbox::requeue() );
 		} );
-		self::route( '/sync/disconnect', 'POST', 'sync.manage', true, static function ( $r ) {
+		self::route( '/sync/disconnect', 'POST', 'settings.manage', true, static function ( $r ) {
 			Pairing::disconnect();
 			return SyncState::present();
 		} );
+	}
+
+	/** Rows of personal data one user may read per minute (M4); filterable for large dealers. */
+	private static function pii_limit(): int {
+		return max( 10, (int) apply_filters( 'wotoyi_dp_pii_rows_per_minute', 600 ) );
+	}
+
+	private static function pii_bucket(): string {
+		return 'pii:' . TenantContext::uuid() . ':' . TenantContext::user_id();
+	}
+
+	/** Refuse (429 + one audit event per window) when the user already read the per-minute budget. */
+	private static function pii_guard( string $entity ): void {
+		if ( RateLimiter::blocked( self::pii_bucket(), self::pii_limit(), 60 ) ) {
+			if ( RateLimiter::allow( 'pii-alert:' . self::pii_bucket(), 1, 60 ) ) {
+				AuditLog::record( 'pii.rate_limited', $entity, null, array( 'limit_per_minute' => self::pii_limit() ) );
+			}
+			throw new ApiException( 'wotoyi_rate_limited', 'Too many records read. Try again in a minute.', 429 );
+		}
+	}
+
+	private static function pii_consume( int $rows ): void {
+		RateLimiter::consume( self::pii_bucket(), $rows, self::pii_limit(), 60 );
+	}
+
+	/**
+	 * List of a personal-data entity: per-user row budget and an audit entry (actor, filter names, count) per read (M3, M4).
+	 *
+	 * @param array<string,mixed> $q
+	 * @return array<string,mixed>
+	 */
+	private static function pii_list( string $entity, EntityService $svc, array $q ): array {
+		self::pii_guard( $entity );
+		$out = $svc->list( $q );
+		self::pii_consume( count( $out['items'] ) );
+		AuditLog::record(
+			$entity . '.list',
+			$entity,
+			null,
+			array(
+				'count'    => count( $out['items'] ),
+				'total'    => $out['total'],
+				'page'     => $out['page'],
+				'per_page' => $out['per_page'],
+				'filters'  => array_values( array_intersect( array_keys( $q ), array( 'q', 'source', 'assigned_to', 'city', 'country', 'stage', 'vehicle_uuid', 'customer_uuid', 'status', 'job_title' ) ) ),
+			)
+		);
+		return $out;
 	}
 
 	/** Rate limit per tenant for sensitive actions. */
@@ -163,7 +251,8 @@ final class Routes {
 	 */
 	private static function crud( string $base, string $caps_prefix, callable $svc, bool $deletable ): void {
 		$entity = $caps_prefix;
-		self::route( $base, 'GET', $entity . '.read', false, static fn( $r ) => $svc()->list( $r->get_query_params() ) );
+		$pii    = in_array( $entity, array( 'customers', 'leads', 'employees' ), true );
+		self::route( $base, 'GET', $entity . '.read', false, static fn( $r ) => $pii ? self::pii_list( $entity, $svc(), $r->get_query_params() ) : $svc()->list( $r->get_query_params() ) );
 		self::route( $base, 'POST', $entity . '.write', true, static fn( $r ) => self::created( $svc(), Handler::body( $r ) ) );
 		self::route( $base . '/' . self::ID, 'GET', $entity . '.read', false, static fn( $r ) => $svc()->get( (string) $r['id'] ) );
 		self::route( $base . '/' . self::ID, 'PUT, PATCH', $entity . '.write', true, static fn( $r ) => self::with_warnings( $svc(), $svc()->update( (string) $r['id'], Handler::body( $r ) ) ) );
@@ -231,6 +320,19 @@ final class Routes {
 				'methods'             => $methods,
 				'callback'            => static fn( \WP_REST_Request $request ) => Handler::run( $request, $fn ),
 				'permission_callback' => static fn( \WP_REST_Request $request ) => Access::authorize( $request, $cap, $write ),
+			)
+		);
+	}
+
+	/** Route for any logged-in user without tenant context (invitation acceptance); nonce on writes. */
+	private static function user_route( string $path, string $methods, callable $fn ): void {
+		register_rest_route(
+			self::API_NAMESPACE,
+			$path,
+			array(
+				'methods'             => $methods,
+				'callback'            => static fn( \WP_REST_Request $request ) => Handler::run_user( $request, $fn ),
+				'permission_callback' => static fn( \WP_REST_Request $request ) => Access::authorize_user( $request, true ),
 			)
 		);
 	}

@@ -16,7 +16,7 @@
     $('[data-wy-media-badges]').innerHTML = U.badge('demo') + '<span class="wy-badge">' + t('v.illus') + '</span>';
     paintView();
     $('[data-wy-thumbs]').innerHTML = VIEWS.map(function (vw, i) { return '<button class="wy-thumb" type="button" role="listitem" data-view="' + i + '" aria-label="' + t('v.view', { n: i + 1 }) + '" aria-current="' + (i === cur) + '"><span class="wy-thumb__c"><img src="' + imgSrc + '" alt="" style="transform:scale(' + vw.s + ');transform-origin:' + vw.o + '" width="660" height="260"></span></button>'; }).join('');
-    $('[data-wy-title]').innerHTML = esc(name) + ' <span class="wy-title__ver">' + esc(v.ver) + ' · ' + v.yr + '</span>';
+    $('[data-wy-title]').innerHTML = esc(name) + ' <span class="wy-title__ver"><bdi>' + esc(v.ver) + '</bdi> · <bdi>' + v.yr + '</bdi></span>';
     $('[data-wy-badges]').innerHTML = U.badges(v, true);
     $('[data-wy-prices]').innerHTML = (v.price ? '<div class="wy-price-block"><span class="wy-price wy-price--l">' + WY.price(v.price) + '</span>' + (v.neg ? '<span class="wy-caption wy-muted">' + t('v.neg') + '</span>' : '') + '</div>' : '') +
       (v.rent ? '<div class="wy-price-block"><span class="wy-caption wy-muted">' + t('v.rental') + '</span><span class="wy-price wy-price--l2">' + t('price.rentday', { p: WY.price(v.rent.day) }) + ' · ' + t('price.rentmonth', { p: WY.price(v.rent.month) }) + '</span></div>' : '');

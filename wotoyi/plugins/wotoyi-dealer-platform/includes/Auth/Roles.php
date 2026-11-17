@@ -31,7 +31,7 @@ final class Roles {
 		);
 		$manager = array_merge(
 			$sales,
-			array( 'vehicles.delete', 'services.write', 'services.publish', 'services.delete', 'customers.delete', 'leads.delete', 'employees.read', 'employees.write', 'finance.read', 'sync.manage', 'audit.read', 'members.read' )
+			array( 'vehicles.delete', 'services.write', 'services.publish', 'services.delete', 'customers.delete', 'leads.delete', 'employees.read', 'employees.write', 'finance.read', 'sync.manage', 'audit.read', 'members.read', 'customers.export' )
 		);
 		return array(
 			'owner'      => array_merge( $manager, array( 'members.manage', 'settings.manage', 'customers.erase', 'employees.delete' ) ),

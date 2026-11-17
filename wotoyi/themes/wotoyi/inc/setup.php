@@ -38,7 +38,7 @@ add_action(
 			'core/paragraph' => array(
 				array( 'wy-lead', __( 'Chapeau', 'wotoyi' ) ),
 				array( 'wy-overline', __( 'Surtitre', 'wotoyi' ) ),
-				array( 'wy-caption', __( 'Legende', 'wotoyi' ) ),
+				array( 'wy-caption', __( 'Légende', 'wotoyi' ) ),
 			),
 			'core/heading'   => array(
 				array( 'wy-display-xl', __( 'Display XL', 'wotoyi' ) ),

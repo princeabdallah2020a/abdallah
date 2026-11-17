@@ -3,7 +3,7 @@
 defined( 'ABSPATH' ) || exit;
 $mission = trim( (string) get_bloginfo( 'description' ) );
 if ( '' === $mission ) {
-	$mission = __( 'Le showroom automobile du Senegal et de l\'Afrique de l\'Ouest : vehicules verifies, concessionnaires de confiance, contact direct.', 'wotoyi' );
+	$mission = __( 'Le showroom automobile du Sénégal et de l\'Afrique de l\'Ouest : véhicules vérifiés, concessionnaires de confiance, contact direct.', 'wotoyi' );
 }
 ?>
 <div class="wy-footer__brand">
@@ -16,6 +16,6 @@ if ( '' === $mission ) {
 			echo '<div><p class="wy-overline">' . esc_html__( 'Langue', 'wotoyi' ) . '</p>' . $l . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput
 		}
 		?>
-		<div><p class="wy-overline"><?php esc_html_e( 'Theme', 'wotoyi' ); ?></p><?php echo wotoyi_view_html( 'partial-theme-seg', array( 'n' => 2 ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></div>
+		<div><p class="wy-overline"><?php esc_html_e( 'Thème', 'wotoyi' ); ?></p><?php echo wotoyi_view_html( 'partial-theme-seg', array( 'n' => 2 ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></div>
 	</div>
 </div>

@@ -28,7 +28,7 @@ $nav     = array(
 		echo '<div class="wy-drawer__block"><p class="wy-overline">' . esc_html__( 'Langue', 'wotoyi' ) . '</p>' . $lang . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput
 	}
 	?>
-	<div class="wy-drawer__block"><p class="wy-overline"><?php esc_html_e( 'Theme', 'wotoyi' ); ?></p><?php echo wotoyi_view_html( 'partial-theme-seg', array( 'n' => 1 ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></div>
+	<div class="wy-drawer__block"><p class="wy-overline"><?php esc_html_e( 'Thème', 'wotoyi' ); ?></p><?php echo wotoyi_view_html( 'partial-theme-seg', array( 'n' => 1 ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></div>
 	<?php if ( '' !== wotoyi_url( 'pro' ) ) : ?>
 		<a class="wy-btn wy-btn--primary" href="<?php echo esc_url( wotoyi_url( 'pro' ) ); ?>"><span class="wy-btn__label"><?php esc_html_e( 'Espace pro', 'wotoyi' ); ?></span></a>
 	<?php endif; ?>

@@ -36,7 +36,7 @@ final class Fixtures {
 	/** Add a member with a role; returns the presented member. */
 	public static function member( array $tenant, int $user_id, string $role ): array {
 		self::user( $user_id );
-		return self::in( $tenant, fn() => Plugin::members()->add( array( 'user_id' => $user_id, 'role' => $role ) ) );
+		return self::in( $tenant, fn() => method_exists( Plugin::members(), 'add_direct' ) ? Plugin::members()->add_direct( $user_id, $role ) : Plugin::members()->add( array( 'user_id' => $user_id, 'role' => $role ) ) );
 	}
 
 	public static function login( int $id, array $caps = array() ): void {

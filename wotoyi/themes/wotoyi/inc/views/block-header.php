@@ -25,7 +25,7 @@ $fav = wotoyi_url( 'favourites' );
 		<div class="wy-header__tools">
 			<?php echo wotoyi_view_html( 'partial-lang', array( 'extra_class' => 'wy-only-desktop' ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 			<a class="wy-btn wy-btn--icon wy-only-phone" href="<?php echo esc_url( wotoyi_url( 'search' ) ); ?>" aria-label="<?php esc_attr_e( 'Rechercher', 'wotoyi' ); ?>"><?php echo wotoyi_icon( 'search' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a>
-			<button class="wy-btn wy-btn--icon" type="button" data-wy-theme-toggle aria-label="<?php esc_attr_e( 'Changer de theme clair / sombre', 'wotoyi' ); ?>"><?php echo wotoyi_icon( 'sun', 'wy-i--sun' ) . wotoyi_icon( 'moon', 'wy-i--moon' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></button>
+			<button class="wy-btn wy-btn--icon" type="button" data-wy-theme-toggle aria-label="<?php esc_attr_e( 'Changer de thème clair / sombre', 'wotoyi' ); ?>"><?php echo wotoyi_icon( 'sun', 'wy-i--sun' ) . wotoyi_icon( 'moon', 'wy-i--moon' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></button>
 			<button class="wy-btn wy-btn--icon wy-only-desktop" type="button" data-wy-favs-open data-href="<?php echo esc_url( $fav ); ?>" aria-label="<?php esc_attr_e( 'Favoris', 'wotoyi' ); ?>"><?php echo wotoyi_icon( 'heart' ); // phpcs:ignore WordPress.Security.EscapeOutput ?><span class="wy-count-dot" data-wy-favs-count hidden>0</span></button>
 			<?php if ( '' !== $acc ) : ?>
 				<a class="wy-btn wy-btn--icon wy-only-desktop" href="<?php echo esc_url( $acc ); ?>" aria-label="<?php esc_attr_e( 'Mon compte', 'wotoyi' ); ?>"><?php echo wotoyi_icon( 'user' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a>

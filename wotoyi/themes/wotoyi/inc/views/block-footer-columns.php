@@ -7,26 +7,26 @@ $cols = array(
 		array( __( 'SUV', 'wotoyi' ), add_query_arg( 'body_type', 'suv', $s ) ),
 		array( __( 'Berlines', 'wotoyi' ), add_query_arg( 'body_type', 'sedan', $s ) ),
 		array( __( 'Pick-up', 'wotoyi' ), add_query_arg( 'body_type', 'pickup', $s ) ),
-		array( __( 'Tous les vehicules', 'wotoyi' ), $s ),
+		array( __( 'Tous les véhicules', 'wotoyi' ), $s ),
 	) ),
 	array( __( 'Louer', 'wotoyi' ), array(
 		array( __( 'Toutes les locations', 'wotoyi' ), wotoyi_url( 'rent' ) ),
 		array( __( 'Services', 'wotoyi' ), wotoyi_url( 'services' ) ),
 	) ),
 	array( __( 'Concessionnaires', 'wotoyi' ), array(
-		array( __( 'Concessionnaires verifies', 'wotoyi' ), wotoyi_url( 'dealers' ) ),
+		array( __( 'Concessionnaires vérifiés', 'wotoyi' ), wotoyi_url( 'dealers' ) ),
 		array( __( 'Rejoindre Wotoyi', 'wotoyi' ), wotoyi_url( 'dealer_cta' ) ),
 		array( 'Wotoyi Pro', wotoyi_url( 'pro' ) ),
 	) ),
 	array( __( 'Aide', 'wotoyi' ), array(
 		array( __( 'Inspection', 'wotoyi' ), wotoyi_url( 'inspection' ) ),
-		array( __( 'Conseils de securite', 'wotoyi' ), wotoyi_url( 'safety' ) ),
+		array( __( 'Conseils de sécurité', 'wotoyi' ), wotoyi_url( 'safety' ) ),
 		array( __( 'Contact', 'wotoyi' ), wotoyi_url( 'contact' ) ),
 	) ),
-	array( __( 'Legal', 'wotoyi' ), array(
+	array( __( 'Légal', 'wotoyi' ), array(
 		array( __( 'Conditions d\'utilisation', 'wotoyi' ), wotoyi_url( 'terms' ) ),
-		array( __( 'Confidentialite', 'wotoyi' ), wotoyi_url( 'privacy' ) ),
-		array( __( 'Mentions legales', 'wotoyi' ), wotoyi_url( 'notices' ) ),
+		array( __( 'Confidentialité', 'wotoyi' ), wotoyi_url( 'privacy' ) ),
+		array( __( 'Mentions légales', 'wotoyi' ), wotoyi_url( 'notices' ) ),
 	) ),
 );
 $cols = (array) apply_filters( 'wotoyi_theme_footer_columns', $cols );

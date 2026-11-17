@@ -1,8 +1,7 @@
 <?php
 /**
  * Vehicle detail (server-rendered for SEO and no-JS). Data: wotoyi_mp_vehicle( ref ) from the marketplace plugin.
- * Lead capture is intentionally not rendered here: contact goes through WhatsApp / phone / dealer page until the lead form
- * (REST /leads with token) is wired by the marketplace plugin.
+ * Lead form: dialog [data-wy-lead] posts to the marketplace REST /leads with a single-use token fetched from /leads/token?vehicle=<uuid> (see assets/js/vehicle.js).
  *
  * @var array $attrs
  */
@@ -12,9 +11,9 @@ $v   = wotoyi_mp_vehicle( $ref );
 if ( ! $v ) {
 	$active = wotoyi_marketplace_active();
 	echo '<div class="wy-container">' . wotoyi_empty_state( // phpcs:ignore WordPress.Security.EscapeOutput
-		$active ? __( 'Annonce introuvable', 'wotoyi' ) : __( 'Le catalogue arrive bientot', 'wotoyi' ),
-		$active ? __( 'Ce vehicule n\'est plus disponible ou le lien est incorrect.', 'wotoyi' ) : __( 'La place de marche n\'est pas encore activee sur ce site.', 'wotoyi' ),
-		array( array( 'url' => wotoyi_url( 'search' ), 'label' => __( 'Voir les vehicules', 'wotoyi' ), 'class' => 'wy-btn--primary' ) )
+		$active ? __( 'Annonce introuvable', 'wotoyi' ) : __( 'Le catalogue arrive bientôt', 'wotoyi' ),
+		$active ? __( 'Ce véhicule n\'est plus disponible ou le lien est incorrect.', 'wotoyi' ) : __( 'La place de marché n\'est pas encore activée sur ce site.', 'wotoyi' ),
+		array( array( 'url' => wotoyi_url( 'search' ), 'label' => __( 'Voir les véhicules', 'wotoyi' ), 'class' => 'wy-btn--primary' ) )
 	) . '</div>';
 	return;
 }
@@ -40,17 +39,17 @@ foreach ( (array) ( $med['gallery'] ?? array() ) as $u ) {
 $card = array_merge( $flat, array( 'id' => $v['id'], 'slug' => $v['slug'], 'title' => $title, 'featured' => $v['featured'], 'wotoyi_inspected' => ! empty( $trust['wotoyi_inspected'] ), 'dealer' => $dealer, 'cover_image' => $photos[0] ?? '' ) );
 
 $labels = array(
-	'make' => __( 'Marque', 'wotoyi' ), 'model' => __( 'Modele', 'wotoyi' ), 'trim_level' => __( 'Finition', 'wotoyi' ), 'year' => __( 'Annee', 'wotoyi' ),
-	'body_type' => __( 'Carrosserie', 'wotoyi' ), 'condition_type' => __( 'Etat', 'wotoyi' ), 'ext_colour' => __( 'Couleur exterieure', 'wotoyi' ), 'int_colour' => __( 'Couleur interieure', 'wotoyi' ),
-	'fuel_type' => __( 'Carburant', 'wotoyi' ), 'transmission' => __( 'Boite de vitesses', 'wotoyi' ), 'drive_type' => __( 'Transmission', 'wotoyi' ), 'engine_cc' => __( 'Cylindree (cm3)', 'wotoyi' ),
+	'make' => __( 'Marque', 'wotoyi' ), 'model' => __( 'Modèle', 'wotoyi' ), 'trim_level' => __( 'Finition', 'wotoyi' ), 'year' => __( 'Année', 'wotoyi' ),
+	'body_type' => __( 'Carrosserie', 'wotoyi' ), 'condition_type' => __( 'État', 'wotoyi' ), 'ext_colour' => __( 'Couleur extérieure', 'wotoyi' ), 'int_colour' => __( 'Couleur intérieure', 'wotoyi' ),
+	'fuel_type' => __( 'Carburant', 'wotoyi' ), 'transmission' => __( 'Boîte de vitesses', 'wotoyi' ), 'drive_type' => __( 'Transmission', 'wotoyi' ), 'engine_cc' => __( 'Cylindrée (cm3)', 'wotoyi' ),
 	'power_hp' => __( 'Puissance (ch)', 'wotoyi' ), 'power_kw' => __( 'Puissance (kW)', 'wotoyi' ), 'torque_nm' => __( 'Couple (Nm)', 'wotoyi' ), 'cylinders' => __( 'Cylindres', 'wotoyi' ), 'gears' => __( 'Rapports', 'wotoyi' ),
-	'doors' => __( 'Portes', 'wotoyi' ), 'seats' => __( 'Places', 'wotoyi' ), 'mileage_km' => __( 'Kilometrage', 'wotoyi' ), 'owners_count' => __( 'Proprietaires', 'wotoyi' ),
+	'doors' => __( 'Portes', 'wotoyi' ), 'seats' => __( 'Places', 'wotoyi' ), 'mileage_km' => __( 'Kilométrage', 'wotoyi' ), 'owners_count' => __( 'Propriétaires', 'wotoyi' ),
 	'accident_free' => __( 'Sans accident', 'wotoyi' ), 'service_book' => __( 'Carnet d\'entretien', 'wotoyi' ), 'warranty' => __( 'Garantie', 'wotoyi' ), 'warranty_months' => __( 'Garantie (mois)', 'wotoyi' ),
-	'customs_status' => __( 'Dedouanement', 'wotoyi' ), 'origin_country' => __( 'Pays d\'origine', 'wotoyi' ), 'last_service_date' => __( 'Dernier entretien', 'wotoyi' ), 'technical_inspection_date' => __( 'Controle technique', 'wotoyi' ),
-	'consumption_combined' => __( 'Consommation mixte (L/100 km)', 'wotoyi' ), 'co2_gkm' => __( 'CO2 (g/km)', 'wotoyi' ), 'euro_norm' => __( 'Norme Euro', 'wotoyi' ), 'tank_l' => __( 'Reservoir (L)', 'wotoyi' ), 'boot_l' => __( 'Coffre (L)', 'wotoyi' ),
-	'top_speed_kmh' => __( 'Vitesse maxi (km/h)', 'wotoyi' ), 'accel_0_100' => __( '0 a 100 km/h (s)', 'wotoyi' ), 'electric_range_km' => __( 'Autonomie (km)', 'wotoyi' ), 'battery_kwh' => __( 'Batterie (kWh)', 'wotoyi' ),
-	'length_mm' => __( 'Longueur (mm)', 'wotoyi' ), 'width_mm' => __( 'Largeur (mm)', 'wotoyi' ), 'height_mm' => __( 'Hauteur (mm)', 'wotoyi' ), 'wheelbase_mm' => __( 'Empattement (mm)', 'wotoyi' ), 'kerb_weight_kg' => __( 'Poids a vide (kg)', 'wotoyi' ),
-	'city' => __( 'Ville', 'wotoyi' ), 'area' => __( 'Quartier', 'wotoyi' ), 'availability' => __( 'Disponibilite', 'wotoyi' ),
+	'customs_status' => __( 'Dédouanement', 'wotoyi' ), 'origin_country' => __( 'Pays d\'origine', 'wotoyi' ), 'last_service_date' => __( 'Dernier entretien', 'wotoyi' ), 'technical_inspection_date' => __( 'Contrôle technique', 'wotoyi' ),
+	'consumption_combined' => __( 'Consommation mixte (L/100 km)', 'wotoyi' ), 'co2_gkm' => __( 'CO2 (g/km)', 'wotoyi' ), 'euro_norm' => __( 'Norme Euro', 'wotoyi' ), 'tank_l' => __( 'Réservoir (L)', 'wotoyi' ), 'boot_l' => __( 'Coffre (L)', 'wotoyi' ),
+	'top_speed_kmh' => __( 'Vitesse maxi (km/h)', 'wotoyi' ), 'accel_0_100' => __( '0 à 100 km/h (s)', 'wotoyi' ), 'electric_range_km' => __( 'Autonomie (km)', 'wotoyi' ), 'battery_kwh' => __( 'Batterie (kWh)', 'wotoyi' ),
+	'length_mm' => __( 'Longueur (mm)', 'wotoyi' ), 'width_mm' => __( 'Largeur (mm)', 'wotoyi' ), 'height_mm' => __( 'Hauteur (mm)', 'wotoyi' ), 'wheelbase_mm' => __( 'Empattement (mm)', 'wotoyi' ), 'kerb_weight_kg' => __( 'Poids à vide (kg)', 'wotoyi' ),
+	'city' => __( 'Ville', 'wotoyi' ), 'area' => __( 'Quartier', 'wotoyi' ), 'availability' => __( 'Disponibilité', 'wotoyi' ),
 );
 $enum   = array( 'body_type' => 'body', 'condition_type' => 'cond', 'fuel_type' => 'fuel', 'transmission' => 'trans', 'drive_type' => 'drive' );
 $fmt    = static function ( string $k, $val ) use ( $enum ): string {
@@ -66,7 +65,7 @@ $fmt    = static function ( string $k, $val ) use ( $enum ): string {
 	return is_scalar( $val ) ? (string) $val : '';
 };
 $spec_tabs = array(
-	'identity' => array( __( 'Identite', 'wotoyi' ), array( 'make', 'model', 'trim_level', 'year', 'body_type', 'condition_type', 'ext_colour', 'int_colour', 'doors', 'seats' ) ),
+	'identity' => array( __( 'Identité', 'wotoyi' ), array( 'make', 'model', 'trim_level', 'year', 'body_type', 'condition_type', 'ext_colour', 'int_colour', 'doors', 'seats' ) ),
 	'engine'   => array( __( 'Moteur', 'wotoyi' ), array( 'fuel_type', 'transmission', 'drive_type', 'engine_cc', 'power_hp', 'power_kw', 'torque_nm', 'cylinders', 'gears', 'consumption_combined', 'co2_gkm', 'euro_norm', 'tank_l', 'boot_l', 'top_speed_kmh', 'accel_0_100', 'electric_range_km', 'battery_kwh' ) ),
 	'history'  => array( __( 'Historique', 'wotoyi' ), array( 'mileage_km', 'owners_count', 'accident_free', 'service_book', 'last_service_date', 'technical_inspection_date', 'warranty', 'warranty_months', 'customs_status', 'origin_country' ) ),
 	'commercial' => array( __( 'Annonce', 'wotoyi' ), array( 'city', 'area', 'availability' ) ),
@@ -86,21 +85,21 @@ foreach ( $spec_tabs as $key => $def ) {
 }
 $equip = (array) ( $t['equipment'] ?? array() );
 if ( $equip ) {
-	$panels['equipment'] = array( __( 'Equipements', 'wotoyi' ), array() );
+	$panels['equipment'] = array( __( 'Équipements', 'wotoyi' ), array() );
 }
 
 $keyfacts = array();
 if ( ! empty( $flat['year'] ) ) {
-	$keyfacts[] = array( 'calendar', __( 'Annee', 'wotoyi' ), (string) (int) $flat['year'] );
+	$keyfacts[] = array( 'calendar', __( 'Année', 'wotoyi' ), (string) (int) $flat['year'] );
 }
 if ( isset( $flat['mileage_km'] ) ) {
-	$keyfacts[] = array( 'gauge', __( 'Kilometrage', 'wotoyi' ), wotoyi_number( $flat['mileage_km'] ) . "\u{00A0}km" );
+	$keyfacts[] = array( 'gauge', __( 'Kilométrage', 'wotoyi' ), wotoyi_number( $flat['mileage_km'] ) . "\u{00A0}km" );
 }
 if ( ! empty( $flat['fuel_type'] ) ) {
 	$keyfacts[] = array( 'fuel', __( 'Carburant', 'wotoyi' ), wotoyi_label( 'fuel', (string) $flat['fuel_type'] ) );
 }
 if ( ! empty( $flat['transmission'] ) ) {
-	$keyfacts[] = array( 'shifter', __( 'Boite', 'wotoyi' ), wotoyi_label( 'trans', (string) $flat['transmission'] ) );
+	$keyfacts[] = array( 'shifter', __( 'Boîte', 'wotoyi' ), wotoyi_label( 'trans', (string) $flat['transmission'] ) );
 }
 if ( ! empty( $flat['city'] ) ) {
 	$keyfacts[] = array( 'pin', __( 'Ville', 'wotoyi' ), (string) $flat['city'] );
@@ -110,7 +109,7 @@ $phone = preg_replace( '/[^0-9+]/', '', (string) ( $dealer['phone'] ?? '' ) );
 $wa    = preg_replace( '/\D/', '', (string) ( $dealer['whatsapp'] ?? '' ) );
 $self  = wotoyi_vehicle_url( array( 'slug' => $v['slug'] ) );
 /* translators: %s: vehicle title */
-$wa_url = '' !== $wa ? 'https://wa.me/' . $wa . '?text=' . rawurlencode( sprintf( __( 'Bonjour, je suis interesse par : %1$s (%2$s)', 'wotoyi' ), $title, $self ) ) : '';
+$wa_url = '' !== $wa ? 'https://wa.me/' . $wa . '?text=' . rawurlencode( sprintf( __( 'Bonjour, je suis intéressé par : %1$s (%2$s)', 'wotoyi' ), $title, $self ) ) : '';
 $durl   = (string) apply_filters( 'wotoyi_theme_dealer_url', '', $dealer );
 
 $contact = static function () use ( $wa_url, $phone, $durl, $dealer ): string {
@@ -122,8 +121,9 @@ $contact = static function () use ( $wa_url, $phone, $durl, $dealer ): string {
 		$h .= '<a class="wy-btn wy-btn--ghost" href="tel:' . esc_attr( $phone ) . '">' . wotoyi_icon( 'phone' ) . '<span>' . esc_html__( 'Appeler', 'wotoyi' ) . '</span></a>';
 	}
 	$h .= '</div>';
+	$h .= '<button class="wy-btn wy-btn--primary wy-btn--block" type="button" data-wy-lead-open hidden>' . wotoyi_icon( 'message' ) . '<span>' . esc_html__( 'Envoyer une demande', 'wotoyi' ) . '</span></button>';
 	if ( '' === $wa_url && '' === $phone ) {
-		$h = '<p class="wy-caption wy-muted">' . esc_html__( 'Contact direct non renseigne par le vendeur.', 'wotoyi' ) . '</p>';
+		$h = '<p class="wy-caption wy-muted">' . esc_html__( 'Contact direct non renseigné par le vendeur.', 'wotoyi' ) . '</p>';
 	}
 	if ( '' !== $durl ) {
 		$h .= '<a class="wy-link wy-link--arrow" href="' . esc_url( $durl ) . '">' . esc_html__( 'Voir le concessionnaire', 'wotoyi' ) . ' ' . wotoyi_icon( 'arrow-right', 'wy-flip' ) . '</a>';
@@ -133,7 +133,7 @@ $contact = static function () use ( $wa_url, $phone, $durl, $dealer ): string {
 $record = array( 'url' => $self, 'title' => $title, 'img' => $photos[0] ?? '', 'price' => ! empty( $flat['price'] ) ? wotoyi_price( $flat['price'], (string) ( $flat['currency'] ?? 'XOF' ) ) : '' );
 ?>
 <div class="wy-container-wide wy-vehicle" data-wy-vehicle data-wy-record="<?php echo esc_attr( wp_json_encode( $record ) ); ?>">
-	<nav class="wy-breadcrumb" aria-label="<?php esc_attr_e( 'Fil d\'Ariane', 'wotoyi' ); ?>"><ol><li><a href="<?php echo esc_url( wotoyi_url( 'home' ) ); ?>"><?php esc_html_e( 'Accueil', 'wotoyi' ); ?></a></li><li><a href="<?php echo esc_url( wotoyi_url( 'search' ) ); ?>"><?php esc_html_e( 'Vehicules', 'wotoyi' ); ?></a></li><li aria-current="page"><?php echo esc_html( $title ); ?></li></ol></nav>
+	<nav class="wy-breadcrumb" aria-label="<?php esc_attr_e( 'Fil d\'Ariane', 'wotoyi' ); ?>"><ol><li><a href="<?php echo esc_url( wotoyi_url( 'home' ) ); ?>"><?php esc_html_e( 'Accueil', 'wotoyi' ); ?></a></li><li><a href="<?php echo esc_url( wotoyi_url( 'search' ) ); ?>"><?php esc_html_e( 'Véhicules', 'wotoyi' ); ?></a></li><li aria-current="page"><?php echo esc_html( $title ); ?></li></ol></nav>
 	<div class="wy-vehicle__grid">
 		<div class="wy-vehicle__main">
 			<section class="wy-gallery" aria-label="<?php esc_attr_e( 'Photos', 'wotoyi' ); ?>" data-wy-gallery>
@@ -141,11 +141,11 @@ $record = array( 'url' => $self, 'title' => $title, 'img' => $photos[0] ?? '', '
 					<div class="wy-gallery__stage" data-wy-stage>
 						<div class="wy-gallery__badges"><?php echo wotoyi_vehicle_badges( $card, true ); // phpcs:ignore WordPress.Security.EscapeOutput ?></div>
 						<div class="wy-gallery__img" data-wy-main-img>
-							<?php if ( $photos ) : ?><img src="<?php echo esc_url( $photos[0] ); ?>" width="1200" height="800" alt="<?php echo esc_attr( $title ); ?>" fetchpriority="high" decoding="async"><?php else : ?><span class="wy-vcard__ph" role="img" aria-label="<?php esc_attr_e( 'Photo bientot disponible', 'wotoyi' ); ?>"><?php echo wotoyi_icon( 'camera' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></span><?php endif; ?>
+							<?php if ( $photos ) : ?><img src="<?php echo esc_url( $photos[0] ); ?>" width="1200" height="800" alt="<?php echo esc_attr( $title ); ?>" fetchpriority="high" decoding="async"><?php else : ?><span class="wy-vcard__ph" role="img" aria-label="<?php esc_attr_e( 'Photo bientôt disponible', 'wotoyi' ); ?>"><?php echo wotoyi_icon( 'camera' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></span><?php endif; ?>
 						</div>
 						<?php if ( count( $photos ) > 1 ) : ?>
 							<span class="wy-gallery__count" data-wy-gcount aria-live="polite">1 / <?php echo (int) count( $photos ); ?></span>
-							<button class="wy-btn wy-btn--icon wy-gallery__fs" type="button" data-wy-lightbox-open aria-label="<?php esc_attr_e( 'Plein ecran', 'wotoyi' ); ?>"><?php echo wotoyi_icon( 'fullscreen' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></button>
+							<button class="wy-btn wy-btn--icon wy-gallery__fs" type="button" data-wy-lightbox-open aria-label="<?php esc_attr_e( 'Plein écran', 'wotoyi' ); ?>"><?php echo wotoyi_icon( 'fullscreen' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></button>
 						<?php endif; ?>
 					</div>
 					<?php if ( count( $photos ) > 1 ) : ?>
@@ -170,9 +170,9 @@ $record = array( 'url' => $self, 'title' => $title, 'img' => $photos[0] ?? '', '
 			<div class="wy-contact-inline wy-not-xl"><?php echo $contact(); // phpcs:ignore WordPress.Security.EscapeOutput ?></div>
 
 			<?php if ( $panels ) : ?>
-				<section class="wy-specs" aria-label="<?php esc_attr_e( 'Caracteristiques', 'wotoyi' ); ?>">
+				<section class="wy-specs" aria-label="<?php esc_attr_e( 'Caractéristiques', 'wotoyi' ); ?>">
 					<div class="wy-tabs" data-wy-tabs>
-						<div class="wy-tabs__bar" role="tablist" data-wy-tablist aria-label="<?php esc_attr_e( 'Caracteristiques', 'wotoyi' ); ?>">
+						<div class="wy-tabs__bar" role="tablist" data-wy-tablist aria-label="<?php esc_attr_e( 'Caractéristiques', 'wotoyi' ); ?>">
 							<?php $first = true; foreach ( $panels as $k => $pn ) : ?>
 								<button class="wy-tab" role="tab" type="button" id="tab-<?php echo esc_attr( $k ); ?>" data-tab="<?php echo esc_attr( $k ); ?>" aria-controls="tp-<?php echo esc_attr( $k ); ?>" aria-selected="<?php echo $first ? 'true' : 'false'; ?>" tabindex="<?php echo $first ? '0' : '-1'; ?>"><?php echo esc_html( $pn[0] ); ?></button>
 							<?php $first = false; endforeach; ?>
@@ -214,11 +214,11 @@ $record = array( 'url' => $self, 'title' => $title, 'img' => $photos[0] ?? '', '
 	</div>
 
 	<section class="wy-block wy-safety" id="securite" aria-labelledby="v-safe">
-		<h2 id="v-safe" class="wy-h3"><?php echo wotoyi_icon( 'shield' ); // phpcs:ignore WordPress.Security.EscapeOutput ?> <?php esc_html_e( 'Achetez en securite', 'wotoyi' ); ?></h2>
+		<h2 id="v-safe" class="wy-h3"><?php echo wotoyi_icon( 'shield' ); // phpcs:ignore WordPress.Security.EscapeOutput ?> <?php esc_html_e( 'Achetez en sécurité', 'wotoyi' ); ?></h2>
 		<ul class="wy-checks">
-			<li><?php echo wotoyi_icon( 'check' ); // phpcs:ignore WordPress.Security.EscapeOutput ?><?php esc_html_e( 'Voyez le vehicule en personne avant tout paiement.', 'wotoyi' ); ?></li>
-			<li><?php echo wotoyi_icon( 'check' ); // phpcs:ignore WordPress.Security.EscapeOutput ?><?php esc_html_e( 'Verifiez les papiers et le numero de chassis.', 'wotoyi' ); ?></li>
-			<li><?php echo wotoyi_icon( 'check' ); // phpcs:ignore WordPress.Security.EscapeOutput ?><?php esc_html_e( 'Ne payez jamais a l\'avance un vendeur que vous n\'avez pas rencontre.', 'wotoyi' ); ?></li>
+			<li><?php echo wotoyi_icon( 'check' ); // phpcs:ignore WordPress.Security.EscapeOutput ?><?php esc_html_e( 'Voyez le véhicule en personne avant tout paiement.', 'wotoyi' ); ?></li>
+			<li><?php echo wotoyi_icon( 'check' ); // phpcs:ignore WordPress.Security.EscapeOutput ?><?php esc_html_e( 'Vérifiez les papiers et le numéro de chassis.', 'wotoyi' ); ?></li>
+			<li><?php echo wotoyi_icon( 'check' ); // phpcs:ignore WordPress.Security.EscapeOutput ?><?php esc_html_e( 'Ne payez jamais à l\'avance un vendeur que vous n\'avez pas rencontré.', 'wotoyi' ); ?></li>
 		</ul>
 	</section>
 </div>
@@ -233,3 +233,32 @@ $record = array( 'url' => $self, 'title' => $title, 'img' => $photos[0] ?? '', '
 	<button class="wy-btn wy-btn--icon wy-lightbox__x" type="button" data-wy-lightbox-close aria-label="<?php esc_attr_e( 'Fermer', 'wotoyi' ); ?>"><?php echo wotoyi_icon( 'close' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></button>
 	<div class="wy-lightbox__img" data-wy-lightbox-img></div>
 </dialog>
+<?php
+$lead_ref = (string) ( $v['id'] ?? '' );
+if ( '' !== $lead_ref ) :
+	?>
+<dialog class="wy-modal" data-wy-lead data-wy-lead-ref="<?php echo esc_attr( $lead_ref ); ?>" data-wy-token-url="<?php echo esc_url( rest_url( 'wotoyi/v1/leads/token' ) ); ?>" data-wy-post-url="<?php echo esc_url( rest_url( 'wotoyi/v1/leads' ) ); ?>" data-wy-locale="fr" aria-labelledby="lead-title"
+	data-m-wait="<?php esc_attr_e( 'Un instant, nous sécurisons le formulaire…', 'wotoyi' ); ?>"
+	data-m-ok="<?php esc_attr_e( 'Demande envoyée. Le concessionnaire vous répondra directement.', 'wotoyi' ); ?>"
+	data-m-contact="<?php esc_attr_e( 'Indiquez un téléphone ou un e-mail.', 'wotoyi' ); ?>"
+	data-m-consent="<?php esc_attr_e( 'Cochez la case de consentement pour envoyer.', 'wotoyi' ); ?>"
+	data-m-limit="<?php esc_attr_e( 'Trop de demandes. Réessayez plus tard ou contactez le vendeur sur WhatsApp.', 'wotoyi' ); ?>"
+	data-m-invalid="<?php esc_attr_e( 'Vérifiez votre numéro ou votre e-mail.', 'wotoyi' ); ?>"
+	data-m-fail="<?php esc_attr_e( 'Envoi impossible pour le moment. Réessayez ou contactez le vendeur sur WhatsApp.', 'wotoyi' ); ?>">
+	<form class="wy-lead-form" method="dialog" novalidate data-wy-lead-form>
+		<header><h2 id="lead-title" class="wy-h3"><?php esc_html_e( 'Envoyer une demande', 'wotoyi' ); ?></h2>
+			<button class="wy-btn wy-btn--icon wy-btn--ghost" type="button" data-wy-lead-close aria-label="<?php esc_attr_e( 'Fermer', 'wotoyi' ); ?>"><?php echo wotoyi_icon( 'close' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></button></header>
+		<p class="wy-caption wy-muted"><?php echo esc_html( $title ); ?></p>
+		<label class="wy-field"><span class="wy-field__l"><?php esc_html_e( 'Nom', 'wotoyi' ); ?></span><input class="wy-input" type="text" name="name" autocomplete="name" maxlength="120"></label>
+		<div class="wy-field-row">
+			<label class="wy-field"><span class="wy-field__l"><?php esc_html_e( 'Téléphone', 'wotoyi' ); ?></span><input class="wy-input" type="tel" name="phone" autocomplete="tel" inputmode="tel" dir="ltr"></label>
+			<label class="wy-field"><span class="wy-field__l"><?php esc_html_e( 'E-mail', 'wotoyi' ); ?></span><input class="wy-input" type="email" name="email" autocomplete="email" dir="ltr"></label>
+		</div>
+		<label class="wy-field"><span class="wy-field__l"><?php esc_html_e( 'Message', 'wotoyi' ); ?></span><textarea class="wy-input" name="message" rows="3" maxlength="2000"></textarea></label>
+		<div class="wy-visually-hidden" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+		<label class="wy-check"><input type="checkbox" name="consent" value="1"><span class="wy-caption"><?php esc_html_e( 'J’accepte que ces informations soient transmises à ce concessionnaire afin qu’il me recontacte.', 'wotoyi' ); ?></span></label>
+		<p class="wy-caption" role="status" aria-live="polite" data-wy-lead-msg></p>
+		<button class="wy-btn wy-btn--primary" type="submit" data-wy-lead-send><span class="wy-btn__label"><?php esc_html_e( 'Envoyer', 'wotoyi' ); ?></span></button>
+	</form>
+</dialog>
+<?php endif; ?>

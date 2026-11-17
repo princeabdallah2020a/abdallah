@@ -7,7 +7,7 @@ $c = count( (array) ( wotoyi_mp_facets( array( 'facets' => 'city' ) )['facets'][
 if ( ! ( $v || $d || $c ) ) {
 	return;
 }
-$fig = array( array( __( 'Vehicules', 'wotoyi' ), $v ), array( __( 'Concessionnaires', 'wotoyi' ), $d ), array( __( 'Villes', 'wotoyi' ), $c ) );
+$fig = array( array( __( 'Véhicules', 'wotoyi' ), $v ), array( __( 'Concessionnaires', 'wotoyi' ), $d ), array( __( 'Villes', 'wotoyi' ), $c ) );
 ?>
 <section class="wy-section" aria-labelledby="h-fig">
 	<div class="wy-container">

@@ -75,12 +75,49 @@
     if (WY.fabRemount) setTimeout(WY.fabRemount, 320);
   }).observe(tb);
 
-  /* lead dialog */
+  /* lead dialog: single-use token (GET /leads/token?vehicle=<uuid>, >= min_age s) then POST /leads as JSON. A fresh token is fetched on every open and after every failure. */
   var dlg = $('[data-wy-lead]');
-  if (dlg && dlg.showModal) {
-    $$('[data-wy-lead-open]').forEach(function (b) { b.addEventListener('click', function () { dlg.showModal(); }); });
+  if (dlg && dlg.showModal && window.fetch) {
+    var form = $('[data-wy-lead-form]', dlg), msg = $('[data-wy-lead-msg]', dlg), send = $('[data-wy-lead-send]', dlg);
+    var ref = dlg.getAttribute('data-wy-lead-ref'), tok = null, tokAt = 0, minAge = 3, busy = false;
+    var say = function (k, bad) { msg.textContent = dlg.getAttribute('data-m-' + k) || ''; msg.classList.toggle('wy-error', !!bad); };
+    var getToken = function () {
+      tok = null; send.disabled = true;
+      return fetch(dlg.getAttribute('data-wy-token-url') + '?vehicle=' + encodeURIComponent(ref), { credentials: 'same-origin', cache: 'no-store', headers: { Accept: 'application/json' } })
+        .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+        .then(function (j) { tok = j.token; tokAt = Date.now(); minAge = +j.min_age || 3; send.disabled = false; })
+        .catch(function () { send.disabled = false; });
+    };
+    $$('[data-wy-lead-open]').forEach(function (b) { b.hidden = false; b.addEventListener('click', function () { say('', false); msg.textContent = ''; dlg.showModal(); getToken(); }); });
     $$('[data-wy-lead-close]', dlg).forEach(function (b) { b.addEventListener('click', function () { dlg.close(); }); });
-  } else $$('[data-wy-lead-open]').forEach(function (b) { b.hidden = true; });
+    form.addEventListener('submit', function (e) {
+      e.preventDefault(); if (busy) return;
+      var f = form.elements, phone = f.phone.value.trim(), email = f.email.value.trim();
+      if (!phone && !email) { say('contact', true); return; }
+      if (!f.consent.checked) { say('consent', true); return; }
+      busy = true; send.disabled = true;
+      var go = function () {
+        if (!tok) return getToken().then(go2);
+        var wait = tokAt + (minAge * 1000) + 300 - Date.now();
+        if (wait > 0) { say('wait', false); return new Promise(function (r) { setTimeout(r, wait); }).then(go2); }
+        return go2();
+      };
+      var go2 = function () {
+        if (!tok) { busy = false; send.disabled = false; say('fail', true); return; }
+        var body = { vehicle: ref, token: tok, name: f.name.value.trim(), phone: phone, email: email, message: f.message.value.trim(), website: f.website.value, consent: true, locale: dlg.getAttribute('data-wy-locale') || 'fr', channel: 'web' };
+        tok = null;
+        return fetch(dlg.getAttribute('data-wy-post-url'), { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(body) })
+          .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { s: r.status, j: j }; }); })
+          .then(function (x) {
+            busy = false;
+            if (x.s === 201) { say('ok', false); form.reset(); send.hidden = true; if (U && U.toast) U.toast(dlg.getAttribute('data-m-ok')); return; }
+            say(x.s === 429 ? 'limit' : (x.s === 422 ? 'invalid' : 'fail'), true); getToken();
+          });
+      };
+      go().catch(function () { busy = false; send.disabled = false; say('fail', true); });
+    });
+    dlg.addEventListener('close', function () { send.hidden = false; tok = null; });
+  }
 
   /* recently viewed */
   var rec = $('[data-wy-record]');

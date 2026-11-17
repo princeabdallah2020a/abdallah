@@ -101,7 +101,7 @@ add_action(
 			'favAdd'    => __( 'Ajouter aux favoris', 'wotoyi' ),
 			'favRemove' => __( 'Retirer des favoris', 'wotoyi' ),
 			'favCount'  => __( '{n} favori(s)', 'wotoyi' ),
-			'copied'    => __( 'Lien copie', 'wotoyi' ),
+			'copied'    => __( 'Lien copié', 'wotoyi' ),
 		);
 		wp_add_inline_script( 'wy-core', 'window.wyI18n=' . wp_json_encode( $i18n ) . ';', 'before' );
 	}

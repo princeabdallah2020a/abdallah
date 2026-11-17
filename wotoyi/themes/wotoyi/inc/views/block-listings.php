@@ -32,8 +32,8 @@ echo wotoyi_section_open( $id, '', 'h-' . $id ); // phpcs:ignore WordPress.Secur
 echo '<div class="wy-container">' . $head; // phpcs:ignore WordPress.Security.EscapeOutput
 if ( ! $items ) {
 	echo wotoyi_empty_state( // phpcs:ignore WordPress.Security.EscapeOutput
-		wotoyi_marketplace_active() ? __( 'Les premieres annonces arrivent', 'wotoyi' ) : __( 'Le catalogue arrive bientot', 'wotoyi' ),
-		wotoyi_marketplace_active() ? __( 'Aucun vehicule n\'est encore publie. Revenez bientot ou deposez une alerte.', 'wotoyi' ) : __( 'La place de marche n\'est pas encore activee sur ce site.', 'wotoyi' )
+		wotoyi_marketplace_active() ? __( 'Les premières annonces arrivent', 'wotoyi' ) : __( 'Le catalogue arrive bientôt', 'wotoyi' ),
+		wotoyi_marketplace_active() ? __( 'Aucun véhicule n\'est encore publié. Revenez bientôt ou déposez une alerte.', 'wotoyi' ) : __( 'La place de marché n\'est pas encore activée sur ce site.', 'wotoyi' )
 	);
 	echo '</div></section>';
 	return;
@@ -50,4 +50,4 @@ echo '</div><div class="wy-container-wide wy-hscroll" data-wy-hscroll><div class
 foreach ( $items as $v ) {
 	echo wotoyi_vehicle_card( (array) $v ); // phpcs:ignore WordPress.Security.EscapeOutput
 }
-echo '</div><div class="wy-hscroll__nav"><button class="wy-btn wy-btn--icon wy-btn--ghost" type="button" data-wy-prev aria-label="' . esc_attr__( 'Precedent', 'wotoyi' ) . '">' . wotoyi_icon( 'arrow-right', 'wy-flip wy-rev' ) . '</button><button class="wy-btn wy-btn--icon wy-btn--ghost" type="button" data-wy-next aria-label="' . esc_attr__( 'Suivant', 'wotoyi' ) . '">' . wotoyi_icon( 'arrow-right', 'wy-flip' ) . '</button></div></div></section>'; // phpcs:ignore WordPress.Security.EscapeOutput
+echo '</div><div class="wy-hscroll__nav"><button class="wy-btn wy-btn--icon wy-btn--ghost" type="button" data-wy-prev aria-label="' . esc_attr__( 'Précédent', 'wotoyi' ) . '">' . wotoyi_icon( 'arrow-right', 'wy-flip wy-rev' ) . '</button><button class="wy-btn wy-btn--icon wy-btn--ghost" type="button" data-wy-next aria-label="' . esc_attr__( 'Suivant', 'wotoyi' ) . '">' . wotoyi_icon( 'arrow-right', 'wy-flip' ) . '</button></div></div></section>'; // phpcs:ignore WordPress.Security.EscapeOutput

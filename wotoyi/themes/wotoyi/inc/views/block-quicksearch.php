@@ -17,14 +17,14 @@ $total  = (int) ( wotoyi_mp_search( array( 'per_page' => 1 ) )['total'] ?? 0 );
 $action = wotoyi_url( 'search' );
 $has    = wotoyi_marketplace_active();
 ?>
-<form class="wy-quicksearch wy-glass" action="<?php echo esc_url( $action ); ?>" method="get" data-wy-quicksearch data-wy-models="<?php echo esc_attr( wp_json_encode( $models ) ); ?>" aria-label="<?php esc_attr_e( 'Recherche rapide de vehicules', 'wotoyi' ); ?>">
+<form class="wy-quicksearch wy-glass" action="<?php echo esc_url( $action ); ?>" method="get" data-wy-quicksearch data-wy-models="<?php echo esc_attr( wp_json_encode( $models ) ); ?>" aria-label="<?php esc_attr_e( 'Recherche rapide de véhicules', 'wotoyi' ); ?>">
 	<div class="wy-quicksearch__top">
 		<div class="wy-segmented" role="radiogroup" aria-label="<?php esc_attr_e( 'Type d\'offre', 'wotoyi' ); ?>">
 			<label><input type="radio" name="offer_type" value="sale" checked><span><?php esc_html_e( 'Acheter', 'wotoyi' ); ?></span></label>
 			<label><input type="radio" name="offer_type" value="rental"><span><?php esc_html_e( 'Louer', 'wotoyi' ); ?></span></label>
 		</div>
 		<?php if ( $total > 0 ) : ?>
-			<p class="wy-quicksearch__count" aria-live="polite"><strong data-wy-counter="<?php echo (int) $total; ?>"><?php echo esc_html( wotoyi_number( $total ) ); ?></strong> <?php echo esc_html( _n( 'vehicule disponible', 'vehicules disponibles', $total, 'wotoyi' ) ); ?></p>
+			<p class="wy-quicksearch__count" aria-live="polite"><strong data-wy-counter="<?php echo (int) $total; ?>"><?php echo esc_html( wotoyi_number( $total ) ); ?></strong> <?php echo esc_html( _n( 'véhicule disponible', 'véhicules disponibles', $total, 'wotoyi' ) ); ?></p>
 		<?php endif; ?>
 	</div>
 	<div class="wy-quicksearch__grid">
@@ -33,11 +33,11 @@ $has    = wotoyi_marketplace_active();
 				<select class="wy-select" name="make" data-wy-make><option value=""><?php esc_html_e( 'Toutes les marques', 'wotoyi' ); ?></option>
 				<?php foreach ( $makes as $m ) : ?><option value="<?php echo esc_attr( $m ); ?>"><?php echo esc_html( $m ); ?></option><?php endforeach; ?></select></label>
 			<?php if ( $models ) : ?>
-				<label class="wy-field"><span class="wy-field__l"><?php esc_html_e( 'Modele', 'wotoyi' ); ?></span>
-					<select class="wy-select" name="model" data-wy-model data-all="<?php esc_attr_e( 'Tous les modeles', 'wotoyi' ); ?>" disabled><option value=""><?php esc_html_e( 'Tous les modeles', 'wotoyi' ); ?></option></select></label>
+				<label class="wy-field"><span class="wy-field__l"><?php esc_html_e( 'Modèle', 'wotoyi' ); ?></span>
+					<select class="wy-select" name="model" data-wy-model data-all="<?php esc_attr_e( 'Tous les modèles', 'wotoyi' ); ?>" disabled><option value=""><?php esc_html_e( 'Tous les modèles', 'wotoyi' ); ?></option></select></label>
 			<?php endif; ?>
 		<?php else : ?>
-			<label class="wy-field wy-field--wide"><span class="wy-field__l"><?php esc_html_e( 'Marque, modele, mot-cle', 'wotoyi' ); ?></span>
+			<label class="wy-field wy-field--wide"><span class="wy-field__l"><?php esc_html_e( 'Marque, modèle, mot-clé', 'wotoyi' ); ?></span>
 				<input class="wy-input" type="search" name="q" autocomplete="off" placeholder="<?php esc_attr_e( 'Ex. Toyota Land Cruiser', 'wotoyi' ); ?>"></label>
 		<?php endif; ?>
 		<?php if ( $steps && $has ) : ?>
@@ -53,6 +53,6 @@ $has    = wotoyi_marketplace_active();
 		<button class="wy-btn wy-btn--primary wy-btn--lg" type="submit" data-motion="magnetic"><span class="wy-btn__label"><?php esc_html_e( 'Rechercher', 'wotoyi' ); ?></span><?php echo wotoyi_icon( 'arrow-right', 'wy-flip' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></button>
 	</div>
 	<?php if ( ! $has ) : ?>
-		<p class="wy-caption wy-muted"><?php esc_html_e( 'Le catalogue sera disponible des l\'activation de la place de marche.', 'wotoyi' ); ?></p>
+		<p class="wy-caption wy-muted"><?php esc_html_e( 'Le catalogue sera disponible des l\'activation de la place de marché.', 'wotoyi' ); ?></p>
 	<?php endif; ?>
 </form>

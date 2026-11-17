@@ -187,14 +187,11 @@ final class CrmTest extends Wotoyi_Test_Case {
 			$this->assertSame( 'wotoyi_last_owner', $this->code( fn() => Plugin::members()->update( $owner['id'], array( 'role' => 'sales' ) ) ) );
 			$this->assertSame( 'wotoyi_last_owner', $this->code( fn() => Plugin::members()->remove( $owner['id'] ) ) );
 			Fixtures::user( 55, 'sales55@example.com' );
-			$m = Plugin::members()->add( array( 'email' => 'sales55@example.com', 'role' => 'sales' ) );
+			$m = Plugin::members()->add_direct( 55, 'sales' ); // Platform-operator path (H1: dealer owners can only invite).
 			$this->assertSame( 55, $m['user_id'] );
-			$this->assertSame( 'wotoyi_member_exists', $this->code( fn() => Plugin::members()->add( array( 'user_id' => 55, 'role' => 'manager' ) ) ) );
-			$this->assertSame( 'wotoyi_invalid_request', $this->code( fn() => Plugin::members()->add( array( 'user_id' => 55, 'role' => 'god' ) ) ) );
-			$this->assertSame( 'wotoyi_invalid_request', $this->code( fn() => Plugin::members()->add( array( 'user_id' => 9999, 'role' => 'sales' ) ) ) );
-			$this->assertSame( 'wotoyi_invalid_request', $this->code( fn() => Plugin::members()->add( array( 'email' => 'nobody@example.com', 'role' => 'sales' ) ) ) );
-			$c = Plugin::members()->add( array( 'email' => 'new@example.com', 'role' => 'mechanic', 'create_user' => true ) );
-			$this->assertSame( 'subscriber', $GLOBALS['wotoyi_wp_users'][ $c['user_id'] ]['role'], 'dealer users never get wp-admin roles' );
+			$this->assertSame( 'wotoyi_member_exists', $this->code( fn() => Plugin::members()->add_direct( 55, 'manager' ) ) );
+			$this->assertSame( 'wotoyi_invalid_request', $this->code( fn() => Plugin::members()->add_direct( 55, 'god' ) ) );
+			$this->assertSame( 'wotoyi_invalid_request', $this->code( fn() => Plugin::members()->add_direct( 9999, 'sales' ) ) );
 			// A second owner makes the first demotable.
 			Plugin::members()->update( $m['id'], array( 'role' => 'owner' ) );
 			$this->assertSame( 'sales', Plugin::members()->update( $owner['id'], array( 'role' => 'sales' ) )['role'] );

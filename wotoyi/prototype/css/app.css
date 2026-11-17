@@ -642,3 +642,8 @@ html[data-motion="reduced"] .wy-cta-bar{transition:none}
 .wy-lead-form{display:grid;gap:14px;padding:24px}.wy-lead-form header{display:flex;justify-content:space-between;align-items:center;gap:12px}
 @media(prefers-reduced-motion:reduce){html:not([data-motion]) *{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 @media(max-width:767.98px){[data-page="vehicle"] .wy-ai-fab{display:none}}
+
+/* AI fab avoidance (same as theme) */
+.wy-ai-fab{transition:transform var(--wy-duration-ui) var(--wy-easing-out),opacity var(--wy-duration-micro) linear,inset-block-end var(--wy-duration-ui) var(--wy-easing-out),visibility 0s}
+.wy-ai-fab.is-away{opacity:0;visibility:hidden;pointer-events:none;transform:translateY(10px);transition-delay:0s,0s,0s,var(--wy-duration-micro)}
+html[data-motion="reduced"] .wy-ai-fab{transition:none}
